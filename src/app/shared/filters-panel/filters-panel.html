@@ -1,0 +1,66 @@
+<div class="bg-white rounded-2xl border border-slate-200 p-4">
+  <div class="flex items-center justify-between mb-3">
+    <div class="text-xl font-bold text-slate-900">Filters</div>
+    <button type="button" class="text-sm text-blue-600 hover:underline" (click)="clearAll()">
+      Clear
+    </button>
+  </div>
+
+  <div class="space-y-2">
+    @for (g of groups; track g.key) {
+      <div class="border border-slate-200 rounded-xl overflow-hidden">
+        <button
+          type="button"
+          class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100"
+          (click)="toggleGroup(g)"
+        >
+          <div class="font-semibold text-slate-900">{{ g.title }}</div>
+          <span class="text-slate-500">{{ g.opened ? '▴' : '▾' }}</span>
+        </button>
+
+        @if (g.opened) {
+          <div class="px-4 py-3 bg-white">
+            @if (g.type === 'checkbox') {
+              <div class="space-y-2">
+                @for (opt of (g.options ?? []); track opt.value) {
+                  <label class="flex items-center justify-between gap-3 text-sm text-slate-700 cursor-pointer">
+                    <span class="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-slate-300"
+                        [checked]="isChecked(g.key, opt.value)"
+                        (change)="toggleCheck(g.key, opt.value)"
+                      />
+                      <span>{{ opt.label }}</span>
+                    </span>
+
+                    @if (opt.count !== undefined) {
+                      <span class="text-slate-400">({{ opt.count }})</span>
+                    }
+                  </label>
+                }
+              </div>
+            }
+
+           @if (g.type === 'price') {
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <input
+      type="number"
+      placeholder="Min"
+      class="h-10 w-full rounded-xl border border-slate-300 px-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+      (input)="setPrice(g.key, 'min', ($any($event.target).value))"
+    />
+    <input
+      type="number"
+      placeholder="Max"
+      class="h-10 w-full rounded-xl border border-slate-300 px-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+      (input)="setPrice(g.key, 'max', ($any($event.target).value))"
+    />
+  </div>
+}
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

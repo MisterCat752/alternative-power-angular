@@ -1,0 +1,145 @@
+<div class="text-sm text-blue-600 mb-4">
+  Dashboard <span class="text-slate-400">›</span> Inventory <span class="text-slate-400">›</span>
+  <span class="text-blue-700 font-semibold">Vendors</span>
+</div>
+
+<div class="flex items-start justify-between gap-4">
+  <div>
+    <h1 class="text-4xl font-bold text-slate-900">Vendors</h1>
+    <div class="text-slate-500 mt-1">Manage supplier relationships and contacts</div>
+    <div class="text-xs text-slate-400 mt-2 inline-flex items-center gap-2">
+      <span class="inline-block h-2 w-2 rounded-full bg-green-500"></span>
+      Last synced 3 недели, 4 дня by gherasimovalexandru&#64;hotmail.com
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
+      ⤓ Export
+    </button>
+    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
+      + Add vendor
+    </button>
+  </div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Total Vendors</div>
+      <div class="text-2xl font-bold text-slate-900">74</div>
+    </div>
+    <div class="text-3xl">🏢</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Active</div>
+      <div class="text-2xl font-bold text-green-600">0</div>
+      <div class="text-xs text-slate-400">Currently trading</div>
+    </div>
+    <div class="text-3xl">✅</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Inactive</div>
+      <div class="text-2xl font-bold text-orange-600">0</div>
+      <div class="text-xs text-slate-400">Not trading</div>
+    </div>
+    <div class="text-3xl">⏸</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Top Supplier</div>
+      <div class="text-2xl font-bold text-slate-900">-</div>
+      <div class="text-xs text-slate-400">Most invoices</div>
+    </div>
+    <div class="text-3xl">🏆</div>
+  </div>
+</div>
+
+<div class="mt-6 flex items-center gap-6 text-sm">
+  <button (click)="tab.set('ALL')" class="font-semibold" [class.text-blue-600]="tab()==='ALL'">All <span class="text-slate-400">(74)</span></button>
+  <button (click)="tab.set('ACTIVE')" class="font-semibold" [class.text-blue-600]="tab()==='ACTIVE'">Active</button>
+  <button (click)="tab.set('INACTIVE')" class="font-semibold" [class.text-blue-600]="tab()==='INACTIVE'">Inactive</button>
+</div>
+
+<div class="mt-4 grid grid-cols-1 lg:grid-cols-[320px_180px_1fr] gap-3 items-center">
+  <div class="bg-white border border-slate-200 rounded-2xl px-4 h-10 flex items-center gap-3">
+    <span class="text-slate-400">🔎</span>
+    <input class="w-full outline-none text-sm" placeholder="Search vendors" (input)="search.set(($any($event.target).value))" />
+  </div>
+
+  <ui-select placeholder="Status" [options]="statusOpts" [value]="status()" (valueChange)="status.set($event)"></ui-select>
+
+  <div class="flex items-center justify-end gap-3">
+    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
+      ⤓ Export
+    </button>
+    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
+      + Add vendor
+    </button>
+    <button class="h-10 px-4 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-sm font-semibold">
+      Delete selected
+    </button>
+  </div>
+</div>
+
+<div class="mt-4 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+  <div class="px-4 py-3 text-sm font-semibold text-slate-800">Vendors</div>
+
+  <div class="overflow-auto">
+    <table class="min-w-[900px] w-full text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr class="border-b border-slate-200">
+          <th class="px-4 py-3 w-12"><input type="checkbox" class="h-4 w-4" /></th>
+          <th class="px-4 py-3 text-left">VENDOR</th>
+          <th class="px-4 py-3 text-left">EMAIL</th>
+          <th class="px-4 py-3 text-left">PHONE</th>
+          <th class="px-4 py-3 text-left">STATUS</th>
+          <th class="px-4 py-3 text-right">ACTIONS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (r of filtered(); track r.name) {
+          <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
+
+            <td class="px-4 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center font-bold">
+                  {{ r.name.slice(0,1) }}
+                </div>
+                <div class="font-semibold text-slate-900">{{ r.name }}</div>
+              </div>
+            </td>
+
+            <td class="px-4 py-4 text-slate-400">{{ r.email ?? '—' }}</td>
+            <td class="px-4 py-4 text-slate-400">{{ r.phone ?? '—' }}</td>
+
+            <td class="px-4 py-4">
+              <span
+                class="text-xs px-3 py-1 rounded-full border font-semibold"
+                [class.bg-green-100]="r.status==='ACTIVE'"
+                [class.text-green-700]="r.status==='ACTIVE'"
+                [class.border-green-200]="r.status==='ACTIVE'"
+                [class.bg-slate-100]="r.status==='INACTIVE'"
+                [class.text-slate-700]="r.status==='INACTIVE'"
+                [class.border-slate-200]="r.status==='INACTIVE'"
+              >
+                {{ r.status }}
+              </span>
+            </td>
+
+            <td class="px-4 py-4 text-right">
+              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

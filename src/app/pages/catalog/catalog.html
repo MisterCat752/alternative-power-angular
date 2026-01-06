@@ -1,0 +1,70 @@
+<app-container className="py-6">
+  <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
+    <!-- LEFT FILTERS -->
+    <div class="sticky top-4">
+      <app-filters-panel
+        [groups]="groups()"
+        [value]="filters()"
+        (valueChange)="onFiltersChange($event)"
+      ></app-filters-panel>
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div>
+      <!-- header -->
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-5">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 capitalize">{{ categorySlug() }}</h1>
+          <div class="text-sm text-slate-500 mt-1">Arată: {{ perPage() }}</div>
+        </div>
+
+        <div class="flex items-center gap-3">
+         
+          
+
+         
+
+           
+          <select
+            class="h-10 rounded-xl border border-slate-300 bg-white px-3 outline-none
+                   focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+            (change)="sort.set($any($event.target).value)"
+          >
+            <option value="default">Sortare implicită</option>
+            <option value="priceAsc">Price: low to high</option>
+            <option value="priceDesc">Price: high to low</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- products -->
+      @if (view() === 'grid') {
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          @for (p of visibleProducts(); track trackByTitle(p)) {
+            <app-product-card
+              [title]="p.title"
+              [imageUrl]="p.imageUrl"
+              [inStock]="p.inStock"
+              [price]="p.price"
+            ></app-product-card>
+          }
+        </div>
+      } @else {
+        <div class="space-y-4">
+          @for (p of visibleProducts(); track trackByTitle(p)) {
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 flex gap-4 items-center">
+              <img [src]="p.imageUrl" class="w-28 h-20 object-cover rounded-xl" />
+              <div class="flex-1">
+                <div class="font-semibold text-slate-900">{{ p.title }}</div>
+                <div class="text-sm mt-1" [class.text-green-700]="p.inStock" [class.text-red-600]="!p.inStock">
+                  {{ p.inStock ? 'În stoc' : 'Nu este în stoc' }}
+                </div>
+              </div>
+              <div class="font-semibold">{{ p.price.toFixed(2) }} €</div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</app-container>

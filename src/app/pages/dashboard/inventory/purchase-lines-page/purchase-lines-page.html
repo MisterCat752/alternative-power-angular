@@ -1,0 +1,153 @@
+<div class="text-sm text-blue-600 mb-4">
+  Dashboard <span class="text-slate-400">›</span> Inventory <span class="text-slate-400">›</span>
+  <span class="text-blue-700 font-semibold">Purchase Lines</span>
+</div>
+
+<div class="flex items-start justify-between gap-4">
+  <div>
+    <h1 class="text-4xl font-bold text-slate-900">Purchase lines</h1>
+    <div class="text-slate-500 mt-1">Invoice line items from suppliers</div>
+    <div class="text-xs text-slate-400 mt-2 inline-flex items-center gap-2">
+      <span class="inline-block h-2 w-2 rounded-full bg-green-500"></span>
+      Last synced 3 недели, 4 дня by gherasimovalexandru&#64;hotmail.com
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
+      ⤓ Export
+    </button>
+    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
+      👁 View invoices
+    </button>
+  </div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Total Lines</div>
+      <div class="text-2xl font-bold text-slate-900">1 763</div>
+    </div>
+    <div class="text-3xl">📋</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Total Value</div>
+      <div class="text-2xl font-bold text-green-600">0</div>
+      <div class="text-xs text-slate-400">MDL</div>
+    </div>
+    <div class="text-3xl">💲</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Unique Products</div>
+      <div class="text-2xl font-bold text-blue-600">0</div>
+      <div class="text-xs text-slate-400">SKUs</div>
+    </div>
+    <div class="text-3xl">📦</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Avg Line Value</div>
+      <div class="text-2xl font-bold text-orange-600">0</div>
+      <div class="text-xs text-slate-400">MDL</div>
+    </div>
+    <div class="text-3xl">📈</div>
+  </div>
+</div>
+
+<div class="mt-6 flex items-center gap-6 text-sm">
+  <button (click)="tab.set('ALL')" class="font-semibold" [class.text-blue-600]="tab()==='ALL'">All <span class="text-slate-400">(1 763)</span></button>
+  <button (click)="tab.set('MDL')" class="font-semibold" [class.text-blue-600]="tab()==='MDL'">MDL</button>
+  <button (click)="tab.set('EUR')" class="font-semibold" [class.text-blue-600]="tab()==='EUR'">EUR</button>
+  <button (click)="tab.set('USD')" class="font-semibold" [class.text-blue-600]="tab()==='USD'">USD</button>
+</div>
+
+<div class="mt-4 grid grid-cols-1 lg:grid-cols-[320px_200px_200px_140px_1fr] gap-3 items-center">
+  <div class="bg-white border border-slate-200 rounded-2xl px-4 h-10 flex items-center gap-3">
+    <span class="text-slate-400">🔎</span>
+    <input class="w-full outline-none text-sm" placeholder="Search purchase lines" (input)="search.set(($any($event.target).value))" />
+  </div>
+
+  <ui-select placeholder="Vendor" [options]="vendorOpts" [value]="vendor()" (valueChange)="vendor.set($event)"></ui-select>
+  <ui-select placeholder="Currency" [options]="currencyOpts" [value]="currency()" (valueChange)="currency.set($event)"></ui-select>
+  <ui-select placeholder="Year" [options]="yearOpts" [value]="year()" (valueChange)="year.set($event)"></ui-select>
+
+  <div class="flex items-center justify-end gap-3">
+    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
+      ⤓ Export
+    </button>
+    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
+      + Add line
+    </button>
+    <button class="h-10 px-4 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-sm font-semibold">
+      Delete selected
+    </button>
+  </div>
+</div>
+
+<div class="mt-4 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+  <div class="px-4 py-3 text-sm font-semibold text-slate-800">Purchase Lines</div>
+
+  <div class="overflow-auto">
+    <table class="min-w-[1200px] w-full text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr class="border-b border-slate-200">
+          <th class="px-4 py-3 w-12"><input type="checkbox" class="h-4 w-4" /></th>
+          <th class="px-4 py-3 text-left">DATE &amp; YEAR</th>
+          <th class="px-4 py-3 text-left">INVOICE</th>
+          <th class="px-4 py-3 text-left">PRODUCT</th>
+          <th class="px-4 py-3 text-left">VENDOR</th>
+          <th class="px-4 py-3 text-left">QTY</th>
+          <th class="px-4 py-3 text-left">UOM</th>
+          <th class="px-4 py-3 text-right">UNIT COST</th>
+          <th class="px-4 py-3 text-right">ACTIONS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (r of filtered(); track r.invoice + r.product) {
+          <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
+
+            <td class="px-4 py-4">
+              <div class="text-slate-700">{{ r.date }}</div>
+              <div class="text-slate-500 text-xs">{{ r.year }}</div>
+            </td>
+
+            <td class="px-4 py-4">
+              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.invoice }}</a>
+            </td>
+
+            <td class="px-4 py-4 text-slate-700">{{ r.product }}</td>
+
+            <td class="px-4 py-4">
+              <div class="text-slate-900 font-semibold">{{ r.vendor }}</div>
+              <div class="text-xs text-slate-400">ID:</div>
+            </td>
+
+            <td class="px-4 py-4 text-slate-900 font-semibold">{{ r.qty }}</td>
+
+            <td class="px-4 py-4">
+              <span class="inline-flex items-center justify-center h-6 px-2 rounded-lg bg-slate-100 border border-slate-200 text-xs">
+                {{ r.uom }}
+              </span>
+            </td>
+
+            <td class="px-4 py-4 text-right font-semibold">
+              {{ r.unitCost }} {{ r.currency }}
+            </td>
+
+            <td class="px-4 py-4 text-right">
+              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

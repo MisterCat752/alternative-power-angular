@@ -1,0 +1,43 @@
+<div class="bg-gray shadow">
+  <app-container className="py-2">
+    <nav class="flex items-center justify-between">
+      <!-- Левая часть: логотип -->
+      <a routerLink="/" class="flex items-center">
+        <img src="/logo.png" alt="logo" class="max-w-[100px] max-h-[40px]" />
+      </a>
+
+      <!-- Центр: поиск -->
+      <div class="flex-1 max-w-[592px] mx-6">
+        <div class="relative">
+          <input
+            type="text"
+            placeholder="Поиск..."
+            class="w-full rounded-full border border-gray-300 px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue"
+          />
+          <mat-icon class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">search</mat-icon>
+        </div>
+      </div>
+
+      <!-- Правая часть: иконки -->
+      <div class="flex items-center space-x-4">
+        <button mat-icon-button type="button">
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+        <button mat-button type="button" class="text-text-secondary">
+          EN
+        </button>
+
+       <button mat-icon-button type="button" (click)="cartUi.toggle()">
+           <mat-icon>shopping_cart</mat-icon>
+      </button>
+
+        <a routerLink="/auth/login" class="inline-flex">
+          <button mat-icon-button type="button" aria-label="Login">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+        </a>
+      </div>
+    </nav>
+  </app-container>
+</div>

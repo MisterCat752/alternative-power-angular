@@ -1,0 +1,35 @@
+<app-container>
+  <!-- 1) Слайдер с картинками -->
+  <ng-template #imgSlide let-src let-i="index">
+    <img [src]="src" class="w-full h-[320px] object-cover rounded-2xl" />
+  </ng-template>
+
+  <app-slider
+    [items]="slides"
+    [itemTpl]="imgSlide"
+    [options]="heroOpts"
+    [trackBy]="trackByStr"
+  ></app-slider>
+
+  <h2 class="text-2xl font-semibold mt-10 mb-4">Популярные товары</h2>
+
+  <!-- 2) Слайдер с карточками -->
+  <ng-template #cardSlide let-p let-i="index">
+    <div class="p-2">
+      <app-product-card
+        [title]="p.title"
+        [imageUrl]="p.imageUrl"
+        [inStock]="p.inStock"
+        [price]="p.price"
+        (addToCart)="add(p)"
+      ></app-product-card>
+    </div>
+  </ng-template>
+
+  <app-slider
+    [items]="products"
+    [itemTpl]="cardSlide"
+    [options]="productOpts"
+    [trackBy]="trackByTitle"
+  ></app-slider>
+</app-container>

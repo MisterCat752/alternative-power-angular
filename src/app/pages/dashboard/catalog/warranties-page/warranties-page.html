@@ -1,0 +1,75 @@
+<div class="text-sm text-blue-600 mb-4">
+  Dashboard <span class="text-slate-400">›</span> Catalog <span class="text-slate-400">›</span>
+  <span class="text-blue-700 font-semibold">Warranties</span>
+</div>
+
+<div class="flex items-start justify-between gap-4">
+  <div>
+    <h1 class="text-4xl font-bold text-slate-900">Warranties</h1>
+    <div class="text-slate-500 mt-1">Manage product warranty information</div>
+  </div>
+
+  <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold inline-flex items-center gap-2">
+    <span class="text-lg leading-none">+</span>
+    Add Warranty
+  </button>
+</div>
+
+<div class="mt-6 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+  <div class="overflow-auto">
+    <table class="min-w-[1000px] w-full text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr class="border-b border-slate-200">
+          <th class="px-4 py-3 text-left">NAME</th>
+          <th class="px-4 py-3 text-left">DURATION</th>
+          <th class="px-4 py-3 text-left">PROVIDER</th>
+          <th class="px-4 py-3 text-left">SERVICE TYPE</th>
+          <th class="px-4 py-3 text-right">ACTIONS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (r of rows; track r.name) {
+          <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-4">
+              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.name }}</a>
+            </td>
+
+            <td class="px-4 py-4">
+              <div class="inline-flex items-center gap-2">
+                <span class="text-xs px-3 py-1 rounded-lg bg-blue-100 text-blue-700 border border-blue-200 font-semibold">
+                  {{ r.years }} YEARS
+                </span>
+                <span class="text-xs text-slate-500">({{ r.months }} months)</span>
+              </div>
+            </td>
+
+            <td class="px-4 py-4">
+              <span class="text-xs px-3 py-1 rounded-lg bg-sky-100 text-sky-700 border border-sky-200 font-semibold">
+                {{ r.provider }}
+              </span>
+            </td>
+
+            <td class="px-4 py-4">
+              <span class="text-xs px-3 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 font-semibold">
+                {{ r.serviceType }}
+              </span>
+            </td>
+
+            <td class="px-4 py-4 text-right">
+              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="px-4 py-3 text-sm text-slate-500 flex items-center justify-between">
+    <a class="text-blue-600 hover:underline cursor-pointer">View all ›</a>
+    <div class="flex items-center gap-2">
+      <button class="h-9 w-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50">‹</button>
+      <button class="h-9 w-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50">›</button>
+    </div>
+  </div>
+</div>

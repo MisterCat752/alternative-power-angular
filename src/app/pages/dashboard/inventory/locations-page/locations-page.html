@@ -1,0 +1,158 @@
+<div class="text-sm text-blue-600 mb-4">
+  Dashboard <span class="text-slate-400">›</span> Inventory <span class="text-slate-400">›</span>
+  <span class="text-blue-700 font-semibold">Locations</span>
+</div>
+
+<div class="flex items-start justify-between gap-4">
+  <div>
+    <h1 class="text-4xl font-bold text-slate-900">Locations</h1>
+    <div class="text-slate-500 mt-1">Warehouse locations and storage areas</div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
+      ⤓ Export
+    </button>
+    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
+      + Add location
+    </button>
+  </div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Total Locations</div>
+      <div class="text-2xl font-bold text-slate-900">10</div>
+    </div>
+    <div class="text-3xl">📍</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Internal</div>
+      <div class="text-2xl font-bold text-green-600">0</div>
+      <div class="text-xs text-slate-400">Warehouse</div>
+    </div>
+    <div class="text-3xl">🏬</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Supplier</div>
+      <div class="text-2xl font-bold text-blue-600">0</div>
+      <div class="text-xs text-slate-400">External</div>
+    </div>
+    <div class="text-3xl">🚚</div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
+    <div>
+      <div class="text-sm text-slate-500">Customer</div>
+      <div class="text-2xl font-bold text-orange-600">0</div>
+      <div class="text-xs text-slate-400">Delivery</div>
+    </div>
+    <div class="text-3xl">👥</div>
+  </div>
+</div>
+
+<div class="mt-6 flex items-center gap-6 text-sm">
+  <button (click)="tab.set('ALL')" class="font-semibold" [class.text-blue-600]="tab()==='ALL'">All Locations <span class="text-slate-400">(10)</span></button>
+  <button (click)="tab.set('INTERNAL')" class="font-semibold" [class.text-blue-600]="tab()==='INTERNAL'">Internal</button>
+  <button (click)="tab.set('SUPPLIER')" class="font-semibold" [class.text-blue-600]="tab()==='SUPPLIER'">Supplier</button>
+  <button (click)="tab.set('CUSTOMER')" class="font-semibold" [class.text-blue-600]="tab()==='CUSTOMER'">Customer</button>
+  <button (click)="tab.set('VIRTUAL')" class="font-semibold" [class.text-blue-600]="tab()==='VIRTUAL'">Virtual</button>
+</div>
+
+<div class="mt-4 grid grid-cols-1 lg:grid-cols-[320px_220px_220px_1fr] gap-3 items-center">
+  <div class="bg-white border border-slate-200 rounded-2xl px-4 h-10 flex items-center gap-3">
+    <span class="text-slate-400">🔎</span>
+    <input class="w-full outline-none text-sm" placeholder="Search locations" (input)="search.set(($any($event.target).value))" />
+  </div>
+
+  <ui-select placeholder="Parent Location" [options]="parentOpts" [value]="parent()" (valueChange)="parent.set($event)"></ui-select>
+  <ui-select placeholder="Usage Type" [options]="usageOpts" [value]="usage()" (valueChange)="usage.set($event)"></ui-select>
+
+  <div class="flex items-center justify-end gap-3">
+    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
+      ⤓ Export
+    </button>
+    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
+      + Add Location
+    </button>
+  </div>
+</div>
+
+<div class="mt-4 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+  <div class="overflow-auto">
+    <table class="min-w-[1200px] w-full text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr class="border-b border-slate-200">
+          <th class="px-4 py-3 w-12"><input type="checkbox" class="h-4 w-4" /></th>
+          <th class="px-4 py-3 text-left">CODE</th>
+          <th class="px-4 py-3 text-left">LOCATION NAME</th>
+          <th class="px-4 py-3 text-left">USAGE TYPE</th>
+          <th class="px-4 py-3 text-left">PARENT LOCATION</th>
+          <th class="px-4 py-3 text-right">PRODUCTS</th>
+          <th class="px-4 py-3 text-left">STATUS</th>
+          <th class="px-4 py-3 text-right">ACTIONS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (r of filtered(); track r.code) {
+          <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
+
+            <td class="px-4 py-4 font-semibold text-slate-900">{{ r.code }}</td>
+
+            <td class="px-4 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center">👤</div>
+                <div>
+                  <div class="font-semibold text-slate-900">{{ r.name }}</div>
+                  <div class="text-xs text-slate-400">{{ r.code }}</div>
+                </div>
+              </div>
+            </td>
+
+            <td class="px-4 py-4">
+              <span class="text-xs px-3 py-1 rounded-full border font-semibold bg-slate-100 text-slate-700 border-slate-200">
+                {{ r.usageType }}
+              </span>
+            </td>
+
+            <td class="px-4 py-4">
+              <span class="text-xs px-2 py-1 rounded-lg bg-orange-100 text-orange-700 border border-orange-200 font-semibold">
+                {{ r.parent }}
+              </span>
+            </td>
+
+            <td class="px-4 py-4 text-right">
+              <div class="font-semibold text-slate-900">{{ r.products }}</div>
+              <div class="text-xs text-slate-400">products</div>
+            </td>
+
+            <td class="px-4 py-4">
+              <span
+                class="text-xs px-3 py-1 rounded-full border font-semibold"
+                [class.bg-green-100]="r.status==='ACTIVE'"
+                [class.text-green-700]="r.status==='ACTIVE'"
+                [class.border-green-200]="r.status==='ACTIVE'"
+                [class.bg-slate-100]="r.status==='EMPTY'"
+                [class.text-slate-600]="r.status==='EMPTY'"
+                [class.border-slate-200]="r.status==='EMPTY'"
+              >
+                {{ r.status }}
+              </span>
+            </td>
+
+            <td class="px-4 py-4 text-right">
+              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

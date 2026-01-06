@@ -1,0 +1,133 @@
+<app-container className="py-6">
+  <!-- breadcrumbs -->
+  <div class="text-sm text-blue-600 flex flex-wrap gap-2 mb-6">
+    <a routerLink="/" class="hover:underline">Главная</a>
+    <span class="text-gray-400">›</span>
+    <a class="hover:underline cursor-pointer">Категории</a>
+    <span class="text-gray-400">›</span>
+    <a class="hover:underline cursor-pointer">Товары</a>
+    <span class="text-gray-400">›</span>
+    <span class="text-gray-800 font-medium">{{ product.title }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-[92px_1fr_420px] gap-6 items-start">
+    <!-- LEFT: thumbs -->
+    <div class="hidden lg:block">
+      @for (img of product.images; track img; let i = $index) {
+        <button
+          type="button"
+          (click)="setActive(i)"
+          class="thumb mb-3"
+          [ngClass]="{ 'thumb--active': i === activeIndex }"
+        >
+          <img [src]="img" class="w-full h-full object-contain" />
+        </button>
+      }
+    </div>
+
+    <!-- CENTER: main image -->
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 flex items-center justify-center">
+      <img
+        [src]="product.images[activeIndex]"
+        class="max-h-[520px] w-auto object-contain"
+        [alt]="product.title"
+      />
+    </div>
+
+    <!-- RIGHT: info -->
+    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+      <h1 class="text-2xl font-semibold leading-tight">{{ product.title }}</h1>
+
+      <div class="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-semibold">
+        {{ product.brand }}
+      </div>
+
+      <div class="mt-4 text-lg font-semibold">
+        Preț : {{ product.price.toFixed(2) }} {{ product.currency }}
+      </div>
+
+      <div class="mt-1 text-base" [ngClass]="product.inStock ? 'text-gray-900' : 'text-red-600'">
+        {{ product.inStock ? 'În stoc' : 'Nu este în stoc' }}
+      </div>
+
+      <div class="mt-2 text-red-600 font-semibold">
+        Гарантия: {{ product.warranty }}
+      </div>
+
+      <div class="mt-6">
+        <div class="text-lg font-semibold mb-2">Описание</div>
+
+        <ul class="space-y-2 text-gray-800">
+          @for (d of product.description; track d; let i = $index) {
+            @if (showFullDesc || i < 3) {
+              <li class="flex gap-2">
+                <span class="text-gray-400">-</span>
+                <span>{{ d }}</span>
+              </li>
+            }
+          }
+        </ul>
+
+        <button type="button" class="mt-2 text-blue-600 hover:underline" (click)="toggleDesc()">
+          {{ showFullDesc ? 'Скрыть' : 'Read more' }}
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="mt-6 w-full rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 flex items-center justify-center gap-2"
+        (click)="addToCart()"
+      >
+        <mat-icon>shopping_cart</mat-icon>
+        Добавить в корзину
+      </button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="mt-10">
+    <div class="flex gap-6 border-b border-gray-200">
+      <button
+        type="button"
+        class="tab"
+        [ngClass]="{ 'tab--active': activeTab === 'specs' }"
+        (click)="activeTab = 'specs'"
+      >
+        Характеристики
+      </button>
+
+      <button
+        type="button"
+        class="tab"
+        [ngClass]="{ 'tab--active': activeTab === 'docs' }"
+        (click)="activeTab = 'docs'"
+      >
+        Документы
+      </button>
+    </div>
+
+    @if (activeTab === 'specs') {
+      <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          @for (s of specs; track s.label) {
+            <div class="flex justify-between gap-3 border-b border-gray-100 pb-2">
+              <div class="text-gray-600">{{ s.label }}</div>
+              <div class="font-medium text-gray-900 text-right">{{ s.value }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-4">
+        <div class="space-y-3">
+          @for (d of docs; track d.name) {
+            <a [href]="d.url" class="text-blue-600 hover:underline flex items-center gap-2">
+              <mat-icon>description</mat-icon>
+              {{ d.name }}
+            </a>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</app-container>
