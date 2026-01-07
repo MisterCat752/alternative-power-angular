@@ -11,12 +11,20 @@ import { register } from 'swiper/element/bundle';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
+
+    // Подключаем HTTP с interceptors
+    provideHttpClient(withInterceptorsFromDi()),
+
+    // Регистрируем interceptor в DI
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 
     {
       provide: ENVIRONMENT_INITIALIZER,

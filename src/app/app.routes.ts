@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { OrdersListPage } from './pages/dashboard/sales/orders-list-page/orders-list-page/orders-list-page';
+import { VerifyEmailPage } from './pages/verify-email/verify-email';
+import { AuthGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -18,12 +20,14 @@ export const routes: Routes = [
     path: 'auth/register',
     loadComponent: () => import('./pages/auth/register/register').then((m) => m.RegisterPage),
   },
+  { path: 'verify-email', component: VerifyEmailPage },
   {
     path: 'catalog/:categorySlug',
     loadComponent: () => import('./pages/catalog/catalog').then((m) => m.CatalogPage),
   },
   {
     path: 'dashboard',
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./pages/dashboard/layout/dashboard-layout/dashboard-layout').then(
         (m) => m.DashboardLayout
