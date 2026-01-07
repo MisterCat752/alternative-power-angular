@@ -1,0 +1,75 @@
+<div class="text-sm text-blue-600 mb-4">
+  Dashboard <span class="text-slate-400">›</span> Projects <span class="text-slate-400">›</span>
+  <span class="text-blue-700 font-semibold">My Projects</span>
+</div>
+
+<div class="flex items-start justify-between gap-4">
+  <div class="flex items-center gap-6">
+    <h1 class="text-4xl font-bold text-slate-900">My Projects</h1>
+    <button class="h-10 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
+      + Add new project
+    </button>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl px-4 h-10 flex items-center gap-3 w-[320px]">
+    <span class="text-slate-400">🔎</span>
+    <input class="w-full outline-none text-sm" placeholder="Search projects" (input)="search.set(($any($event.target).value))" />
+  </div>
+</div>
+
+<div class="mt-6 flex items-center gap-6 text-sm">
+  <button (click)="tab.set('ALL')" class="font-semibold" [class.text-blue-600]="tab()==='ALL'">All(1)</button>
+  <button (click)="tab.set('ONGOING')" class="font-semibold" [class.text-blue-600]="tab()==='ONGOING'">Ongoing(0)</button>
+  <button (click)="tab.set('CANCELLED')" class="font-semibold" [class.text-blue-600]="tab()==='CANCELLED'">Cancelled(0)</button>
+  <button (click)="tab.set('FINISHED')" class="font-semibold" [class.text-blue-600]="tab()==='FINISHED'">Finished(0)</button>
+  <button (click)="tab.set('POSTPONED')" class="font-semibold" [class.text-blue-600]="tab()==='POSTPONED'">Postponed(0)</button>
+</div>
+
+<div class="mt-4 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+  <div class="overflow-auto">
+    <table class="min-w-[1100px] w-full text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr class="border-b border-slate-200">
+          <th class="px-4 py-3 text-left">PROJECT NAME</th>
+          <th class="px-4 py-3 text-left">POWER (kWh)</th>
+          <th class="px-4 py-3 text-left">ASSIGNEES</th>
+          <th class="px-4 py-3 text-left">START DATE</th>
+          <th class="px-4 py-3 text-left">DEADLINE</th>
+          <th class="px-4 py-3 text-left">TOTAL PRICE</th>
+          <th class="px-4 py-3 text-left">STATUS</th>
+          <th class="px-4 py-3 text-right">ACTIONS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (r of filtered(); track r.name) {
+          <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-4">
+              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.name }}</a>
+            </td>
+            <td class="px-4 py-4">{{ r.powerKwh }}</td>
+            <td class="px-4 py-4">
+              <div class="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold">
+                {{ r.assigneeInitial }}
+              </div>
+            </td>
+            <td class="px-4 py-4 text-slate-600">{{ r.startDate }}</td>
+            <td class="px-4 py-4 text-slate-600">{{ r.deadline }}</td>
+            <td class="px-4 py-4">
+              @if (r.totalPriceMdl === null) { <span class="text-slate-400">—</span> }
+              @else { <span class="font-semibold">{{ r.totalPriceMdl | number:'1.2-2' }} MDL</span> }
+            </td>
+            <td class="px-4 py-4">
+              <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 font-semibold">
+                {{ r.status }}
+              </span>
+            </td>
+            <td class="px-4 py-4 text-right">
+              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

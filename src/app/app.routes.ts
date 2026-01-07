@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { OrdersListPage } from './pages/dashboard/sales/orders-list-page/orders-list-page/orders-list-page';
 
 export const routes: Routes = [
   {
@@ -115,6 +116,95 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/dashboard/inventory/locations-page/locations-page').then(
             (m) => m.LocationsPage
+          ),
+      },
+
+      {
+        path: 'accounts/users',
+        loadComponent: () =>
+          import('./pages/dashboard/accounts/users-page/users-page').then((m) => m.UsersPage),
+      },
+      {
+        path: 'accounts/group-and-roles',
+        loadComponent: () =>
+          import('./pages/dashboard/accounts/groups-and-roles-page/groups-and-roles-page').then(
+            (m) => m.GroupsAndRolesPage
+          ),
+      },
+
+      {
+        path: 'translations',
+        loadComponent: () =>
+          import('./pages/dashboard/translations/translations-page/translations-page').then(
+            (m) => m.TranslationsPage
+          ),
+      },
+
+      {
+        path: 'sync-logs',
+        loadComponent: () =>
+          import('./pages/dashboard/core/sync-logs-page/sync-logs-page').then(
+            (m) => m.SyncLogsPage
+          ),
+      },
+      {
+        path: 'offers',
+        loadComponent: () =>
+          import('./pages/dashboard/offers/offers-page/offers-page').then((m) => m.OffersPage),
+      },
+
+      {
+        path: 'sales/orders-list',
+        loadComponent: () =>
+          import('./pages/dashboard/sales/orders-list-page/orders-list-page/orders-list-page').then(
+            (m) => m.OrdersListPage
+          ),
+      },
+      {
+        path: 'sales/sold-products',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/sales/sold-products-page/sold-products-page/sold-products-page'
+          ).then((m) => m.SoldProductsPage),
+      },
+
+      {
+        path: 'sales/warehouse-fulfillment',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/sales/warehouse-fulfillment-page/warehouse-fulfillment-page'
+          ).then((m) => m.WarehouseFulfillmentPage),
+      },
+      {
+        path: 'sales/my-orders-list',
+        loadComponent: () =>
+          import('./pages/dashboard/sales/my-orders-list-page/my-orders-list-page').then(
+            (m) => m.MyOrdersListPage
+          ),
+      },
+
+      // cart
+      {
+        path: 'cart/cart-list',
+        loadComponent: () =>
+          import('./pages/dashboard/cart/carts-list-page/carts-list-page').then(
+            (m) => m.CartsListPage
+          ),
+      },
+
+      // project
+      {
+        path: 'projects/projects-list',
+        loadComponent: () =>
+          import('./pages/dashboard/projects/projects-list-page/projects-list-page').then(
+            (m) => m.ProjectsListPage
+          ),
+      },
+      {
+        path: 'projects/my-projects-list',
+        loadComponent: () =>
+          import('./pages/dashboard/projects/my-projects-list-page/my-projects-list-page').then(
+            (m) => m.MyProjectsListPage
           ),
       },
     ],

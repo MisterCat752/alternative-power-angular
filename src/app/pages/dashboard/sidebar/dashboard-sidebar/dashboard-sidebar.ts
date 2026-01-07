@@ -79,7 +79,7 @@ export class DashboardSidebar {
       key: 'cart',
       label: 'Cart',
       items: [
-        { label: 'Carts list', to: '/dashboard/cart/carts-list' },
+        { label: 'Carts list', to: '/dashboard/cart/cart-list' },
         { label: 'My carts list', to: '/dashboard/cart/my-carts-list' },
       ],
     },
