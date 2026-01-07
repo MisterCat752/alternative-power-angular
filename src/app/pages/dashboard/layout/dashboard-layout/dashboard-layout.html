@@ -1,4 +1,36 @@
 <div class="min-h-screen bg-slate-50">
+
+<div class="p-4 border-b min-h-200 bg-slate-50">
+  @if (authStore.user(); as user) {
+    <div class="text-sm text-slate-700 space-y-1">
+      <div><b>ID:</b> {{ user.id }}</div>
+      <div><b>Email:</b> {{ user.email }}</div>
+      <div><b>Account type:</b> {{ user.account_type }}</div>
+
+      <div>
+        <b>Date joined:</b>
+        {{ user.date_joined | date: 'medium' }}
+      </div>
+
+      <div>
+        <b>Email verified at:</b>
+        {{ user.email_verified_at ? (user.email_verified_at | date:'short') : '—' }}
+      </div>
+
+      <div><b>Is email verified:</b> {{ user.is_email_verified ? 'Да' : 'Нет' }}</div>
+      <div><b>Is manager:</b> {{ user.is_manager ? 'Да' : 'Нет' }}</div>
+      <div><b>Is staff:</b> {{ user.is_staff ? 'Да' : 'Нет' }}</div>
+      <div><b>First name:</b> {{ user.first_name || '—' }}</div>
+      <div><b>Last name:</b> {{ user.last_name || '—' }}</div>
+      <div><b>Preferred language:</b> {{ user.preferred_language || '—' }}</div>
+      <div><b>Groups:</b> {{ user.groups?.length ? user.groups.join(', ') : '—' }}</div>
+
+      
+    </div>
+  } @else {
+    <div class="text-sm text-slate-400">Загрузка профиля…</div>
+  }
+</div>
   <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr]">
     <!-- left -->
     <app-dashboard-sidebar></app-dashboard-sidebar>
