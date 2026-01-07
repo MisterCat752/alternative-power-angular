@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { OrdersListPage } from './pages/dashboard/sales/orders-list-page/orders-list-page/orders-list-page';
 import { VerifyEmailPage } from './pages/verify-email/verify-email';
 import { AuthGuard } from './core/guards/auth-guard';
+import { RoleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -42,10 +43,13 @@ export const routes: Routes = [
       },
       {
         path: 'catalog/uom-categories',
+
         loadComponent: () =>
           import('./pages/dashboard/catalog/uom-categories-page/uom-categories-page').then(
             (m) => m.UomCategoriesPage
           ),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'catalog/units-of-measure',

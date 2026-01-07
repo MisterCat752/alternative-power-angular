@@ -10,36 +10,36 @@
     </div>
 
     <div class="space-y-2">
-      @for (g of groups; track g.key) {
-        <div class="rounded-xl border border-slate-200 overflow-hidden">
-          <!-- group header -->
-          <button
-            type="button"
-            class="w-full flex items-center justify-between px-3 py-3 bg-slate-50 hover:bg-slate-100"
-            (click)="toggle(g.key)"
-          >
-            <div class="font-semibold text-slate-800">{{ g.label }}</div>
-            <span class="text-slate-500">{{ open()[g.key] ? '▾' : '▸' }}</span>
-          </button>
+  @for (g of filteredGroups(); track g.key) {  <!-- <-- заменить groups на filteredGroups() -->
+    <div class="rounded-xl border border-slate-200 overflow-hidden">
+      <!-- group header -->
+      <button
+        type="button"
+        class="w-full flex items-center justify-between px-3 py-3 bg-slate-50 hover:bg-slate-100"
+        (click)="toggle(g.key)"
+      >
+        <div class="font-semibold text-slate-800">{{ g.label }}</div>
+        <span class="text-slate-500">{{ open()[g.key] ? '▾' : '▸' }}</span>
+      </button>
 
-          <!-- group items -->
-          @if (open()[g.key]) {
-            <div class="py-2">
-              @for (it of g.items; track it.to) {
-                <a
-                  [routerLink]="it.to"
-                  routerLinkActive="bg-blue-50 text-blue-700"
-                  [routerLinkActiveOptions]="{ exact: true }"
-                  class="mx-2 px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                  <span>{{ it.label }}</span>
-                </a>
-              }
-            </div>
+      <!-- group items -->
+      @if (open()[g.key]) {
+        <div class="py-2">
+          @for (it of g.items; track it.to) {
+            <a
+              [routerLink]="it.to"
+              routerLinkActive="bg-blue-50 text-blue-700"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="mx-2 px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+              <span>{{ it.label }}</span>
+            </a>
           }
         </div>
       }
     </div>
+  }
+</div>
   </div>
 </aside>
