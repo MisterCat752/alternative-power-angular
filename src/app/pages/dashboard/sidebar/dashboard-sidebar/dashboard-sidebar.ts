@@ -143,7 +143,7 @@ export class DashboardSidebar {
     return this.groups
       .map((g) => ({
         ...g,
-        items: g.items.filter((i) => !i.requiredGroup || userGroups.includes(i.requiredGroup)),
+        items: g.items, //.filter((i) => !i.requiredGroup || userGroups.includes(i.requiredGroup)),
       }))
       .filter((g) => g.items.length > 0); // <-- убираем группы без доступных элементов
   });

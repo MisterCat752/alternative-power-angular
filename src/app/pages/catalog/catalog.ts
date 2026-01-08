@@ -20,7 +20,7 @@ type Product = {
 @Component({
   selector: 'app-catalog-page',
   standalone: true,
-  imports: [Container, RouterLink, ProductCardComponent, FiltersPanelComponent],
+  imports: [Container, ProductCardComponent, FiltersPanelComponent],
   templateUrl: './catalog.html',
 })
 export class CatalogPage {

@@ -8,7 +8,6 @@ import {
   computed,
   signal,
 } from '@angular/core';
-import { NgClass } from '@angular/common';
 
 export type UiSelectOption<T = string> = {
   label: string;
@@ -20,7 +19,7 @@ export type UiSelectOption<T = string> = {
 @Component({
   selector: 'ui-select',
   standalone: true,
-  imports: [NgClass],
+  imports: [],
   templateUrl: './ui-select.html',
 })
 export class UiSelect<T = any> {
