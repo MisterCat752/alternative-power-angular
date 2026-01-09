@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+import { StatCard } from '../../../../shared/stat-card/stat-card';
 
 type MoveState = 'DRAFT' | 'POSTED' | 'CANCELED';
 
@@ -30,7 +31,7 @@ type LocKey =
 @Component({
   selector: 'app-stock-moves-page',
   standalone: true,
-  imports: [UiSelect],
+  imports: [UiSelect, StatCard],
   templateUrl: './stock-moves-page.html',
 })
 export class StockMovesPage {
@@ -104,7 +105,33 @@ export class StockMovesPage {
       invoice: 'EBC000759599',
     },
   ]);
-
+  stats = [
+    {
+      title: 'Total Moves',
+      value: '1 702',
+      icon: '↔️',
+    },
+    {
+      title: 'Draft',
+      value: 0,
+      subtitle: 'Not posted',
+      icon: '📝',
+    },
+    {
+      title: 'Posted',
+      value: 0,
+      subtitle: 'Completed',
+      valueClass: 'text-green-600',
+      icon: '✅',
+    },
+    {
+      title: 'Canceled',
+      value: 0,
+      subtitle: 'Rejected',
+      valueClass: 'text-red-600',
+      icon: '⛔',
+    },
+  ];
   filtered = computed(() => {
     const q = this.search().trim().toLowerCase();
 

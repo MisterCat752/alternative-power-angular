@@ -1,8 +1,5 @@
 <aside class="bg-white border-r border-slate-200 min-h-screen sticky top-0">
-  <div class="h-16 px-4 flex items-center gap-3 border-b border-slate-200">
-    <img src="/logo.png" class="h-7" alt="logo" />
-    <div class="font-semibold text-slate-900">Admin Panel</div>
-  </div>
+  
 
   <div class="px-3 py-4">
     <div class="text-[11px] uppercase tracking-wide text-slate-400 px-3 mb-2">
@@ -11,11 +8,11 @@
 
     <div class="space-y-2">
   @for (g of filteredGroups(); track g.key) {  <!-- <-- заменить groups на filteredGroups() -->
-    <div class="rounded-xl border border-slate-200 overflow-hidden">
+    <div class="rounded-xl   overflow-hidden">
       <!-- group header -->
       <button
         type="button"
-        class="w-full flex items-center justify-between px-3 py-3 bg-slate-50 hover:bg-slate-100"
+        class="w-full flex items-center justify-between px-3 py-3   hover:bg-slate-100"
         (click)="toggle(g.key)"
       >
         <div class="font-semibold text-slate-800">{{ g.label }}</div>
@@ -32,7 +29,7 @@
               [routerLinkActiveOptions]="{ exact: true }"
               class="mx-2 px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
             >
-              <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+              <span class="w-1.5 h-1.5 rounded-full  "></span>
               <span>{{ it.label }}</span>
             </a>
           }

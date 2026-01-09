@@ -5,11 +5,12 @@ import { ProfileService } from '../../../../core/services/profile.service';
 import { AuthStore } from '../../../../core/services/auth.store';
 import { tap } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Nav } from '../../../../shared/layout/nav/nav';
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [RouterOutlet, DashboardSidebar, CommonModule],
+  imports: [RouterOutlet, DashboardSidebar, CommonModule, Nav],
   templateUrl: './dashboard-layout.html',
 })
 export class DashboardLayout implements OnInit {

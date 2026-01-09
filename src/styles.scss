@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+@import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+@theme inline {
+  --color-gray: #f5f7fa;
+  --color-lightGray: #e6edff;
+  --color-white: #ffffff;
+  --color-dark: #31374a;
+  --color-secondary: #72798f;
+  --color-blue: #3874ff;
+  --color-darkBlue: #2b62e3;
+  --color-green: #1c6b2e;
+}
+
+body {
+  font-family: 'Nunito Sans', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+}
