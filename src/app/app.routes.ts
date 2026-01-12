@@ -178,6 +178,13 @@ export const routes: Routes = [
         // data: { requiredGroup: 'Manager' },
       },
       {
+        path: 'inventory/invoices/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/inventory/invoices-page/invoice-details/invoice-details').then(
+            (m) => m.InvoiceDetails
+          ),
+      },
+      {
         path: 'inventory/vendors',
         loadComponent: () =>
           import('./pages/dashboard/inventory/vendors-page/vendors-page').then(

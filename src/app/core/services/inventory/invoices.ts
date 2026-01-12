@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { PurchaseInvoiceDetailsDto } from '../../models/invoice';
 
 export interface Vendor {
   id: number;
@@ -55,5 +56,9 @@ export class InvoicesService {
     return this.http.get<PaginatedResponse<PurchaseInvoice>>(`${this.apiUrl}/purchase-invoices/`, {
       params,
     });
+  }
+
+  getInvoiceById(id: number) {
+    return this.http.get<PurchaseInvoiceDetailsDto>(`${this.apiUrl}/purchase-invoices/${id}/`);
   }
 }

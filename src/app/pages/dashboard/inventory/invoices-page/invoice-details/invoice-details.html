@@ -1,0 +1,98 @@
+<!-- breadcrumbs -->
+<div class="text-sm text-blue-600 mb-4">
+  Dashboard <span class="text-slate-400">›</span>
+  Inventory <span class="text-slate-400">›</span>
+  <a routerLink="../" class="hover:underline">Invoices</a>
+  <span class="text-slate-400">›</span>
+  <span class="text-blue-700 font-semibold">Invoice Details</span>
+</div>
+
+<!-- loading / error -->
+@if (loading()) {
+  <div class="text-slate-500">Loading invoice…</div>
+}
+
+@if (error()) {
+  <div class="text-red-600">{{ error() }}</div>
+}
+
+@if (invoice()) {
+  <div class="flex items-start justify-between gap-6">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">
+        Invoice #{{ invoice()!.doc_number }}
+      </h1>
+      <div class="text-slate-500 mt-1">
+        Vendor:
+        <span class="text-blue-600 font-semibold">
+          {{ invoice()!.vendor.name }}
+        </span>
+      </div>
+    </div>
+
+    <span
+      class="inline-flex items-center px-3 py-1 rounded-full border text-sm font-semibold"
+      [class]="badgeClass(invoice()!.status)"
+    >
+      {{ invoice()!.status | uppercase }}
+    </span>
+  </div>
+
+  <!-- table -->
+  <div class="mt-6 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr>
+          <th class="px-4 py-3 text-left">PRODUCT</th>
+          <th class="px-4 py-3 text-right">QTY</th>
+          <th class="px-4 py-3 text-left">UOM</th>
+          <th class="px-4 py-3 text-right">UNIT COST</th>
+          <th class="px-4 py-3 text-right">TOTAL</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (l of invoice()!.lines; track l.id) {
+          <tr class="border-t border-slate-100">
+            <td class="px-4 py-3">
+              <div class="font-semibold text-blue-600">
+                {{ l.product.code }}
+              </div>
+              <div class="text-slate-500 text-xs">
+                {{ l.product.name }}
+              </div>
+            </td>
+
+            <td class="px-4 py-3 text-right">{{ l.qty }}</td>
+            <td class="px-4 py-3">{{ l.product.uom }}</td>
+            <td class="px-4 py-3 text-right">
+              {{ l.unit_cost | number:'1.2-2' }} {{ invoice()!.currency }}
+            </td>
+            <td class="px-4 py-3 text-right font-semibold">
+              {{ l.line_sum | number:'1.2-2' }} {{ invoice()!.currency }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- summary -->
+  <div class="mt-6 flex justify-end">
+    <div class="w-[360px] bg-white border border-slate-200 rounded-2xl p-5">
+      <div class="flex justify-between text-sm mb-2">
+        <span class="text-slate-500">Items subtotal</span>
+        <span class="font-semibold">
+          {{ invoice()!.doc_sum }} {{ invoice()!.currency }}
+        </span>
+      </div>
+
+      <div class="border-t border-slate-200 mt-3 pt-3 flex justify-between text-lg font-bold">
+        <span>Total</span>
+        <span>
+          {{ invoice()!.doc_sum }} {{ invoice()!.currency }}
+        </span>
+      </div>
+    </div>
+  </div>
+}

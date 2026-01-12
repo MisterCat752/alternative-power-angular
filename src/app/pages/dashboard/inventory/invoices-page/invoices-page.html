@@ -155,7 +155,7 @@
     class="inline-flex items-center px-2.5 py-1 rounded-full border text-xs font-semibold"
     [class]="badgeClass(r.status)"
   >
-    {{ r.status }}
+    {{ r.status }}   
   </span>
 </td>
             <td class="px-4 py-4 text-slate-700">{{ r.date }}</td>
@@ -173,7 +173,9 @@
 
             <td class="px-4 py-4 text-right">
               <div class="inline-flex gap-2">
-                <button class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100" title="View">👁</button>
+                <button 
+                [routerLink]="['/dashboard/inventory/invoices', r.id ]"
+                class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100" title="View">👁</button>
                 <button class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100" title="Receive">📥</button>
                 <button class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100" title="Lock">🔒</button>
                 <button class="h-9 w-9 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100" title="Delete">🗑</button>

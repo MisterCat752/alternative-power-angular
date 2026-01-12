@@ -2,11 +2,13 @@ import { Component, computed, signal, effect, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
 import { InvoicesService, PurchaseInvoice } from '../../../../core/services/inventory/invoices';
+import { RouterLink } from '@angular/router';
 
 type Currency = 'MDL' | 'EUR' | 'USD';
 type InvoiceStatus = 'RECEIVED' | 'PENDING' | 'DRAFT' | 'LOCKED';
 
 type InvoiceRow = {
+  id: number;
   invoice: string;
   date: string;
   vendor: string;
@@ -26,7 +28,7 @@ type Tab = {
 @Component({
   selector: 'app-invoices-page',
   standalone: true,
-  imports: [UiSelect, DecimalPipe],
+  imports: [UiSelect, DecimalPipe, RouterLink],
   templateUrl: './invoices-page.html',
 })
 export class InvoicesPage {
@@ -100,6 +102,7 @@ export class InvoicesPage {
   }
 
   private mapInvoice = (i: PurchaseInvoice): InvoiceRow => ({
+    id: i.id,
     invoice: i.doc_number,
     date: new Date(i.doc_date).toLocaleDateString('ru-RU', {
       month: 'short',
@@ -136,9 +139,9 @@ export class InvoicesPage {
 
   filtered = computed(() => {
     const q = this.search().trim().toLowerCase();
-    this.rows().forEach((r) => {
-      console.log(r.invoice, r.status);
-    });
+
+    console.log(this.rows, 'massiv');
+
     return this.rows().filter((r) => {
       const byTab = this.activeTab() === 'ALL' ? true : r.currency === this.activeTab();
 
