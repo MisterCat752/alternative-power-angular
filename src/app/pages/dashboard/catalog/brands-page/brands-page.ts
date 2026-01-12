@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type BrandRow = {
   name: string;
@@ -16,6 +17,7 @@ function initials(name: string) {
 @Component({
   selector: 'app-brands-page',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './brands-page.html',
 })
 export class BrandsPage {

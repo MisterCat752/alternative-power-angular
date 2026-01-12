@@ -1,0 +1,282 @@
+<form [formGroup]="form" class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
+
+  <!-- LEFT COLUMN -->
+  <div class="space-y-6">
+
+    <!-- Product information -->
+    <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-slate-800">
+        Product information
+      </h2>
+
+      <app-form-field label="Product Title">
+        <app-text-input
+          placeholder="Write title here..."
+          formControlName="title"
+        />
+      </app-form-field>
+
+      <app-form-field label="Product Description">
+        <textarea
+          formControlName="description"
+          rows="6"
+          class="w-full rounded-xl border border-slate-200 px-4 py-3
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Write a description here..."
+        ></textarea>
+      </app-form-field>
+    </section>
+
+    <!-- Images -->
+    <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-slate-800">
+        Display images
+      </h2>
+
+      <app-form-field>
+        <app-image-input formControlName="image" />
+      </app-form-field>
+    </section>
+
+    <!-- Inventory -->
+    <section class="bg-white flex gap-2 rounded-2xl border border-slate-200 p-6   ">
+      <!-- LEFT SIDEBAR -->
+  <aside class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2 h-fit w-64 shrink-0">
+
+    <button
+      type="button"
+      class="w-full px-4 py-2 rounded-xl text-left"
+      [class.bg-slate-100]="activeSection === 'pricing'"
+      (click)="activeSection = 'pricing'"
+    >
+      💲 Pricing
+    </button>
+
+    <button
+      type="button"
+      class="w-full px-4 py-2 rounded-xl text-left"
+      [class.bg-slate-100]="activeSection === 'stock'"
+      (click)="activeSection = 'stock'"
+    >
+      📦 Stock
+    </button>
+
+    <button
+      type="button"
+      class="w-full px-4 py-2 rounded-xl text-left"
+      [class.bg-slate-100]="activeSection === 'settings'"
+      (click)="activeSection = 'settings'"
+    >
+      ⚙️ Settings
+    </button>
+
+  </aside>
+ 
+       <!-- RIGHT CONTENT -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 flex-1 min-w-0">
+
+    @switch (activeSection) {
+
+      <!-- ================= PRICING ================= -->
+      @case ('pricing') {
+        <div formGroupName="pricing" class="space-y-4">
+
+          <app-form-field label="Currency">
+            <ui-select
+              [options]="currencyOptions"
+              formControlName="currency"
+            />
+          </app-form-field>
+
+          <app-form-field label="List price">
+            <app-number-input formControlName="listPrice" />
+          </app-form-field>
+
+          <app-form-field label="Installer price">
+            <app-number-input formControlName="installerPrice" />
+          </app-form-field>
+
+          <app-form-field label="Sale price">
+            <app-number-input formControlName="salePrice" />
+          </app-form-field>
+
+          <app-form-field label="Sale ends at">
+            <input
+              type="datetime-local"
+              formControlName="saleEndsAt"
+              class="w-full rounded-xl border border-slate-200 px-4 py-2"
+            />
+          </app-form-field>
+
+          <app-form-field label="Website discount %">
+            <app-number-input formControlName="websiteDiscount" />
+          </app-form-field>
+
+          <app-form-field label="Default margin %">
+            <app-number-input formControlName="defaultMargin" />
+          </app-form-field>
+
+          <app-form-field label="TVA %">
+            <app-number-input formControlName="tva" />
+          </app-form-field>
+
+          <app-form-field label="Customs %">
+            <app-number-input formControlName="customs" />
+          </app-form-field>
+
+          <app-form-field label="Logistics %">
+            <app-number-input formControlName="logistics" />
+          </app-form-field>
+
+        </div>
+      }
+
+      <!-- ================= STOCK ================= -->
+      @case ('stock') {
+        <div formGroupName="stock" class="space-y-4">
+
+          <app-form-field label="Base Unit of Measure">
+            <ui-select
+              [options]="uomOptions"
+              formControlName="baseUom"
+            />
+          </app-form-field>
+
+          <app-form-field label="Purchase Unit of Measure">
+            <ui-select
+              [options]="uomOptions"
+              formControlName="purchaseUom"
+            />
+          </app-form-field>
+
+        </div>
+      }
+
+      <!-- ================= SETTINGS ================= -->
+      @case ('settings') {
+        <div formGroupName="settings" class="space-y-4">
+
+          <app-form-field label="Warranty">
+            <ui-select
+              [options]="warrantyOptions"
+              formControlName="warranty"
+            />
+          </app-form-field>
+
+          <app-form-field label="Invoice">
+            <app-text-input formControlName="invoice" />
+          </app-form-field>
+
+          <app-form-field label="URL Slug">
+            <app-text-input formControlName="slug" />
+          </app-form-field>
+
+          <app-form-field label="Model name">
+            <app-text-input formControlName="modelName" />
+          </app-form-field>
+
+          <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox" formControlName="published" />
+            Published (visible on website)
+          </label>
+
+          <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox" formControlName="internal" />
+            Internal product
+          </label>
+
+          <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox" formControlName="allowPreorder" />
+            Allow preorder when out of stock
+          </label>
+
+        </div>
+      }
+
+    }
+
+  </section>
+     
+      
+    </section>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <aside class="space-y-6">
+
+    <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-slate-800">
+        Organize
+      </h2>
+
+      <!-- Category -->
+      <app-form-field label="Category">
+        <ui-select
+          [options]="categoryOptions"
+          formControlName="category"
+        />
+      </app-form-field>
+
+      <!-- Brand -->
+      <app-form-field label="Brand">
+        <ui-select
+          [options]="brandOptions"
+          formControlName="brand"
+        />
+      </app-form-field>
+
+      <!-- Product type -->
+      <app-form-field label="Product Type">
+        <ui-select
+          [options]="productTypeOptions"
+          formControlName="productType"
+        />
+      </app-form-field>
+    </section>
+
+    <!-- Short description -->
+    <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-slate-800">
+        Short description
+      </h2>
+
+      <textarea
+        formControlName="shortDescription"
+        rows="4"
+        maxlength="240"
+        class="w-full rounded-xl border border-slate-200 px-4 py-3
+               focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Brief product summary..."
+      ></textarea>
+
+      <div class="text-xs text-slate-400 text-right">
+        Max 240 characters
+      </div>
+    </section>
+
+    <!-- Colors -->
+    <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-slate-800">
+        Colors
+      </h2>
+
+      <div class="flex flex-wrap gap-4 text-sm text-slate-700">
+        @for (c of colors; track c) {
+          <label class="flex items-center gap-2">
+            <input
+              type="checkbox"
+              [value]="c"
+              class="rounded border-slate-300"
+            />
+            {{ c }}
+          </label>
+        }
+      </div>
+
+      <app-form-field>
+        <app-text-input placeholder="Extra colors (comma separated)" />
+      </app-form-field>
+    </section>
+
+  </aside>
+</form>

@@ -1,0 +1,43 @@
+<div class="relative inline-block ui-action-menu">
+  <!-- trigger -->
+  <button
+    type="button"
+    class="inline-flex items-center justify-center rounded-md px-2 py-1 text-xl text-slate-600 hover:bg-slate-100 focus:outline-none"
+    (click)="toggle()"
+  >
+    ⋯
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="absolute right-0 z-50 mt-2 min-w-[160px] rounded-md border border-slate-200 bg-white shadow-lg"
+    >
+      @for (item of actions; track item.label) {
+
+        @if (item.type === 'link') {
+          <a
+            [href]="item.href"
+            class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
+            [class.text-red-600]="item.danger"
+            [class.pointer-events-none]="item.disabled"
+            [class.opacity-50]="item.disabled"
+            (click)="close()"
+          >
+            {{ item.label }}
+          </a>
+        } @else {
+          <button
+            type="button"
+            class="flex w-full items-center px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
+            [class.text-red-600]="item.danger"
+            [disabled]="item.disabled"
+            (click)="onAction(item)"
+          >
+            {{ item.label }}
+          </button>
+        }
+
+      }
+    </div>
+  }
+</div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type UomRow = {
   name: string;
@@ -11,6 +12,8 @@ type UomRow = {
 @Component({
   selector: 'app-units-of-measure-page',
   standalone: true,
+  imports: [RouterLink],
+
   templateUrl: './units-of-measure-page.html',
 })
 export class UnitsOfMeasurePage {

@@ -38,6 +38,8 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // дашборд
   {
     path: 'dashboard',
     // canActivate: [AuthGuard],
@@ -54,6 +56,13 @@ export const routes: Routes = [
           import('./pages/dashboard/catalog/product-page/product-page').then((m) => m.ProductsPage),
       },
       {
+        path: 'catalog/products/create-product',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/catalog/product-page/product-create-page/product-create-page'
+          ).then((m) => m.ProductCreatePage),
+      },
+      {
         path: 'catalog/uom-categories',
 
         loadComponent: () =>
@@ -62,6 +71,13 @@ export const routes: Routes = [
           ),
         // canActivate: [RoleGuard],
         // data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'catalog/uom-categories/create-uom-categories',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/catalog/uom-categories-page/uom-category-create-page/uom-category-create-page'
+          ).then((m) => m.UomCategoryCreatePage),
       },
       {
         path: 'catalog/units-of-measure',
@@ -73,6 +89,13 @@ export const routes: Routes = [
         // data: { requiredGroup: 'Manager' },
       },
       {
+        path: 'catalog/units-of-measure/create-units-of-measure',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/catalog/units-of-measure-page/unit-of-measure-create-page/unit-of-measure-create-page'
+          ).then((m) => m.UnitOfMeasureCreatePage),
+      },
+      {
         path: 'catalog/warranties',
         loadComponent: () =>
           import('./pages/dashboard/catalog/warranties-page/warranties-page').then(
@@ -82,11 +105,25 @@ export const routes: Routes = [
         // data: { requiredGroup: 'Manager' },
       },
       {
+        path: 'catalog/warranties/create-warranties',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/catalog/warranties-page/warranty-create-page/warranty-create-page'
+          ).then((m) => m.WarrantyCreatePage),
+      },
+      {
         path: 'catalog/brands',
         loadComponent: () =>
           import('./pages/dashboard/catalog/brands-page/brands-page').then((m) => m.BrandsPage),
         // canActivate: [RoleGuard],
         // data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'catalog/brands/create-brands',
+        loadComponent: () =>
+          import('./pages/dashboard/catalog/brands-page/brand-create-page/brand-create-page').then(
+            (m) => m.BrandCreatePage
+          ),
       },
       {
         path: 'catalog/categories',
@@ -96,6 +133,13 @@ export const routes: Routes = [
           ),
         // canActivate: [RoleGuard],
         // data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'catalog/categories/create-category',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/catalog/categories-page/category-create-page/category-create-page'
+          ).then((m) => m.CategoryCreatePage),
       },
       {
         path: 'inventory/product-stock',
@@ -167,6 +211,13 @@ export const routes: Routes = [
           import('./pages/dashboard/accounts/users-page/users-page').then((m) => m.UsersPage),
         // canActivate: [RoleGuard],
         // data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'accounts/users/create-user',
+        loadComponent: () =>
+          import('./pages/dashboard/accounts/users-page/users-create-page/users-create-page').then(
+            (m) => m.UserCreatePage
+          ),
       },
       {
         path: 'accounts/group-and-roles',
@@ -272,6 +323,13 @@ export const routes: Routes = [
           ),
         // canActivate: [RoleGuard],
         // data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'projects/my-projects-list/create-project',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/projects/my-projects-list-page/project-create-page/project-create-page'
+          ).then((m) => m.ProjectCreatePage),
       },
     ],
   },

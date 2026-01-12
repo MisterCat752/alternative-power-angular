@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type CategoryRow = {
   name: string;
@@ -10,6 +11,7 @@ type CategoryRow = {
 @Component({
   selector: 'app-categories-page',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './categories-page.html',
 })
 export class CategoriesPage {

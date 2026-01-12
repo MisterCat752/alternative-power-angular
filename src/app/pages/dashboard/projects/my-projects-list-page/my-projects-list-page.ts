@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type ProjectStatus = 'PLANNING' | 'ONGOING' | 'CANCELLED' | 'FINISHED' | 'POSTPONED';
 
@@ -18,7 +19,7 @@ type TabKey = 'ALL' | 'ONGOING' | 'CANCELLED' | 'FINISHED' | 'POSTPONED';
 @Component({
   selector: 'app-my-projects-list-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './my-projects-list-page.html',
 })
 export class MyProjectsListPage {

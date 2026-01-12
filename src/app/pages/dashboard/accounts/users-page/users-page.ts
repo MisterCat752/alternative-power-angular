@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+import { RouterLink } from '@angular/router';
 
 type UserStatus = 'ACTIVE' | 'INACTIVE';
 type UserType = 'INDIVIDUAL' | 'COMPANY';
@@ -20,7 +21,7 @@ type UserRow = {
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [UiSelect],
+  imports: [UiSelect, RouterLink],
   templateUrl: './users-page.html',
 })
 export class UsersPage {

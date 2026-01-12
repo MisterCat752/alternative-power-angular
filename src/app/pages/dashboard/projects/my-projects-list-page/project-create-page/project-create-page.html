@@ -1,0 +1,120 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-4xl space-y-6"
+>
+
+  <!-- HEADER -->
+  <div class="space-y-1">
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Create a project
+    </h1>
+  </div>
+
+  <!-- BASIC INFO -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Basic Information
+    </h2>
+
+    <app-form-field label="Project title">
+      <app-text-input
+        placeholder="Project title"
+        formControlName="title"
+      />
+    </app-form-field>
+
+    <app-form-field label="Project status">
+      <ui-select
+        [options]="statusOptions"
+        formControlName="status"
+      />
+    </app-form-field>
+
+    <app-form-field label="Power (kWh)">
+      <app-number-input
+        formControlName="power"
+      />
+    </app-form-field>
+  </section>
+
+  <!-- DATES -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Schedule
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-form-field label="Start date">
+        <input
+          type="date"
+          formControlName="startDate"
+          class="w-full rounded-xl border border-slate-200 px-4 py-3
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </app-form-field>
+
+      <app-form-field label="Deadline">
+        <input
+          type="date"
+          formControlName="deadline"
+          class="w-full rounded-xl border border-slate-200 px-4 py-3
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </app-form-field>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Team members
+    </h2>
+
+<app-form-field label="Team members">
+  <select
+    multiple
+    formControlName="teamMembers"
+    class="w-full min-h-[160px] rounded-xl border border-slate-200 px-4 py-3
+           focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    @for (member of teamMemberOptions; track member.value) {
+      <option [value]="member.value">
+        {{ member.label }}
+      </option>
+    }
+  </select>
+
+  <div class="text-xs text-slate-400 mt-1">
+    Hold Ctrl (Cmd on Mac) to select multiple team members
+  </div>
+</app-form-field>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Project overview
+    </h2>
+
+    <textarea
+      rows="5"
+      formControlName="overview"
+      class="w-full rounded-xl border border-slate-200 px-4 py-3
+             focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Project overview"
+    ></textarea>
+  </section>
+
+  <!-- ACTION -->
+  <div class="flex justify-end">
+    <button
+      type="submit"
+      class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700
+             text-white font-semibold"
+    >
+      Create Project
+    </button>
+  </div>
+
+</form>

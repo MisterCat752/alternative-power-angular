@@ -1,0 +1,110 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-3xl space-y-6"
+>
+
+  <!-- PAGE HEADER -->
+  <div class="space-y-1">
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Add Category
+    </h1>
+    <p class="text-sm text-slate-500">
+      Create new category
+    </p>
+  </div>
+
+  <!-- BASIC INFORMATION -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Basic Information
+    </h2>
+
+    <!-- Category Name -->
+    <app-form-field label="Category Name">
+      <app-text-input
+        placeholder="Category name"
+        formControlName="name"
+      />
+    </app-form-field>
+
+    <!-- Slug -->
+    <app-form-field
+      label="Slug"
+      hint="Auto-generated from category name if left empty"
+    >
+      <app-text-input
+        placeholder="category-name"
+        formControlName="slug"
+      />
+    </app-form-field>
+
+    <!-- Parent Category -->
+    <app-form-field
+      label="Parent Category"
+      hint="Optional: select parent for subcategory"
+    >
+      <ui-select
+        [options]="parentCategoryOptions"
+        formControlName="parentCategory"
+      />
+    </app-form-field>
+
+    <!-- Sort Order -->
+    <app-form-field
+      label="Sort Order"
+      hint="Determines display order (lower numbers appear first)"
+    >
+      <app-number-input
+        formControlName="sortOrder"
+      />
+    </app-form-field>
+
+    <!-- Flags -->
+    <div class="flex flex-col gap-3 pt-2 text-sm text-slate-700">
+      <label class="flex items-center gap-2">
+        <input
+          type="checkbox"
+          formControlName="showInMenu"
+          class="rounded border-slate-300"
+        />
+        Show in Menu
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input
+          type="checkbox"
+          formControlName="isActive"
+          class="rounded border-slate-300"
+        />
+        Active (visible on website)
+      </label>
+    </div>
+  </section>
+
+  <!-- CATEGORY IMAGE -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Category Image
+    </h2>
+
+    <p class="text-xs text-slate-500">
+      Recommended size: 300×300px. PNG or JPG format.
+    </p>
+
+    <app-form-field>
+      <app-image-input formControlName="image" />
+    </app-form-field>
+  </section>
+
+  <!-- ACTIONS -->
+  <div class="flex justify-end gap-3">
+    <button
+      type="submit"
+      class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+    >
+      Create Category
+    </button>
+  </div>
+
+</form>

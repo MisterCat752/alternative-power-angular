@@ -1,0 +1,83 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-3xl space-y-6"
+>
+
+  <!-- PAGE HEADER -->
+  <div class="space-y-1">
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Add Brand
+    </h1>
+    <p class="text-sm text-slate-500">
+      Create new brand
+    </p>
+  </div>
+
+  <!-- BASIC INFORMATION -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Basic Information
+    </h2>
+
+    <!-- Brand Name -->
+    <app-form-field label="Brand Name">
+      <app-text-input
+        placeholder="Brand name"
+        formControlName="name"
+      />
+    </app-form-field>
+
+    <!-- Slug -->
+    <app-form-field
+      label="Slug"
+      hint="Auto-generated from brand name if left empty"
+    >
+      <app-text-input
+        placeholder="brand-name"
+        formControlName="slug"
+      />
+    </app-form-field>
+
+    <!-- Country -->
+    <app-form-field label="Country">
+      <app-text-input
+        placeholder="Country"
+        formControlName="country"
+      />
+    </app-form-field>
+
+    <!-- Website -->
+    <app-form-field
+      label="Website"
+      hint="Official brand website URL"
+    >
+      <app-text-input
+        placeholder="https://example.com"
+        formControlName="website"
+      />
+    </app-form-field>
+  </section>
+
+  <!-- LOGO -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Logo
+    </h2>
+
+    <app-form-field>
+      <app-image-input formControlName="logo" />
+    </app-form-field>
+  </section>
+
+  <!-- ACTIONS -->
+  <div class="flex justify-end gap-3">
+    <button
+      type="submit"
+      class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+    >
+      Create Brand
+    </button>
+  </div>
+
+</form>

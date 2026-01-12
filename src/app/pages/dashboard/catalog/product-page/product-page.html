@@ -16,10 +16,15 @@
   </div>
 
   <div class="flex items-center gap-3">
-    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold inline-flex items-center gap-2">
-      <span class="text-lg leading-none">+</span>
-      Add product
-    </button>
+     
+     <a
+  routerLink="/dashboard/catalog/products/create-product"
+  class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold inline-flex items-center gap-2"
+>
+  <span class="text-lg leading-none">+</span>
+  Add products
+</a>
+     
     <button class="h-10 w-10 rounded-xl border border-slate-200 bg-white hover:bg-slate-50">⟳</button>
   </div>
 </div>
@@ -85,6 +90,7 @@
           <th class="px-4 py-3 text-left">BRAND</th>
           <th class="px-4 py-3 text-left">STOCK</th>
           <th class="px-4 py-3 text-left">INVOICE</th>
+          <th class="px-4 py-3 text-right">Actions</th>
         </tr>
       </thead>
 
@@ -128,12 +134,22 @@
 
             <td class="px-4 py-4">
               <div class="inline-flex items-center px-3 py-1 rounded-full bg-green-600 text-white text-xs font-semibold">
-                In stock — {{ r.stock.toFixed(2) }}
+                In stockвыв — {{ r.stock.toFixed(2) }}
               </div>
               <div class="text-xs text-slate-400 mt-1">WH/MAIN: {{ r.stock.toFixed(2) }}</div>
             </td>
 
             <td class="px-4 py-4 text-slate-500">{{ r.invoiceCode ?? '—' }}</td>
+            <td class="px-4 py-4 text-right">
+  <ui-action-menu
+    [actions]="[
+      { label: 'View', type: 'button', action: 'view' },
+      { label: 'Edit', type: 'button', action: 'edit' },
+      { label: 'Delete', type: 'button', action: 'delete', danger: true }
+    ]"
+    (action)="handleAction(r, $event)"
+  ></ui-action-menu>
+</td>
           </tr>
         }
       </tbody>

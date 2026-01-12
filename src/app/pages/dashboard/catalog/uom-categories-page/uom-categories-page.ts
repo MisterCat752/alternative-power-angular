@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type Row = {
   name: string;
@@ -8,6 +9,7 @@ type Row = {
 @Component({
   selector: 'app-uom-categories-page',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './uom-categories-page.html',
 })
 export class UomCategoriesPage {

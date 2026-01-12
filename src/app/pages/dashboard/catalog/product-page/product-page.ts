@@ -1,5 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
+import { ActionMenu } from '../../../../shared/ui/action-menu/action-menu';
+import { RouterLink } from '@angular/router';
 
 type Row = {
   sku: string;
@@ -19,7 +21,7 @@ type Row = {
 @Component({
   selector: 'app-products-page',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, ActionMenu, CommonModule, RouterLink],
   templateUrl: './product-page.html',
 })
 export class ProductsPage {
@@ -80,5 +82,23 @@ export class ProductsPage {
 
   fmt(n: number) {
     return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  handleAction(row: Row, action: string) {
+    switch (action) {
+      case 'view':
+        console.log('View', row);
+        // здесь можно открыть просмотр продукта
+        break;
+      case 'edit':
+        console.log('Edit', row);
+        // переход на страницу редактирования
+        break;
+      case 'delete':
+        console.log('Delete', row);
+        // удаление строки
+        this.rows.update((rows) => rows.filter((r) => r.sku !== row.sku));
+        break;
+    }
   }
 }

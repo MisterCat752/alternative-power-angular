@@ -1,0 +1,111 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-3xl space-y-6"
+>
+
+  <!-- PAGE HEADER -->
+  <div class="space-y-1">
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Add Unit of Measure
+    </h1>
+    <p class="text-sm text-slate-500">
+      Create new unit of measure
+    </p>
+  </div>
+
+  <!-- BASIC INFORMATION -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Basic Information
+    </h2>
+
+    <!-- Category -->
+    <app-form-field label="Category">
+      <ui-select
+        placeholder="Select category"
+        [options]="categoryOptions"
+        formControlName="category"
+      />
+    </app-form-field>
+
+    <!-- Unit Name -->
+    <app-form-field label="Unit Name">
+      <app-text-input
+        placeholder="Unit name"
+        formControlName="unitName"
+      />
+    </app-form-field>
+
+    <!-- Symbol -->
+    <app-form-field
+      label="Symbol"
+      hint='Short symbol for this unit (e.g., "kg", "m", "pcs")'
+    >
+      <app-text-input
+        placeholder="Symbol"
+        formControlName="symbol"
+      />
+    </app-form-field>
+
+    <!-- Ratio -->
+    <app-form-field
+      label="Ratio to Base"
+      hint="Conversion ratio to base unit"
+    >
+      <app-number-input
+        formControlName="ratioToBase"
+      />
+    </app-form-field>
+  </section>
+
+  <!-- UNIT PROPERTIES -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Unit Properties
+    </h2>
+
+    <div class="space-y-3 text-sm text-slate-700">
+
+      <label class="flex items-start gap-3">
+        <input
+          type="checkbox"
+          formControlName="continuousUnit"
+          class="mt-1 rounded border-slate-300"
+        />
+        <div>
+          <div class="font-medium">Continuous Unit</div>
+          <div class="text-slate-500">
+            For measurable quantities like length, weight (vs. discrete items)
+          </div>
+        </div>
+      </label>
+
+      <label class="flex items-start gap-3">
+        <input
+          type="checkbox"
+          formControlName="packagingUnit"
+          class="mt-1 rounded border-slate-300"
+        />
+        <div>
+          <div class="font-medium">Packaging Unit</div>
+          <div class="text-slate-500">
+            For packaging units like rolls, pallets, boxes
+          </div>
+        </div>
+      </label>
+
+    </div>
+  </section>
+
+  <!-- ACTIONS -->
+  <div class="flex justify-end gap-3">
+    <button
+      type="submit"
+      class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+    >
+      Create Unit
+    </button>
+  </div>
+
+</form>

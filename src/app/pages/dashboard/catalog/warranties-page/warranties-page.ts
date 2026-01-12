@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type WarrantyRow = {
   name: string;
@@ -11,6 +12,7 @@ type WarrantyRow = {
 @Component({
   selector: 'app-warranties-page',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './warranties-page.html',
 })
 export class WarrantiesPage {

@@ -1,0 +1,56 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-2xl space-y-6"
+>
+
+  <!-- PAGE HEADER -->
+  <header class="space-y-1">
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Add UOM Category
+    </h1>
+    <p class="text-sm text-slate-500">
+      Create new UOM category
+    </p>
+  </header>
+
+  <!-- BASIC INFORMATION -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Basic Information
+    </h2>
+
+    <!-- Category Name -->
+    <app-form-field label="Category Name">
+      <app-text-input
+        placeholder="Enter category name"
+        formControlName="name"
+      />
+    </app-form-field>
+
+    <!-- Base Unit of Measure -->
+    <app-form-field label="Base Unit of Measure">
+      <ui-select
+        placeholder="Select base unit"
+        [options]="baseUomOptions"
+        formControlName="baseUom"
+      />
+    </app-form-field>
+
+    <p class="text-xs text-slate-500">
+      The fundamental unit for this category
+    </p>
+  </section>
+
+  <!-- ACTIONS -->
+  <div class="flex justify-end gap-3">
+    <button
+      type="submit"
+      class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700
+             text-white font-semibold"
+    >
+      Create
+    </button>
+  </div>
+
+</form>

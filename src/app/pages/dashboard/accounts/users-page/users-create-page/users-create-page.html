@@ -1,0 +1,160 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-4xl space-y-6"
+>
+
+  <!-- PAGE HEADER -->
+  <div class="space-y-1">
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Add User
+    </h1>
+    <p class="text-sm text-slate-500">
+      Fill in the information below to create a new user account.
+    </p>
+  </div>
+
+  <!-- BASIC INFO -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Basic Information
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-form-field label="Email *">
+        <app-text-input
+          placeholder="user@example.com"
+          formControlName="email"
+        />
+      </app-form-field>
+
+      <app-form-field label="Phone">
+        <app-text-input
+          placeholder="+373..."
+          formControlName="phone"
+        />
+      </app-form-field>
+
+      <app-form-field label="First name">
+        <app-text-input
+          formControlName="firstName"
+        />
+      </app-form-field>
+
+      <app-form-field label="Last name">
+        <app-text-input
+          formControlName="lastName"
+        />
+      </app-form-field>
+    </div>
+
+    <!-- Account type -->
+    <app-form-field label="Account type">
+      <ui-select
+        [options]="accountTypeOptions"
+        formControlName="accountType"
+      />
+    </app-form-field>
+
+    <!-- Company name -->
+    @if (form.value.accountType === 'company') {
+      <app-form-field label="Company name">
+        <app-text-input
+          formControlName="companyName"
+        />
+      </app-form-field>
+    }
+  </section>
+
+  <!-- SECURITY -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Security
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-form-field label="Password *">
+        <app-text-input
+          type="password"
+          formControlName="password"
+        />
+      </app-form-field>
+
+      <app-form-field label="Confirm password *">
+        <app-text-input
+          type="password"
+          formControlName="confirmPassword"
+        />
+      </app-form-field>
+    </div>
+
+    <!-- Active -->
+    <label class="flex items-center gap-2 text-sm text-slate-700">
+      <input
+        type="checkbox"
+        formControlName="isActive"
+        class="rounded border-slate-300"
+      />
+      Is active
+    </label>
+  </section>
+
+  <!-- ROLES -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Roles / Groups
+    </h2>
+
+    <div
+      formGroupName="roles"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-slate-700"
+    >
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="customer" /> Customer
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="sales" /> Sales
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="salesManager" /> Sales Manager
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="warehouseClerk" /> Warehouse Clerk
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="warehouseManager" /> Warehouse Manager
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="productManager" /> Product Manager
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="manager" /> Manager
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="admin" /> Admin
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="translator" /> Translator
+      </label>
+    </div>
+  </section>
+
+  <!-- ACTIONS -->
+  <div class="flex justify-end gap-3">
+    <button
+      type="submit"
+      class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+    >
+      Create User
+    </button>
+  </div>
+
+</form>
