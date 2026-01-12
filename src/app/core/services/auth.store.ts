@@ -1,18 +1,21 @@
 import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { User, UserProfile } from './auth.types';
+import { UserProfile } from './auth.types';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
   token = signal<string | null>(null);
+  refreshToken = signal<string | null>(null);
   user = signal<UserProfile | null>(null);
 
   private platformId = inject(PLATFORM_ID);
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
-      const saved = localStorage.getItem('token');
-      if (saved) this.token.set(saved);
+      const savedAccess = localStorage.getItem('access_token');
+      const savedRefresh = localStorage.getItem('refresh_token');
+      if (savedAccess) this.token.set(savedAccess);
+      if (savedRefresh) this.refreshToken.set(savedRefresh);
     }
   }
 
@@ -20,18 +23,24 @@ export class AuthStore {
     this.user.set(user);
   }
 
-  loginSuccess(token: string, user: User) {
-    this.token.set(token);
+  loginSuccess(access: string, refresh: string, user: UserProfile | null = null) {
+    this.token.set(access);
+    this.refreshToken.set(refresh);
+    if (user) this.user.set(user);
+
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('token', token);
+      localStorage.setItem('access_token', access);
+      localStorage.setItem('refresh_token', refresh);
     }
   }
 
   logout() {
     this.token.set(null);
+    this.refreshToken.set(null);
     this.user.set(null);
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
     }
   }
 }
