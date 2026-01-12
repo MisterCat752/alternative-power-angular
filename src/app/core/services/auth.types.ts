@@ -21,18 +21,30 @@ export interface RegisterDto {
 }
 
 export interface UserProfile {
-  account_type: 'individual' | 'company' | string;
-  date_joined: string; // ISO-string from backend
+  id: string;
   email: string;
-  email_verified_at: string | null; // ISO-string or null
+
   first_name: string;
-  groups: string[]; // e.g. ['Customer']
-  id: string; // UUID
+  last_name: string;
+  phone: string;
+  preferred_language: string;
+
+  account_type: 'individual' | 'company';
+
+  company_name?: string;
+  company_reg_no?: string;
+  company_vat_id?: string;
+
+  avatar: string | null;
+
+  date_joined: string;
+  email_verified_at: string | null;
+
   is_email_verified: boolean;
   is_manager: boolean;
   is_staff: boolean;
-  last_name: string;
-  preferred_language: string;
-  // allow extra fields from backend
-  [key: string]: unknown;
+
+  groups: string[];
+
+  [key: string]: any;
 }

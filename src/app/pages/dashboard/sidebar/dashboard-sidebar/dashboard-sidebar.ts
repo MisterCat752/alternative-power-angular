@@ -16,6 +16,11 @@ export class DashboardSidebar {
   private authStore = inject(AuthStore);
   groups: NavGroup[] = [
     {
+      key: 'profile',
+      label: 'Profile',
+      items: [{ label: 'Profile', to: '/dashboard/profile' }],
+    },
+    {
       key: 'catalog',
       label: 'Catalog',
       items: [

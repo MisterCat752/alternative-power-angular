@@ -9,7 +9,12 @@ export interface Vendor {
   name: string;
   email: string;
 }
-
+// Интерфейс
+export interface Location {
+  code: string;
+  name: string;
+  type: 'internal' | 'external' | string;
+}
 export interface PurchaseInvoice {
   id: number;
   vendor: Vendor;
@@ -60,5 +65,20 @@ export class InvoicesService {
 
   getInvoiceById(id: number) {
     return this.http.get<PurchaseInvoiceDetailsDto>(`${this.apiUrl}/purchase-invoices/${id}/`);
+  }
+
+  lockInvoice(id: number): Observable<{ detail: string }> {
+    return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/lock/`, {});
+  }
+
+  receiveInvoice(id: number, locationCode: string = 'WH/MAIN'): Observable<{ detail: string }> {
+    return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/receive/`, {
+      location_code: locationCode,
+    });
+  }
+
+  // InvoicesService или InventoryService
+  getLocations(): Observable<Location> {
+    return this.http.get<Location>(`${this.apiUrl}/locations/`);
   }
 }

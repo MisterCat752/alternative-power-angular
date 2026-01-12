@@ -140,8 +140,6 @@ export class InvoicesPage {
   filtered = computed(() => {
     const q = this.search().trim().toLowerCase();
 
-    console.log(this.rows, 'massiv');
-
     return this.rows().filter((r) => {
       const byTab = this.activeTab() === 'ALL' ? true : r.currency === this.activeTab();
 
@@ -195,5 +193,64 @@ export class InvoicesPage {
 
   onDeleteSelected() {
     console.log('delete selected');
+  }
+
+  onLockInvoice(row: InvoiceRow) {
+    if (row.status !== 'RECEIVED') {
+      alert('Можно заблокировать только счета со статусом RECEIVED');
+      return;
+    }
+
+    this.invoicesService.lockInvoice(row.id).subscribe({
+      next: (res) => {
+        alert(res.detail); // "Invoice locked."
+        // обновляем локально статус
+        console.log('click', res);
+        this.rows.update((rows) =>
+          rows.map((r) =>
+            r.id === row.id
+              ? { ...r, status: 'LOCKED' } // меняем статус
+              : r
+          )
+        );
+      },
+      error: (err) => {
+        if (err.status === 400) {
+          alert(err.error.detail);
+        } else if (err.status === 401) {
+          alert('Не авторизован');
+        } else if (err.status === 403) {
+          alert('Нет прав менеджера');
+        } else if (err.status === 404) {
+          alert('Счет не найден');
+        } else {
+          alert('Произошла ошибка');
+        }
+      },
+    });
+  }
+
+  onReceiveInvoice(row: InvoiceRow) {
+    if (row.status !== 'DRAFT') {
+      alert('Можно принять только счета со статусом DRAFT');
+      return;
+    }
+
+    // Берём "локашин" напрямую — у тебя один склад, например "WH/MAIN"
+    const locationCode = 'WH/MAIN'; // <- заменить на реальный код со стороны бекенда
+
+    this.invoicesService.receiveInvoice(row.id, locationCode).subscribe({
+      next: (res) => {
+        alert(res.detail); // "Invoice received. Stock posted to WH/MAIN."
+        // обновляем локально статус
+        this.rows.update((rows) =>
+          rows.map((r) => (r.id === row.id ? { ...r, status: 'RECEIVED' } : r))
+        );
+      },
+      error: (err) => {
+        const detail = err.error?.detail || 'Произошла ошибка';
+        alert(detail);
+      },
+    });
   }
 }

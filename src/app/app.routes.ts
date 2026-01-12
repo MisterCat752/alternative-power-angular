@@ -49,7 +49,10 @@ export const routes: Routes = [
       ),
     children: [
       { path: '', pathMatch: 'full', redirectTo: '' },
-
+      {
+        path: 'profile',
+        loadComponent: () => import('./pages/dashboard/profile/profile').then((m) => m.Profile),
+      },
       {
         path: 'catalog/products',
         loadComponent: () =>

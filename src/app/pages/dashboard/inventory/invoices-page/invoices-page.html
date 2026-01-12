@@ -143,7 +143,7 @@
             <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
 
             <td class="px-4 py-4">
-              <div class="text-blue-600 font-semibold hover:underline cursor-pointer">{{ r.invoice }}</div>
+              <div  [routerLink]="['/dashboard/inventory/invoices', r.id]" class="text-blue-600 font-semibold hover:underline cursor-pointer">{{ r.invoice }}</div>
               <div class="mt-1">
                 <span class="text-[11px] px-2 py-0.5 rounded-full border font-semibold" [class]="badgeClass(r.status)">
                   {{ r.status === 'RECEIVED' ? 'Received' : 'Pending' }}
@@ -177,7 +177,24 @@
                 [routerLink]="['/dashboard/inventory/invoices', r.id ]"
                 class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100" title="View">👁</button>
                 <button class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100" title="Receive">📥</button>
-                <button class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100" title="Lock">🔒</button>
+                  <button
+    class="h-9 w-9 cursor-pointer rounded-xl bg-purple-50 border border-purple-200 hover:bg-purple-100 text-purple-700"
+    title="Lock"
+    (click)="onLockInvoice(r)"
+    [disabled]="r.status !== 'RECEIVED'"
+  >
+    🔒
+  </button>
+      <!-- Receive -->
+    
+      <button
+        class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700"
+        title="Receive"
+        (click)="onReceiveInvoice(r)"
+      >
+        📥ds
+      </button>
+   
                 <button class="h-9 w-9 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100" title="Delete">🗑</button>
               </div>
             </td>
