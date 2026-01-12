@@ -128,6 +128,7 @@
         <tr class="border-b border-slate-200">
           <th class="px-4 py-3 w-12"><input type="checkbox" class="h-4 w-4" /></th>
           <th class="px-4 py-3 text-left">INVOICE</th>
+          <th class="px-4 py-3 text-left">STATUS</th>
           <th class="px-4 py-3 text-left">DATE</th>
           <th class="px-4 py-3 text-left">VENDOR</th>
           <th class="px-4 py-3 text-right">AMOUNT</th>
@@ -149,7 +150,14 @@
                 </span>
               </div>
             </td>
-
+<td class="px-4 py-4">
+  <span
+    class="inline-flex items-center px-2.5 py-1 rounded-full border text-xs font-semibold"
+    [class]="badgeClass(r.status)"
+  >
+    {{ r.status }}
+  </span>
+</td>
             <td class="px-4 py-4 text-slate-700">{{ r.date }}</td>
             <td class="px-4 py-4 text-slate-700">{{ r.vendor }}</td>
 
@@ -175,5 +183,28 @@
         }
       </tbody>
     </table>
+    <div class="flex items-center justify-between px-4 py-3 text-sm text-slate-600">
+  <div>
+    Page {{ page() }} of {{ totalPages() }}
+  </div>
+
+  <div class="flex items-center gap-2">
+    <button
+      class="h-9 px-3 rounded-xl border border-slate-200 hover:bg-slate-50"
+      [disabled]="!hasPrev()"
+      (click)="prevPage()"
+    >
+      Prev
+    </button>
+
+    <button
+      class="h-9 px-3 rounded-xl border border-slate-200 hover:bg-slate-50"
+      [disabled]="!hasNext()"
+      (click)="nextPage()"
+    >
+      Next
+    </button>
+  </div>
+</div>
   </div>
 </div>
