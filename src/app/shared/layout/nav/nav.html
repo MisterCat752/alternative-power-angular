@@ -1,12 +1,12 @@
 <div class="bg-gray shadow">
-  <app-container className="py-2">
+  <app-container class="py-2">
     <nav class="flex items-center justify-between">
-      <!-- Левая часть: логотип -->
+      <!-- Логотип -->
       <a routerLink="/" class="flex items-center">
         <img src="/logo.png" alt="logo" class="max-w-[100px] max-h-[40px]" />
       </a>
 
-      <!-- Центр: поиск -->
+      <!-- Поиск -->
       <div class="flex-1 max-w-[592px] mx-6">
         <div class="relative">
           <input
@@ -18,27 +18,51 @@
         </div>
       </div>
 
-      <!-- Правая часть: иконки -->
+      <!-- Иконки справа -->
       <div class="flex items-center space-x-4">
+
+        <!-- Notifications -->
         <button mat-icon-button type="button">
           <mat-icon>notifications</mat-icon>
         </button>
 
-        <button mat-button type="button" class="text-text-secondary">
-          EN
+        <!-- Language -->
+        <button mat-button type="button" class="text-text-secondary">EN</button>
+
+        <!-- Cart -->
+        <button mat-icon-button type="button" (click)="cartUi.toggle()">
+          <mat-icon>shopping_cart</mat-icon>
         </button>
 
-       <button mat-icon-button type="button" (click)="cartUi.toggle()">
-           <mat-icon>shopping_cart</mat-icon>
-      </button>
-      <a routerLink="/dashboard">
-        dash
-      </a>
-        <a routerLink="/auth/login" class="inline-flex">
-          <button mat-icon-button type="button" aria-label="Login">
-            <mat-icon>account_circle</mat-icon>
-          </button>
-        </a>
+        <!-- Dashboard -->
+        <a routerLink="/dashboard">dash</a>
+
+        <!-- User Avatar / Login -->
+        @if(user) {
+          <div class="relative">
+            <button mat-button type="button" class="flex items-center gap-2">
+              <img
+                [src]="avatarUrl"
+                alt="Avatar"
+                class="w-8 h-8 rounded-full object-cover border"
+              />
+              <span>{{ user.email }}</span>
+            </button>
+            <!-- Dropdown -->
+            <div class="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-100 flex flex-col">
+              <a routerLink="/dashboard/profile" class="px-4 py-2 hover:bg-gray-100">Profile</a>
+              <a routerLink="/dashboard/profile-settings" class="px-4 py-2 hover:bg-gray-100">Settings</a>
+              <button class="px-4 py-2 text-left hover:bg-gray-100" (click)="logout()">Logout</button>
+            </div>
+          </div>
+        } @else {
+          <a routerLink="/login" class="inline-flex">
+            <button mat-icon-button type="button" aria-label="Login">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+          </a>
+        }
+      
       </div>
     </nav>
   </app-container>

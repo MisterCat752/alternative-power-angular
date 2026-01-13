@@ -5,6 +5,7 @@ import { ProfileService } from '../../../core/services/profile.service';
 import { UserProfile } from '../../../core/services/auth.types';
 import { map, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { AuthStore } from '../../../core/services/auth.store';
 
 @Component({
   selector: 'app-profile',
@@ -14,19 +15,13 @@ import { environment } from '../../../../environments/environment';
 })
 export class Profile implements OnInit {
   private profileService = inject(ProfileService);
-
+  private authStore = inject(AuthStore);
   profile$: Observable<UserProfile> | null = null;
-  avatarUrl$!: Observable<string | null>;
   ngOnInit() {
     this.profile$ = this.profileService.loadProfile();
-    this.avatarUrl$ = this.profile$?.pipe(
-      map((profile) => {
-        if (!profile?.avatar) return null;
-        return profile.avatar.startsWith('http')
-          ? profile.avatar
-          : `${environment.mediaUrl}${profile.avatar}`;
-      }),
-      tap((url) => console.log('Avatar URL:', url))
-    );
+  }
+  // Avatar можно использовать напрямую из computed signal
+  get avatarUrl() {
+    return this.authStore.avatarUrl();
   }
 }

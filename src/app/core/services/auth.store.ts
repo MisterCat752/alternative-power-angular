@@ -1,6 +1,7 @@
-import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
+import { Injectable, inject, signal, PLATFORM_ID, computed } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { UserProfile } from './auth.types';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
@@ -8,6 +9,14 @@ export class AuthStore {
   refreshToken = signal<string | null>(null);
   user = signal<UserProfile | null>(null);
 
+  // computed для аватара
+  avatarUrl = computed<string | null>(() => {
+    const profile = this.user();
+    if (!profile?.avatar) return null;
+    return profile.avatar.startsWith('http')
+      ? profile.avatar
+      : `${environment.mediaUrl}${profile.avatar}`;
+  });
   private platformId = inject(PLATFORM_ID);
 
   constructor() {

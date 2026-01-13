@@ -27,7 +27,7 @@ export class DashboardSidebar {
       key: 'catalog',
       label: 'Catalog',
       items: [
-        { label: 'Products', to: '/dashboard/catalog/products' },
+        { label: 'Products', to: '/dashboard/catalog/products', requiredGroup: 'Manager' },
         {
           label: 'UOM Categories',
           to: '/dashboard/catalog/uom-categories',
@@ -151,7 +151,7 @@ export class DashboardSidebar {
     return this.groups
       .map((g) => ({
         ...g,
-        items: g.items, //.filter((i) => !i.requiredGroup || userGroups.includes(i.requiredGroup)),
+        items: g.items.filter((i) => !i.requiredGroup || userGroups.includes(i.requiredGroup)),
       }))
       .filter((g) => g.items.length > 0); // <-- убираем группы без доступных элементов
   });

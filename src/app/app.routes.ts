@@ -21,11 +21,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/product/product').then((m) => m.ProductPage),
       },
       {
-        path: 'auth/login',
+        path: 'login',
         loadComponent: () => import('./pages/auth/login/login').then((m) => m.LoginPage),
       },
       {
-        path: 'auth/register',
+        path: 'register',
         loadComponent: () => import('./pages/auth/register/register').then((m) => m.RegisterPage),
       },
       {
@@ -42,7 +42,7 @@ export const routes: Routes = [
   // дашборд
   {
     path: 'dashboard',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./pages/dashboard/layout/dashboard-layout/dashboard-layout').then(
         (m) => m.DashboardLayout

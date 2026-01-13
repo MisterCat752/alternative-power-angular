@@ -41,7 +41,7 @@ export class LoginPage {
     this.auth.login(data).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/']); // после логина редирект на домашнюю
+        this.router.navigate(['/dashboard/profile']); // после логина редирект на домашнюю
       },
       error: (err) => {
         this.loading = false;
