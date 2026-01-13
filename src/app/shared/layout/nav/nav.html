@@ -1,6 +1,6 @@
 <div class="bg-gray shadow">
-  <app-container class="py-2">
-    <nav class="flex items-center justify-between">
+  <app-container class="py-4">
+    <nav class="flex items-center justify-between py-3">
       <!-- Логотип -->
       <a routerLink="/" class="flex items-center">
         <img src="/logo.png" alt="logo" class="max-w-[100px] max-h-[40px]" />
@@ -34,34 +34,52 @@
           <mat-icon>shopping_cart</mat-icon>
         </button>
 
-        <!-- Dashboard -->
-        <a routerLink="/dashboard">dash</a>
+    
 
         <!-- User Avatar / Login -->
-        @if(user) {
-          <div class="relative">
-            <button mat-button type="button" class="flex items-center gap-2">
+          @if(user) {
+          <div class="relative " (document:click)="closeDropdown()" (click)="$event.stopPropagation()">
+            <button mat-button type="button" class="flex items-center gap-2 w-8 h-8" (click)="toggleDropdown()">
               <img
                 [src]="avatarUrl"
                 alt="Avatar"
                 class="w-8 h-8 rounded-full object-cover border"
               />
-              <span>{{ user.email }}</span>
+             
             </button>
+
             <!-- Dropdown -->
-            <div class="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-100 flex flex-col">
-              <a routerLink="/dashboard/profile" class="px-4 py-2 hover:bg-gray-100">Profile</a>
-              <a routerLink="/dashboard/profile-settings" class="px-4 py-2 hover:bg-gray-100">Settings</a>
-              <button class="px-4 py-2 text-left hover:bg-gray-100" (click)="logout()">Logout</button>
-            </div>
+            @if(dropdownOpen()) {
+        <div class="absolute right-0 mt-2 w-[290px] h-[350px] bg-white border border-gray rounded shadow-md flex flex-col z-50 p-5 justify-between">
+  <!-- Верхняя часть: email + ссылки -->
+  <div>
+       <img
+                [src]="avatarUrl"
+                alt="Avatar"
+                class="w-12 h-12 rounded-full object-cover border mx-auto"
+              />
+    <span class="text-black text-[14px] my-3 block text-center">{{ user.email }}</span>
+    <span class="text-black text-[12px] mb-1 block text-center ">Account Type : {{ user.account_type }}</span>
+    <a routerLink="/dashboard/profile" class="px-4 py-2 hover:bg-gray-100 block">Profile</a>
+    <a routerLink="/dashboard/profile-settings" class="px-4 py-2 hover:bg-gray-100 block">Settings</a>
+  </div>
+
+  <!-- Нижняя часть: кнопка logout -->
+  <button class="px-4 py-2 border border-lightGray rounded-[12px] bg-gray text-left hover:bg-black/10 w-full max-w-[260px]" 
+          (click)="logout()">
+    Logout
+  </button>
+</div>
+            }
           </div>
         } @else {
-          <a routerLink="/login" class="inline-flex">
+          <a routerLink="/auth/login" class="inline-flex">
             <button mat-icon-button type="button" aria-label="Login">
               <mat-icon>account_circle</mat-icon>
             </button>
           </a>
         }
+      
       
       </div>
     </nav>

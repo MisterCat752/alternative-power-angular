@@ -1,24 +1,11 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
-
-type LogStatus = 'STARTED' | 'SUCCESS' | 'FAILED' | 'RUNNING';
-type LogSource = 'CORE' | 'CATALOG' | 'INVENTORY';
-
-type LogRow = {
-  source: LogSource;
-  type: string;
-  status: LogStatus;
-  started: string;
-  completed: string;
-  userEmail: string;
-  recordsPlus: number;
-  recordsMinus: number;
-  recordsErr: number;
-  message: string;
-};
-
-type Tab = 'ALL' | 'SUCCESS' | 'FAILED' | 'RUNNING';
+import { CommonModule } from '@angular/common';
+import {
+  IntegrationsService,
+  InvoiceSyncResult,
+  SyncLog,
+} from '../../../../core/services/integrations/integrations.service';
 
 @Component({
   selector: 'app-sync-logs-page',
@@ -27,13 +14,17 @@ type Tab = 'ALL' | 'SUCCESS' | 'FAILED' | 'RUNNING';
   templateUrl: './sync-logs-page.html',
 })
 export class SyncLogsPage {
-  tab = signal<Tab>('ALL');
-
+  tab = signal<'ALL' | 'SUCCESS' | 'FAILED' | 'RUNNING'>('ALL');
   q = signal('');
   typeQ = signal('');
-  status = signal<LogStatus | 'ALL'>('ALL');
+  status = signal<'ALL' | 'STARTED' | 'RUNNING' | 'SUCCESS' | 'FAILED'>('ALL');
 
-  statusOpts: UiSelectOption<LogStatus | 'ALL'>[] = [
+  syncing = signal(false);
+  lastResult = signal<InvoiceSyncResult | null>(null);
+  errorMsg = signal<string | null>(null);
+
+  // массив опций для ui-select
+  statusOpts: UiSelectOption<'ALL' | 'STARTED' | 'RUNNING' | 'SUCCESS' | 'FAILED'>[] = [
     { label: 'All statuses', value: 'ALL' },
     { label: 'STARTED', value: 'STARTED' },
     { label: 'RUNNING', value: 'RUNNING' },
@@ -41,87 +32,71 @@ export class SyncLogsPage {
     { label: 'FAILED', value: 'FAILED' },
   ];
 
-  rows = signal<LogRow[]>([
-    {
-      source: 'CORE',
-      type: 'invoices',
-      status: 'STARTED',
-      started: 'Дек 26, 18:34',
-      completed: '—',
-      userEmail: 'gherasimovalexandru@hotmail.com',
-      recordsPlus: 0,
-      recordsMinus: 0,
-      recordsErr: 0,
-      message: 'Sync started…',
-    },
-    {
-      source: 'CORE',
-      type: 'products',
-      status: 'SUCCESS',
-      started: 'Дек 15, 00:28',
-      completed: 'Дек 15, 00:28',
-      userEmail: 'gherasimovalexandru@hotmail.com',
-      recordsPlus: 0,
-      recordsMinus: 0,
-      recordsErr: 0,
-      message: 'Syncing currency/invoice from invoices… refreshing prices…',
-    },
-    {
-      source: 'CORE',
-      type: 'invoices',
-      status: 'SUCCESS',
-      started: 'Дек 12, 22:49',
-      completed: 'Дек 12, 22:49',
-      userEmail: 'gherasimovalexandru@hotmail.com',
-      recordsPlus: 0,
-      recordsMinus: 360,
-      recordsErr: 10,
-      message: 'Imported invoices: +/-360; lines: +/-1418; skipped 0',
-    },
-    {
-      source: 'CORE',
-      type: 'products',
-      status: 'FAILED',
-      started: 'Дек 11, 10:12',
-      completed: 'Дек 11, 10:13',
-      userEmail: 'gherasimovalexandru@hotmail.com',
-      recordsPlus: 0,
-      recordsMinus: 0,
-      recordsErr: 1,
-      message: 'Request timeout on vendor API.',
-    },
-  ]);
+  rows = signal<SyncLog[]>([]);
+
+  constructor(private integrationsService: IntegrationsService) {}
+
+  ngOnInit() {
+    this.loadLogs();
+  }
+
+  loadLogs() {
+    this.integrationsService.getSyncLogs().subscribe({
+      next: (logs) => this.rows.set(logs),
+      error: (err) => console.error('Failed to load sync logs:', err),
+    });
+  }
+
+  /** 🚀 Запуск синка */
+  syncInvoices() {
+    if (this.syncing()) return;
+
+    this.syncing.set(true);
+    this.errorMsg.set(null);
+    this.lastResult.set(null);
+
+    this.integrationsService.syncInvoices().subscribe({
+      next: (res) => {
+        this.lastResult.set(res);
+        this.loadLogs(); // обновляем таблицу логов
+      },
+      error: (err) => {
+        this.errorMsg.set(err?.error?.detail ?? 'Sync failed');
+      },
+      complete: () => {
+        this.syncing.set(false);
+      },
+    });
+  }
 
   view = computed(() => {
     const q = this.q().trim().toLowerCase();
-    const tq = this.typeQ().trim().toLowerCase();
     const st = this.status();
+    const tab = this.tab();
 
     return this.rows().filter((r) => {
-      const byTab = this.tab() === 'ALL' ? true : r.status === this.tab();
-      const byQ =
-        !q || r.message.toLowerCase().includes(q) || r.userEmail.toLowerCase().includes(q);
-      const byType = !tq || r.type.toLowerCase().includes(tq);
-      const byStatus = st === 'ALL' ? true : r.status === st;
-      return byTab && byQ && byType && byStatus;
+      const byTab = tab === 'ALL' ? true : r.status.toUpperCase() === tab;
+      const byQ = !q || r.message.toLowerCase().includes(q) || r.user.toLowerCase().includes(q);
+      const byStatus = st === 'ALL' ? true : r.status.toUpperCase() === st;
+      return byTab && byQ && byStatus;
     });
   });
 
-  apply() {
-    // тут ничего не нужно — фильтры реактивные, но кнопка на скрине есть
+  badgeClass(status: string) {
+    if (status === 'SUCCESS') return 'bg-green-100 text-green-700 border-green-200';
+    if (status === 'FAILED') return 'bg-red-100 text-red-700 border-red-200';
+    if (status === 'RUNNING' || status === 'STARTED')
+      return 'bg-blue-100 text-blue-700 border-blue-200';
+    return 'bg-slate-100 text-slate-700 border-slate-200';
   }
-
+  // 🔹 метод apply чтобы TS не ругался
+  apply() {
+    // фильтры уже реактивные, ничего делать не нужно
+  }
   reset() {
     this.q.set('');
     this.typeQ.set('');
     this.status.set('ALL');
     this.tab.set('ALL');
-  }
-
-  badgeClass(s: LogStatus) {
-    if (s === 'SUCCESS') return 'bg-green-100 text-green-700 border-green-200';
-    if (s === 'FAILED') return 'bg-red-100 text-red-700 border-red-200';
-    if (s === 'RUNNING') return 'bg-blue-100 text-blue-700 border-blue-200';
-    return 'bg-slate-100 text-slate-700 border-slate-200';
   }
 }

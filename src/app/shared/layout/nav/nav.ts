@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Container } from '../../container/container';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +17,8 @@ export class Nav {
   cartUi = inject(CartUiService);
   authStore = inject(AuthStore);
 
+  // состояние дропдауна
+  dropdownOpen = signal(false);
   get user() {
     return this.authStore.user();
   }
@@ -27,5 +29,13 @@ export class Nav {
 
   logout() {
     this.authStore.logout();
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen.set(!this.dropdownOpen());
+  }
+
+  closeDropdown() {
+    this.dropdownOpen.set(false);
   }
 }
