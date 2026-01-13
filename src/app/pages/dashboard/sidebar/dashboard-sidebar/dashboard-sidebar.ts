@@ -18,7 +18,10 @@ export class DashboardSidebar {
     {
       key: 'profile',
       label: 'Profile',
-      items: [{ label: 'Profile', to: '/dashboard/profile' }],
+      items: [
+        { label: 'Profile', to: '/dashboard/profile' },
+        { label: 'Profile settings', to: '/dashboard/profile-settings' },
+      ],
     },
     {
       key: 'catalog',
