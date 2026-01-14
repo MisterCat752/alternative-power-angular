@@ -9,21 +9,60 @@
     <div class="text-slate-500 mt-1">Warehouse locations and storage areas</div>
   </div>
 
-  <div class="flex items-center gap-3">
-    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
+  <div class="flex items-center justify-end gap-3">
+    <button
+      class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2"
+    >
       ⤓ Export
     </button>
-    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
-      + Add location
+
+    <button
+      class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2"
+      (click)="mode.set('create'); selectedLocation.set(null); open.set(true)"
+    >
+      + Add Location
     </button>
+
+    <!-- Create/Edit Modal -->
+    <app-ui-modal [open]="open() && mode() !== 'delete'" (openChange)="open.set($event)">
+      <app-location-form
+        [location]="selectedLocation()"
+        (cancel)="open.set(false)"
+        (saved)="open.set(false); loadLocations()"
+      ></app-location-form>
+    </app-ui-modal>
+
+    <!-- Delete Modal -->
+    <app-ui-modal [open]="open() && mode() === 'delete'" (openChange)="open.set($event)">
+      <h2 class="text-xl font-bold mb-4">Delete Location</h2>
+      <p>Are you sure you want to delete location <strong>{{ selectedLocation()?.name }}</strong>?</p>
+
+      <div class="flex justify-end gap-3 pt-4">
+        <button
+          type="button"
+          class="px-4 py-2 border rounded-lg"
+          (click)="open.set(false)"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="px-4 py-2 rounded-lg bg-red-600 text-white"
+          (click)="deleteLocation(selectedLocation()?.id)"
+        >
+          Delete
+        </button>
+      </div>
+    </app-ui-modal>
   </div>
 </div>
 
+<!-- Stats Cards -->
 <div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
   <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
     <div>
       <div class="text-sm text-slate-500">Total Locations</div>
-      <div class="text-2xl font-bold text-slate-900">10</div>
+      <div class="text-2xl font-bold text-slate-900"> {{ totalCount() }}</div>
     </div>
     <div class="text-3xl">📍</div>
   </div>
@@ -31,7 +70,7 @@
   <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
     <div>
       <div class="text-sm text-slate-500">Internal</div>
-      <div class="text-2xl font-bold text-green-600">0</div>
+      <div class="text-2xl font-bold text-green-600"> {{ internalCount() }}</div>
       <div class="text-xs text-slate-400">Warehouse</div>
     </div>
     <div class="text-3xl">🏬</div>
@@ -40,7 +79,7 @@
   <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
     <div>
       <div class="text-sm text-slate-500">Supplier</div>
-      <div class="text-2xl font-bold text-blue-600">0</div>
+      <div class="text-2xl font-bold text-blue-600"> {{ supplierCount() }}</div>
       <div class="text-xs text-slate-400">External</div>
     </div>
     <div class="text-3xl">🚚</div>
@@ -49,40 +88,29 @@
   <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between">
     <div>
       <div class="text-sm text-slate-500">Customer</div>
-      <div class="text-2xl font-bold text-orange-600">0</div>
+      <div class="text-2xl font-bold text-orange-600"> {{ customerCount() }}</div>
       <div class="text-xs text-slate-400">Delivery</div>
     </div>
     <div class="text-3xl">👥</div>
   </div>
 </div>
 
-<div class="mt-6 flex items-center gap-6 text-sm">
-  <button (click)="tab.set('ALL')" class="font-semibold" [class.text-blue-600]="tab()==='ALL'">All Locations <span class="text-slate-400">(10)</span></button>
-  <button (click)="tab.set('INTERNAL')" class="font-semibold" [class.text-blue-600]="tab()==='INTERNAL'">Internal</button>
-  <button (click)="tab.set('SUPPLIER')" class="font-semibold" [class.text-blue-600]="tab()==='SUPPLIER'">Supplier</button>
-  <button (click)="tab.set('CUSTOMER')" class="font-semibold" [class.text-blue-600]="tab()==='CUSTOMER'">Customer</button>
-  <button (click)="tab.set('VIRTUAL')" class="font-semibold" [class.text-blue-600]="tab()==='VIRTUAL'">Virtual</button>
-</div>
-
+<!-- Filters -->
 <div class="mt-4 grid grid-cols-1 lg:grid-cols-[320px_220px_220px_1fr] gap-3 items-center">
   <div class="bg-white border border-slate-200 rounded-2xl px-4 h-10 flex items-center gap-3">
     <span class="text-slate-400">🔎</span>
-    <input class="w-full outline-none text-sm" placeholder="Search locations" (input)="search.set(($any($event.target).value))" />
+    <input
+      class="w-full outline-none text-sm"
+      placeholder="Search locations"
+      (input)="search.set(($any($event.target).value))"
+    />
   </div>
 
   <ui-select placeholder="Parent Location" [options]="parentOpts" [value]="parent()" (valueChange)="parent.set($event)"></ui-select>
   <ui-select placeholder="Usage Type" [options]="usageOpts" [value]="usage()" (valueChange)="usage.set($event)"></ui-select>
-
-  <div class="flex items-center justify-end gap-3">
-    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
-      ⤓ Export
-    </button>
-    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
-      + Add Location
-    </button>
-  </div>
 </div>
 
+<!-- Table -->
 <div class="mt-4 bg-white border border-slate-200 rounded-2xl overflow-hidden">
   <div class="overflow-auto">
     <table class="min-w-[1200px] w-full text-sm">
@@ -100,12 +128,10 @@
       </thead>
 
       <tbody>
-        @for (r of filtered(); track r.code) {
+        @for (r of filtered(); track r.id) {
           <tr class="border-b border-slate-100 hover:bg-slate-50">
             <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
-
             <td class="px-4 py-4 font-semibold text-slate-900">{{ r.code }}</td>
-
             <td class="px-4 py-4">
               <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center">👤</div>
@@ -115,24 +141,24 @@
                 </div>
               </div>
             </td>
-
             <td class="px-4 py-4">
-              <span class="text-xs px-3 py-1 rounded-full border font-semibold bg-slate-100 text-slate-700 border-slate-200">
-                {{ r.usageType }}
+              <span
+                class="text-xs px-3 py-1 rounded-full border font-semibold bg-slate-100 text-slate-700 border-slate-200"
+              >
+                {{ r.usage }}
               </span>
             </td>
-
             <td class="px-4 py-4">
-              <span class="text-xs px-2 py-1 rounded-lg bg-orange-100 text-orange-700 border border-orange-200 font-semibold">
+              <span
+                class="text-xs px-2 py-1 rounded-lg bg-orange-100 text-orange-700 border border-orange-200 font-semibold"
+              >
                 {{ r.parent }}
               </span>
             </td>
-
             <td class="px-4 py-4 text-right">
               <div class="font-semibold text-slate-900">{{ r.products }}</div>
               <div class="text-xs text-slate-400">products</div>
             </td>
-
             <td class="px-4 py-4">
               <span
                 class="text-xs px-3 py-1 rounded-full border font-semibold"
@@ -146,9 +172,8 @@
                 {{ r.status }}
               </span>
             </td>
-
             <td class="px-4 py-4 text-right">
-              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
+              <ui-action-menu [actions]="rowActions(r)" (action)="onRowAction($event, r)"></ui-action-menu>
             </td>
           </tr>
         }
