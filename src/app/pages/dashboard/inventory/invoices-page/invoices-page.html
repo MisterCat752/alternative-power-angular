@@ -1,5 +1,6 @@
 <div class="text-sm text-blue-600 mb-4">
-  Dashboard <span class="text-slate-400">›</span> Inventory <span class="text-slate-400">›</span>
+  Dashboard <span class="text-slate-400">›</span> Inventory
+  <span class="text-slate-400">›</span>
   <span class="text-blue-700 font-semibold">Invoices</span>
 </div>
 
@@ -7,27 +8,45 @@
   <div>
     <h1 class="text-4xl font-bold text-slate-900">Invoices</h1>
     <div class="text-slate-500 mt-1">Purchase invoices from suppliers</div>
-    <div class="text-xs text-slate-400 mt-2">● Last synced 3 недели, 4 дня by you</div>
+    <div class="text-xs text-slate-400 mt-2">
+      ● Last synced 3 недели, 4 дня by you
+    </div>
   </div>
 
   <div class="flex items-center gap-3">
+    <!-- LOCATION SELECT (под твой TS) -->
+    <ui-select
+      class="w-[260px]"
+      placeholder="Select location"
+      [options]="locationOptions()"
+      [value]="selectedLocation()"
+      (valueChange)="selectedLocation.set($event)"
+    ></ui-select>
+
     <button
       type="button"
-      (click)="onSync()"
       class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2"
     >
       ⟳ Sync invoices
     </button>
+
     <button
       type="button"
-      (click)="onReceiveAll()"
       class="h-10 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-semibold inline-flex items-center gap-2"
     >
       ✓ Receive All
     </button>
+
     <button
       type="button"
-      (click)="onDeleteSelected()"
+      (click)="onReceiveSelected()"
+      class="h-10 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-semibold inline-flex items-center gap-2"
+    >
+      ✓ Receive selected
+    </button>
+
+    <button
+      type="button"
       class="h-10 px-4 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-sm font-semibold inline-flex items-center gap-2"
     >
       🗑 Delete selected
@@ -37,36 +56,52 @@
 
 <!-- summary cards -->
 <div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
-  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between">
+  <div
+    class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between"
+  >
     <div>
       <div class="text-sm text-slate-500">Total Invoices</div>
-      <div class="text-2xl font-bold text-slate-900"> {{totalCount()}}</div>
+      <div class="text-2xl font-bold text-slate-900">
+        {{ totalCount() }}
+      </div>
     </div>
     <div class="text-3xl">🧾</div>
   </div>
 
-  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between">
+  <div
+    class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between"
+  >
     <div>
       <div class="text-sm text-slate-500">Total Value</div>
-      <div class="text-2xl font-bold text-green-600">{{ totalValue() | number:'1.0-2' }}</div>
+      <div class="text-2xl font-bold text-green-600">
+        <!-- {{ totalValue() | number : '1.0-2' }} -->
+      </div>
       <div class="text-xs text-slate-400">MDL</div>
     </div>
     <div class="text-3xl">💲</div>
   </div>
 
-  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between">
+  <div
+    class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between"
+  >
     <div>
       <div class="text-sm text-slate-500">Avg Invoice</div>
-      <div class="text-2xl font-bold text-blue-600">{{ avgInvoice() | number:'1.0-2' }}</div>
+      <div class="text-2xl font-bold text-blue-600">
+        <!-- {{ avgInvoice() | number : '1.0-2' }} -->
+      </div>
       <div class="text-xs text-slate-400">MDL</div>
     </div>
     <div class="text-3xl">📈</div>
   </div>
 
-  <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between">
+  <div
+    class="bg-white border border-slate-200 rounded-2xl p-5 flex items-start justify-between"
+  >
     <div>
       <div class="text-sm text-slate-500">Pending Receipt</div>
-      <div class="text-2xl font-bold text-orange-600">{{ pendingCount() }}</div>
+      <div class="text-2xl font-bold text-orange-600">
+        <!-- {{ pendingCount() }} -->
+      </div>
       <div class="text-xs text-slate-400">Need processing</div>
     </div>
     <div class="text-3xl">🕒</div>
@@ -83,14 +118,19 @@
       [class.text-blue-600]="activeTab() === t.key"
       [class.text-slate-500]="activeTab() !== t.key"
     >
-      {{ t.label }} <span class="text-slate-400">({{ t.count }})</span>
+      {{ t.label }}
+      <span class="text-slate-400">({{ t.count }})</span>
     </button>
   }
 </div>
 
 <!-- filters -->
-<div class="mt-4 grid grid-cols-1 lg:grid-cols-[320px_160px_160px_120px_1fr] gap-3 items-center">
-  <div class="bg-white border border-slate-200 rounded-2xl px-4 h-10 flex items-center gap-3">
+<div
+  class="mt-4 grid grid-cols-1 lg:grid-cols-[320px_160px_160px_120px_1fr] gap-3 items-center"
+>
+  <div
+    class="bg-white border border-slate-200 rounded-2xl px-4 h-10 flex items-center gap-3"
+  >
     <span class="text-slate-400">🔎</span>
     <input
       class="w-full outline-none text-sm"
@@ -126,7 +166,9 @@
     <table class="min-w-[1100px] w-full text-sm">
       <thead class="bg-slate-50 text-slate-600">
         <tr class="border-b border-slate-200">
-          <th class="px-4 py-3 w-12"><input type="checkbox" class="h-4 w-4" /></th>
+          <th class="px-4 py-3 w-12">
+            <input type="checkbox" class="h-4 w-4" />
+          </th>
           <th class="px-4 py-3 text-left">INVOICE</th>
           <th class="px-4 py-3 text-left">STATUS</th>
           <th class="px-4 py-3 text-left">DATE</th>
@@ -140,90 +182,100 @@
       <tbody>
         @for (r of filtered(); track r.invoice) {
           <tr class="border-b border-slate-100 hover:bg-slate-50">
-            <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
+            <td class="px-4 py-4">
+              <input
+                type="checkbox"
+                class="h-4 w-4"
+                [checked]="selectedInvoiceId() === r.id"
+                (change)="onSelectInvoice(r.id, $event)"
+              />
+            </td>
 
             <td class="px-4 py-4">
-              <div  [routerLink]="['/dashboard/inventory/invoices', r.id]" class="text-blue-600 font-semibold hover:underline cursor-pointer">{{ r.invoice }}</div>
-              <div class="mt-1">
-                <span class="text-[11px] px-2 py-0.5 rounded-full border font-semibold" [class]="badgeClass(r.status)">
-                  {{ r.status === 'RECEIVED' ? 'Received' : 'Pending' }}
-                </span>
+              <div
+                [routerLink]="['/dashboard/inventory/invoices', r.id]"
+                class="text-blue-600 font-semibold hover:underline cursor-pointer"
+              >
+                {{ r.invoice }}
               </div>
             </td>
-<td class="px-4 py-4">
-  <span
-    class="inline-flex items-center px-2.5 py-1 rounded-full border text-xs font-semibold"
-    [class]="badgeClass(r.status)"
-  >
-    {{ r.status }}   
-  </span>
-</td>
+
+            <td class="px-4 py-4">
+              <span
+                class="inline-flex items-center px-2.5 py-1 rounded-full border text-xs font-semibold"
+                [class]="badgeClass(r.status)"
+              >
+                {{ r.status }}
+              </span>
+            </td>
+
             <td class="px-4 py-4 text-slate-700">{{ r.date }}</td>
             <td class="px-4 py-4 text-slate-700">{{ r.vendor }}</td>
 
             <td class="px-4 py-4 text-right font-semibold">
-              {{ r.amount | number:'1.2-2' }}
+              {{ r.amount | number : '1.2-2' }}
             </td>
 
             <td class="px-4 py-4">
-              <span class="inline-flex items-center justify-center h-6 px-2 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold">
+              <span
+                class="inline-flex items-center justify-center h-6 px-2 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold"
+              >
                 {{ r.currency }}
               </span>
             </td>
 
             <td class="px-4 py-4 text-right">
               <div class="inline-flex gap-2">
-                <button 
-                [routerLink]="['/dashboard/inventory/invoices', r.id ]"
-                class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100" title="View">👁</button>
-               
-                  <button
-    class="h-9 w-9 cursor-pointer rounded-xl bg-purple-50 border border-purple-200 hover:bg-purple-100 text-purple-700"
-    title="Lock"
-    (click)="onLockInvoice(r)"
-    [disabled]="r.status !== 'RECEIVED'"
-  >
-    🔒
-  </button>
-      <!-- Receive -->
-    
-      <button
-        class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700"
-        title="Receive"
-        (click)="onReceiveInvoice(r)"
-      >
-        📥 
-      </button>
-   
-                <button class="h-9 w-9 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100" title="Delete">🗑</button>
+                <button
+                  [routerLink]="['/dashboard/inventory/invoices', r.id]"
+                  class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100"
+                  title="View"
+                >
+                  👁
+                </button>
+
+                <button
+                  class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700"
+                  title="Receive"
+                >
+                  📥
+                </button>
+
+                <button
+                  class="h-9 w-9 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100"
+                  title="Delete"
+                >
+                  🗑
+                </button>
               </div>
             </td>
           </tr>
         }
       </tbody>
     </table>
-    <div class="flex items-center justify-between px-4 py-3 text-sm text-slate-600">
-  <div>
-    Page {{ page() }} of {{ totalPages() }}
-  </div>
 
-  <div class="flex items-center gap-2">
-    <button
-      class="h-9 px-3 rounded-xl border border-slate-200 hover:bg-slate-50"
-      [disabled]="!hasPrev()"
-      (click)="prevPage()"
+    <div
+      class="flex items-center justify-between px-4 py-3 text-sm text-slate-600"
     >
-      Prev
-    </button>
+      <div>Page {{ page() }} of {{ totalPages() }}</div>
 
-    <button
-      class="h-9 px-3 rounded-xl border border-slate-200 hover:bg-slate-50"
-      [disabled]="!hasNext()"
-      (click)="nextPage()"
-    >
-      Next
-    </button>
-  </div>
-</div>
+      <div class="flex items-center gap-2">
+        <button
+          class="h-9 px-3 rounded-xl border border-slate-200 hover:bg-slate-50"
+          [disabled]="!hasPrev()"
+          (click)="prevPage()"
+        >
+          Prev
+        </button>
+
+        <button
+          class="h-9 px-3 rounded-xl border border-slate-200 hover:bg-slate-50"
+          [disabled]="!hasNext()"
+          (click)="nextPage()"
+        >
+          Next
+        </button>
+      </div>
+    </div>
   </div>
 </div>

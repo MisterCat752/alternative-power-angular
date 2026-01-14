@@ -10,11 +10,7 @@
   </div>
 
   <div class="flex items-center justify-end gap-3">
-    <button
-      class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2"
-    >
-      ⤓ Export
-    </button>
+ 
 
     <button
       class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2"
@@ -116,7 +112,7 @@
     <table class="min-w-[1200px] w-full text-sm">
       <thead class="bg-slate-50 text-slate-600">
         <tr class="border-b border-slate-200">
-          <th class="px-4 py-3 w-12"><input type="checkbox" class="h-4 w-4" /></th>
+         
           <th class="px-4 py-3 text-left">CODE</th>
           <th class="px-4 py-3 text-left">LOCATION NAME</th>
           <th class="px-4 py-3 text-left">USAGE TYPE</th>
@@ -130,7 +126,7 @@
       <tbody>
         @for (r of filtered(); track r.id) {
           <tr class="border-b border-slate-100 hover:bg-slate-50">
-            <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
+            
             <td class="px-4 py-4 font-semibold text-slate-900">{{ r.code }}</td>
             <td class="px-4 py-4">
               <div class="flex items-center gap-3">

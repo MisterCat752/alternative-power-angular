@@ -1,10 +1,12 @@
 import { Component, computed, signal, effect, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
-import { InvoicesService, PurchaseInvoice } from '../../../../core/services/inventory/invoices';
 import { RouterLink } from '@angular/router';
 
-type Currency = 'MDL' | 'EUR' | 'USD';
+import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+import { InvoicesService, PurchaseInvoice } from '../../../../core/services/inventory/invoices';
+import { InventoryLocationsService } from '../../../../core/services/locations/inventory-locations.service';
+
+type Currency = 'MDL' | 'EUR' | 'USD' | 'RON';
 type InvoiceStatus = 'RECEIVED' | 'PENDING' | 'DRAFT' | 'LOCKED';
 
 type InvoiceRow = {
@@ -13,7 +15,7 @@ type InvoiceRow = {
   date: string;
   vendor: string;
   amount: number;
-  currency: 'MDL' | 'USD' | 'EUR' | 'RON';
+  currency: Currency;
   status: InvoiceStatus;
 };
 
@@ -33,21 +35,35 @@ type Tab = {
 })
 export class InvoicesPage {
   private invoicesService = inject(InvoicesService);
+  private locationsService = inject(InventoryLocationsService);
+
   page = signal(1);
   pageSize = signal(20);
+  search = signal('');
+
+  activeTab = signal<TabKey>('ALL');
+
+  status = signal<'ALL' | InvoiceStatus>('ALL');
+  currency = signal<'ALL' | Currency>('ALL');
+  year = signal<'ALL' | '2025' | '2024'>('ALL');
+
+  /** locations */
+  locationOptions = signal<UiSelectOption<string>[]>([]);
+  selectedLocation = signal<string | null>(null);
+
+  /** selection */
+  selectedInvoiceId = signal<number | null>(null);
+
+  /** data */
+  rows = signal<InvoiceRow[]>([]);
+  totalCount = signal(0);
+
   tabs: Tab[] = [
     { key: 'ALL', label: 'All', count: 0 },
     { key: 'MDL', label: 'MDL', count: 0 },
     { key: 'EUR', label: 'EUR', count: 0 },
     { key: 'USD', label: 'USD', count: 0 },
   ];
-
-  activeTab = signal<TabKey>('ALL');
-  search = signal('');
-
-  status = signal<'ALL' | InvoiceStatus>('ALL');
-  currency = signal<'ALL' | Currency>('ALL');
-  year = signal<'ALL' | '2025' | '2024'>('ALL');
 
   statusOpts: UiSelectOption<'ALL' | InvoiceStatus>[] = [
     { label: 'All', value: 'ALL' },
@@ -69,28 +85,31 @@ export class InvoicesPage {
     { label: '2024', value: '2024' },
   ];
 
-  /** данные из API */
-  rows = signal<InvoiceRow[]>([]);
-  totalCount = signal(0);
-
   constructor() {
     effect(() => {
       this.page();
       this.pageSize();
       this.search();
-
       this.loadInvoices();
+    });
+
+    this.loadLocations();
+  }
+
+  loadLocations() {
+    this.locationsService.getLocations().subscribe((locations) => {
+      this.locationOptions.set(
+        locations.map((l) => ({
+          label: `${l.code} — ${l.name}`,
+          value: l.code,
+        }))
+      );
     });
   }
 
   loadInvoices() {
     this.invoicesService
-      .getInvoices(
-        undefined, // status (пока не используем)
-        this.search() || undefined,
-        this.page(),
-        this.pageSize()
-      )
+      .getInvoices(undefined, this.search() || undefined, this.page(), this.pageSize())
       .subscribe((res) => {
         this.totalCount.set(res.count);
 
@@ -105,8 +124,8 @@ export class InvoicesPage {
     id: i.id,
     invoice: i.doc_number,
     date: new Date(i.doc_date).toLocaleDateString('ru-RU', {
-      month: 'short',
       day: 'numeric',
+      month: 'short',
       year: 'numeric',
     }),
     vendor: i.vendor?.name ?? '—',
@@ -128,129 +147,74 @@ export class InvoicesPage {
       count: t.key === 'ALL' ? rows.length : rows.filter((r) => r.currency === t.key).length,
     }));
   }
-  totalPages = computed(() => Math.ceil(this.totalCount() / this.pageSize()));
 
+  totalPages = computed(() => Math.ceil(this.totalCount() / this.pageSize()));
   hasPrev = computed(() => this.page() > 1);
   hasNext = computed(() => this.page() < this.totalPages());
-  totalInvoices = computed(() => this.rows().length);
-  totalValue = computed(() => this.rows().reduce((s, r) => s + r.amount, 0));
-  avgInvoice = computed(() => (this.rows().length ? this.totalValue() / this.rows().length : 0));
-  pendingCount = computed(() => this.rows().filter((r) => r.status === 'PENDING').length);
 
   filtered = computed(() => {
     const q = this.search().trim().toLowerCase();
 
     return this.rows().filter((r) => {
       const byTab = this.activeTab() === 'ALL' ? true : r.currency === this.activeTab();
-
       const bySearch =
         !q || r.invoice.toLowerCase().includes(q) || r.vendor.toLowerCase().includes(q);
-
       const byStatus = this.status() === 'ALL' ? true : r.status === this.status();
-
       const byCurrency = this.currency() === 'ALL' ? true : r.currency === this.currency();
-
-      const byYear = this.year() === 'ALL' ? true : r.date.toLowerCase().includes(this.year());
+      const byYear = this.year() === 'ALL' ? true : r.date.includes(this.year());
 
       return byTab && bySearch && byStatus && byCurrency && byYear;
     });
   });
-  badgeClass(s: InvoiceStatus) {
-    switch (s) {
-      case 'RECEIVED':
-        return 'bg-green-100 text-green-700 border-green-200';
-      case 'DRAFT':
-        return 'bg-slate-100 text-slate-700 border-slate-200';
-      case 'LOCKED':
-        return 'bg-purple-100 text-purple-700 border-purple-200';
-      default:
-        return 'bg-orange-100 text-orange-700 border-orange-200';
-    }
+
+  onSelectInvoice(id: number, e: Event) {
+    const checked = (e.target as HTMLInputElement).checked;
+    this.selectedInvoiceId.set(checked ? id : null);
   }
-  nextPage() {
-    if (this.hasNext()) {
-      this.page.update((p) => p + 1);
+
+  onReceiveSelected() {
+    const invoiceId = this.selectedInvoiceId();
+    const locationCode = this.selectedLocation();
+
+    if (!invoiceId) {
+      alert('Select invoice');
+      return;
     }
+
+    if (!locationCode) {
+      alert('Select location');
+      return;
+    }
+
+    this.invoicesService.receiveInvoice(invoiceId, locationCode).subscribe({
+      next: () => {
+        alert('Invoice successfully received');
+
+        this.rows.update((rows) =>
+          rows.map((r) => (r.id === invoiceId ? { ...r, status: 'RECEIVED' } : r))
+        );
+
+        this.selectedInvoiceId.set(null);
+      },
+      error: (err) => alert(err.error?.detail ?? 'Error'),
+    });
+  }
+
+  nextPage() {
+    if (this.hasNext()) this.page.update((p) => p + 1);
   }
 
   prevPage() {
-    if (this.hasPrev()) {
-      this.page.update((p) => p - 1);
-    }
+    if (this.hasPrev()) this.page.update((p) => p - 1);
   }
 
-  setPageSize(size: number) {
-    this.page.set(1);
-    this.pageSize.set(size);
-  }
-  onSync() {
-    this.loadInvoices();
-  }
-
-  onReceiveAll() {
-    console.log('receive all');
-  }
-
-  onDeleteSelected() {
-    console.log('delete selected');
-  }
-
-  onLockInvoice(row: InvoiceRow) {
-    if (row.status !== 'RECEIVED') {
-      alert('Можно заблокировать только счета со статусом RECEIVED');
-      return;
-    }
-
-    this.invoicesService.lockInvoice(row.id).subscribe({
-      next: (res) => {
-        alert(res.detail); // "Invoice locked."
-        // обновляем локально статус
-        console.log('click', res);
-        this.rows.update((rows) =>
-          rows.map((r) =>
-            r.id === row.id
-              ? { ...r, status: 'LOCKED' } // меняем статус
-              : r
-          )
-        );
-      },
-      error: (err) => {
-        if (err.status === 400) {
-          alert(err.error.detail);
-        } else if (err.status === 401) {
-          alert('Не авторизован');
-        } else if (err.status === 403) {
-          alert('Нет прав менеджера');
-        } else if (err.status === 404) {
-          alert('Счет не найден');
-        } else {
-          alert('Произошла ошибка');
-        }
-      },
-    });
-  }
-
-  onReceiveInvoice(row: InvoiceRow) {
-    if (row.status !== 'DRAFT') {
-      alert('Можно принять только счета со статусом DRAFT');
-      return;
-    }
-
-    // Берём "локашин" напрямую — у тебя один склад, например "WH/MAIN"
-    const locationCode = 'WH/MAIN'; // <- заменить на реальный код со стороны бекенда
-
-    this.invoicesService.receiveInvoice(row.id, locationCode).subscribe({
-      next: (res) => {
-        alert(res.detail); // "Invoice received. Stock posted to WH/MAIN."
-        // обновляем локально статус
-        this.rows.update((rows) =>
-          rows.map((r) => (r.id === row.id ? { ...r, status: 'RECEIVED' } : r))
-        );
-      },
-      error: (err) => {
-        const detail = err.error?.detail || 'Произошла ошибка';
-        alert(detail);
-      },
-    });
+  badgeClass(s: InvoiceStatus) {
+    return s === 'RECEIVED'
+      ? 'bg-green-100 text-green-700 border-green-200'
+      : s === 'DRAFT'
+      ? 'bg-slate-100 text-slate-700 border-slate-200'
+      : s === 'LOCKED'
+      ? 'bg-purple-100 text-purple-700 border-purple-200'
+      : 'bg-orange-100 text-orange-700 border-orange-200';
   }
 }
