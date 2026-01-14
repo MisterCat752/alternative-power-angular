@@ -98,12 +98,16 @@ export class InvoicesPage {
 
   loadLocations() {
     this.locationsService.getLocations().subscribe((locations) => {
-      this.locationOptions.set(
-        locations.map((l) => ({
-          label: `${l.code} — ${l.name}`,
-          value: l.code,
-        }))
-      );
+      const opts = locations.map((l) => ({
+        label: `${l.code} — ${l.name}`,
+        value: l.code,
+      }));
+      this.locationOptions.set(opts);
+
+      // Если выбранное значение ещё не установлено, ставим первое
+      if (!this.selectedLocation() && opts.length > 0) {
+        this.selectedLocation.set(opts[0].value);
+      }
     });
   }
 
@@ -152,6 +156,10 @@ export class InvoicesPage {
   hasPrev = computed(() => this.page() > 1);
   hasNext = computed(() => this.page() < this.totalPages());
 
+  // Вычисляем объект выбранной опции для кнопки селекта
+  selectedLocationOption = computed(() =>
+    this.locationOptions().find((o) => o.value === this.selectedLocation())
+  );
   filtered = computed(() => {
     const q = this.search().trim().toLowerCase();
 

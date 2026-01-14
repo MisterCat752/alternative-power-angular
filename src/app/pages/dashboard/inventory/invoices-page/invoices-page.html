@@ -15,13 +15,12 @@
 
   <div class="flex items-center gap-3">
     <!-- LOCATION SELECT (под твой TS) -->
-    <ui-select
-      class="w-[260px]"
-      placeholder="Select location"
-      [options]="locationOptions()"
-      [value]="selectedLocation()"
-      (valueChange)="selectedLocation.set($event)"
-    ></ui-select>
+ <ui-select
+  class="w-[260px]" 
+  [options]="locationOptions()"
+  [value]="selectedLocation()"
+  (valueChange)="selectedLocation.set($event)"
+></ui-select>
 
     <button
       type="button"

@@ -1,153 +1,75 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
 import { StatCard } from '../../../../shared/stat-card/stat-card';
+import {
+  InventoryStockService,
+  StockItem,
+} from '../../../../core/services/stock/inventory-stock.service';
+import { InventoryLocationsService } from '../../../../core/services/locations/inventory-locations.service';
 
-type MoveState = 'DRAFT' | 'POSTED' | 'CANCELED';
-
-type MoveRow = {
-  date: string;
-  product: string;
-  source: string;
-  destination: string;
-  qty: number;
-  uom: string;
-  state: MoveState;
-  invoice: string;
-};
-
-type LocKey =
-  | 'ALL'
-  | 'CUSTOMERS'
-  | 'MAIN'
-  | 'SCRAPPED'
-  | 'SUPPLIER'
-  | 'VIRTUAL'
-  | 'WH_DAMAGED'
-  | 'WH_MAIN'
-  | 'WH_RETURNS'
-  | 'WH_STORE'
-  | 'WH_TRANSIT';
+type LocKey = 'ALL' | 'WH_MAIN' | 'WH_STORE' | 'WH_TRANSIT' | 'WH_DAMAGED' | 'WH_RETURNS';
 
 @Component({
-  selector: 'app-stock-moves-page',
+  selector: 'app-stock-page',
   standalone: true,
   imports: [UiSelect, StatCard],
   templateUrl: './stock-moves-page.html',
 })
 export class StockMovesPage {
-  tab = signal<'ALL' | 'DRAFT' | 'POSTED' | 'CANCELED'>('ALL');
+  private stockApi = inject(InventoryStockService);
+  private locationsApi = inject(InventoryLocationsService);
   search = signal('');
+  location = signal<string>('ALL');
 
-  source = signal<LocKey>('ALL');
-  destination = signal<LocKey>('ALL');
+  page = signal(1);
+  pageSize = signal(25);
 
-  locOpts: UiSelectOption<LocKey>[] = [
-    { label: 'All Sources', value: 'ALL' },
-    { label: 'CUSTOMERS', value: 'CUSTOMERS', hint: 'Customer Locations' },
-    { label: 'MAIN', value: 'MAIN', hint: 'Main Warehouse' },
-    { label: 'SCRAPPED', value: 'SCRAPPED', hint: 'Scrapped / Lost' },
-    { label: 'SUPPLIER', value: 'SUPPLIER', hint: 'Supplier Location' },
-    { label: 'VIRTUAL', value: 'VIRTUAL', hint: 'Virtual Location' },
-    { label: 'WH/DAMAGED', value: 'WH_DAMAGED', hint: 'Damaged Goods' },
-    { label: 'WH/MAIN', value: 'WH_MAIN', hint: 'Main Warehouse' },
-    { label: 'WH/RETURNS', value: 'WH_RETURNS', hint: 'Customer Returns' },
-    { label: 'WH/STORE', value: 'WH_STORE', hint: 'Store / Showroom' },
-    { label: 'WH/TRANSIT', value: 'WH_TRANSIT', hint: 'In Transit' },
-  ];
+  total = signal(0);
+  rows = signal<StockItem[]>([]);
+  loading = signal(false);
 
-  // ✅ опции для Destination (чтобы "All Destinations")
-  destOpts = computed<UiSelectOption<LocKey>[]>(() =>
-    this.locOpts.map((o) => ({
-      ...o,
-      label: o.label === 'All Sources' ? 'All Destinations' : o.label,
-    }))
-  );
+  locOpts = signal<UiSelectOption<string | 'ALL'>[]>([{ label: 'All locations', value: 'ALL' }]);
 
-  rows = signal<MoveRow[]>([
+  constructor() {
+    this.loadLocations();
+  }
+  loadLocations() {
+    this.locationsApi.getLocations().subscribe((locations) => {
+      this.locOpts.set([
+        { label: 'All locations', value: 'ALL' },
+        ...locations.map((l) => ({
+          label: `${l.code} — ${l.name}`,
+          value: l.code, // 👈 ВАЖНО
+        })),
+      ]);
+    });
+  }
+  stats = computed(() => [
     {
-      date: 'Дек 9, 2025',
-      product: '150222 —',
-      source: 'SUPPLIER',
-      destination: 'WH/MAIN',
-      qty: 1,
-      uom: '—',
-      state: 'POSTED',
-      invoice: 'EBC 000920396',
-    },
-    {
-      date: 'Дек 9, 2025',
-      product: '151295 —',
-      source: 'SUPPLIER',
-      destination: 'WH/MAIN',
-      qty: 1,
-      uom: '—',
-      state: 'POSTED',
-      invoice: 'EBC 000920396',
-    },
-    {
-      date: 'Дек 9, 2025',
-      product: '399416 —',
-      source: 'SUPPLIER',
-      destination: 'WH/MAIN',
-      qty: 5,
-      uom: '—',
-      state: 'POSTED',
-      invoice: 'EBC 000835038',
-    },
-    {
-      date: 'Дек 9, 2025',
-      product: '359519 —',
-      source: 'SUPPLIER',
-      destination: 'WH/MAIN',
-      qty: 4,
-      uom: '—',
-      state: 'POSTED',
-      invoice: 'EBC000759599',
+      title: 'Total records',
+      value: this.total(),
+      icon: '📦',
     },
   ]);
-  stats = [
-    {
-      title: 'Total Moves',
-      value: '1 702',
-      icon: '↔️',
-    },
-    {
-      title: 'Draft',
-      value: 0,
-      subtitle: 'Not posted',
-      icon: '📝',
-    },
-    {
-      title: 'Posted',
-      value: 0,
-      subtitle: 'Completed',
-      valueClass: 'text-green-600',
-      icon: '✅',
-    },
-    {
-      title: 'Canceled',
-      value: 0,
-      subtitle: 'Rejected',
-      valueClass: 'text-red-600',
-      icon: '⛔',
-    },
-  ];
-  filtered = computed(() => {
-    const q = this.search().trim().toLowerCase();
 
-    return this.rows().filter((r) => {
-      const byTab = this.tab() === 'ALL' ? true : r.state === this.tab();
-      const bySearch =
-        !q || r.product.toLowerCase().includes(q) || r.invoice.toLowerCase().includes(q);
+  load = effect(() => {
+    this.loading.set(true);
 
-      const bySource =
-        this.source() === 'ALL' ? true : r.source.replace('/', '_') === this.source();
-      const byDest =
-        this.destination() === 'ALL'
-          ? true
-          : r.destination.replace('/', '_') === this.destination();
-
-      return byTab && bySearch && bySource && byDest;
-    });
+    this.stockApi
+      .getStock({
+        search: this.search(),
+        location_code: this.location() === 'ALL' ? undefined : this.location(),
+        page: this.page(),
+        page_size: this.pageSize(),
+        ordering: '-qty_on_hand',
+      })
+      .subscribe({
+        next: (res) => {
+          this.rows.set(res.results);
+          this.total.set(res.count);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false),
+      });
   });
 }
