@@ -1,9 +1,16 @@
-import { Component, computed, signal } from '@angular/core';
-import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+
+import { UsersService } from '../../../../core/services/users/users.service';
+import { User, UserGroup } from '../../../../core/models/users/user.model';
+
+/* =======================
+   UI TYPES
+======================= */
 
 type UserStatus = 'ACTIVE' | 'INACTIVE';
-type UserType = 'INDIVIDUAL' | 'COMPANY';
+type UserType = 'INDIVIDUAL';
 type Role = 'ADMIN' | 'CUSTOMER' | 'MANAGER';
 
 type UserRow = {
@@ -12,10 +19,20 @@ type UserRow = {
   email: string;
   type: UserType;
   roles: Role[];
-  joined: string; // "Дек 3, 2025"
-  lastSeen: string; // "1 месяц ago"
+  joined: string;
+  lastSeen: string;
   status: UserStatus;
-  avatarUrl?: string;
+  avatar?: string;
+};
+
+/* =======================
+   ROLE → API GROUP MAP
+======================= */
+
+const ROLE_TO_GROUP_MAP: Record<Role, UserGroup> = {
+  ADMIN: 'Admin',
+  CUSTOMER: 'Customer',
+  MANAGER: 'Manager',
 };
 
 @Component({
@@ -25,11 +42,28 @@ type UserRow = {
   templateUrl: './users-page.html',
 })
 export class UsersPage {
+  private usersService = inject(UsersService);
+
+  /* =======================
+     UI STATE
+  ======================= */
+
   tab = signal<'ALL' | 'ACTIVE' | 'INACTIVE'>('ALL');
   search = signal('');
 
   statusFilter = signal<'ALL' | UserStatus>('ALL');
   roleFilter = signal<'ALL' | Role>('ALL');
+
+  page = signal(1);
+  pageSize = signal(25);
+
+  rows = signal<UserRow[]>([]);
+  total = signal(0);
+  loading = signal(false);
+
+  /* =======================
+     SELECT OPTIONS
+  ======================= */
 
   statusOpts: UiSelectOption<'ALL' | UserStatus>[] = [
     { label: 'All', value: 'ALL' },
@@ -44,87 +78,91 @@ export class UsersPage {
     { label: 'Manager', value: 'MANAGER' },
   ];
 
-  rows = signal<UserRow[]>([
-    {
-      id: 'u1',
-      name: 'Simion Taut',
-      email: 'tautsimion@gmail.com',
-      type: 'INDIVIDUAL',
-      roles: ['CUSTOMER'],
-      joined: 'Дек 3, 2025',
-      lastSeen: '1 месяц ago',
-      status: 'ACTIVE',
-      avatarUrl: 'https://i.pravatar.cc/80?img=12',
-    },
-    {
-      id: 'u2',
-      name: 'Tatiana Hacina',
-      email: 'tatiaccount@gmail.com',
-      type: 'INDIVIDUAL',
-      roles: ['CUSTOMER'],
-      joined: 'Дек 1, 2025',
-      lastSeen: '1 месяц, 1 неделя ago',
-      status: 'ACTIVE',
-    },
-    {
-      id: 'u3',
-      name: 'Alexandru Gherasimov',
-      email: 'gherasimovalexandru@gmail.com',
-      type: 'INDIVIDUAL',
-      roles: ['ADMIN'],
-      joined: 'Ноя 26, 2025',
-      lastSeen: '11 часов, 8 минут ago',
-      status: 'ACTIVE',
-    },
-    {
-      id: 'u4',
-      name: 'Ion Taut',
-      email: 'taution4@gmail.com',
-      type: 'INDIVIDUAL',
-      roles: ['ADMIN'],
-      joined: 'Ноя 16, 2025',
-      lastSeen: '7 часов, 6 минут ago',
-      status: 'ACTIVE',
-    },
-    {
-      id: 'u5',
-      name: 'Alexandru Gherasimov',
-      email: 'gherasimovalexandru@hotmail.com',
-      type: 'INDIVIDUAL',
-      roles: [],
-      joined: 'Окт 19, 2025',
-      lastSeen: '3 часа, 49 минут ago',
-      status: 'ACTIVE',
-    },
-  ]);
+  /* =======================
+     API LOAD
+  ======================= */
 
-  totalUsers = computed(() => this.rows().length);
-  activeUsers = computed(() => this.rows().filter((u) => u.status === 'ACTIVE').length);
-  inactiveUsers = computed(() => this.rows().filter((u) => u.status === 'INACTIVE').length);
-  admins = computed(() => this.rows().filter((u) => u.roles.includes('ADMIN')).length);
+  loadUsers = effect(() => {
+    this.loading.set(true);
+
+    const role = this.roleFilter();
+
+    this.usersService
+      .getUsers({
+        page: this.page(),
+        page_size: this.pageSize(),
+        search: this.search() || undefined,
+        groups: role === 'ALL' ? undefined : [ROLE_TO_GROUP_MAP[role]],
+      })
+      .subscribe({
+        next: (res) => {
+          this.rows.set(res.results.map(this.mapUser));
+          this.total.set(res.count);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false),
+      });
+  });
+
+  /* =======================
+     ADAPTER (API → UI)
+  ======================= */
+
+  private mapUser = (u: User): UserRow => ({
+    id: u.id,
+    name: `${u.first_name} ${u.last_name}`.trim(),
+    email: u.email,
+    type: 'INDIVIDUAL',
+    roles: u.groups as Role[],
+    joined: this.formatDate(u.date_joined),
+    lastSeen: '—',
+    status: u.is_active ? 'ACTIVE' : 'INACTIVE',
+    avatar: undefined,
+  });
+
+  /* =======================
+     LOCAL FILTERING
+  ======================= */
 
   filtered = computed(() => {
-    const q = this.search().trim().toLowerCase();
-
     return this.rows().filter((u) => {
       const byTab = this.tab() === 'ALL' ? true : u.status === this.tab();
-      const bySearch = !q || u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q);
-
       const byStatus = this.statusFilter() === 'ALL' ? true : u.status === this.statusFilter();
 
-      const byRole =
-        this.roleFilter() === 'ALL' ? true : u.roles.includes(this.roleFilter() as Role);
-
-      return byTab && bySearch && byStatus && byRole;
+      return byTab && byStatus;
     });
   });
+
+  /* =======================
+     COUNTERS
+  ======================= */
+
+  totalUsers = computed(() => this.total());
+
+  activeUsers = computed(() => this.rows().filter((u) => u.status === 'ACTIVE').length);
+
+  inactiveUsers = computed(() => this.rows().filter((u) => u.status === 'INACTIVE').length);
+
+  admins = computed(() => this.rows().filter((u) => u.roles.includes('ADMIN')).length);
+
+  /* =======================
+     HELPERS
+  ======================= */
 
   initials(name: string) {
     return name
       .split(' ')
       .filter(Boolean)
       .slice(0, 2)
-      .map((x) => x[0]?.toUpperCase())
+      .map((x) => x[0].toUpperCase())
       .join('');
+  }
+
+  private formatDate(date: string) {
+    return new Intl.DateTimeFormat('ru-RU', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(date));
   }
 }

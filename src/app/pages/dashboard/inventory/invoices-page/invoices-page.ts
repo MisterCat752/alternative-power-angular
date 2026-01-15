@@ -48,8 +48,10 @@ export class InvoicesPage {
   year = signal<'ALL' | '2025' | '2024'>('ALL');
 
   /** locations */
-  locationOptions = signal<UiSelectOption<string>[]>([]);
-  selectedLocation = signal<string | null>(null);
+  locationOptions = signal<UiSelectOption<string | 'ALL'>[]>([
+    { label: 'All locations', value: 'ALL' },
+  ]);
+  selectedLocation = signal<string | 'ALL'>('ALL'); // дефолтное значение
 
   /** selection */
   selectedInvoiceId = signal<number | null>(null);
@@ -86,6 +88,7 @@ export class InvoicesPage {
   ];
 
   constructor() {
+    // Загружаем счета при изменении пагинации / поиска
     effect(() => {
       this.page();
       this.pageSize();
@@ -93,24 +96,49 @@ export class InvoicesPage {
       this.loadInvoices();
     });
 
+    // Загружаем locations
     this.loadLocations();
   }
 
+  /** Load locations и сразу ставим дефолт */
   loadLocations() {
     this.locationsService.getLocations().subscribe((locations) => {
-      const opts = locations.map((l) => ({
-        label: `${l.code} — ${l.name}`,
-        value: l.code,
-      }));
+      const opts: UiSelectOption<string | 'ALL'>[] = [
+        { label: 'All locations', value: 'ALL' },
+        ...locations.map((l) => ({
+          label: `${l.code} — ${l.name}`,
+          value: l.code,
+        })),
+      ];
       this.locationOptions.set(opts);
 
-      // Если выбранное значение ещё не установлено, ставим первое
-      if (!this.selectedLocation() && opts.length > 0) {
-        this.selectedLocation.set(opts[0].value);
+      // Если выбранное значение ещё не существует в новых опциях — ставим дефолт
+      if (!opts.find((o) => o.value === this.selectedLocation())) {
+        this.selectedLocation.set('ALL');
       }
     });
   }
 
+  onLockSelected() {
+    const invoiceId = this.selectedInvoiceId();
+
+    if (!invoiceId) {
+      alert('Select invoice');
+      return;
+    }
+
+    this.invoicesService.lockInvoice(invoiceId).subscribe({
+      next: () => {
+        alert('Invoice successfully locked');
+        this.rows.update((rows) =>
+          rows.map((r) => (r.id === invoiceId ? { ...r, status: 'LOCKED' } : r))
+        );
+        this.selectedInvoiceId.set(null);
+      },
+      error: (err) => alert(err.error?.detail ?? 'Error'),
+    });
+  }
+  /** Load invoices */
   loadInvoices() {
     this.invoicesService
       .getInvoices(undefined, this.search() || undefined, this.page(), this.pageSize())
@@ -156,13 +184,8 @@ export class InvoicesPage {
   hasPrev = computed(() => this.page() > 1);
   hasNext = computed(() => this.page() < this.totalPages());
 
-  // Вычисляем объект выбранной опции для кнопки селекта
-  selectedLocationOption = computed(() =>
-    this.locationOptions().find((o) => o.value === this.selectedLocation())
-  );
   filtered = computed(() => {
     const q = this.search().trim().toLowerCase();
-
     return this.rows().filter((r) => {
       const byTab = this.activeTab() === 'ALL' ? true : r.currency === this.activeTab();
       const bySearch =
@@ -170,7 +193,6 @@ export class InvoicesPage {
       const byStatus = this.status() === 'ALL' ? true : r.status === this.status();
       const byCurrency = this.currency() === 'ALL' ? true : r.currency === this.currency();
       const byYear = this.year() === 'ALL' ? true : r.date.includes(this.year());
-
       return byTab && bySearch && byStatus && byCurrency && byYear;
     });
   });
@@ -197,11 +219,9 @@ export class InvoicesPage {
     this.invoicesService.receiveInvoice(invoiceId, locationCode).subscribe({
       next: () => {
         alert('Invoice successfully received');
-
         this.rows.update((rows) =>
           rows.map((r) => (r.id === invoiceId ? { ...r, status: 'RECEIVED' } : r))
         );
-
         this.selectedInvoiceId.set(null);
       },
       error: (err) => alert(err.error?.detail ?? 'Error'),

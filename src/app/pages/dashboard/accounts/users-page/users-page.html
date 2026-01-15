@@ -120,8 +120,8 @@
 
             <td class="px-4 py-4">
               <div class="flex items-center gap-3">
-                @if (u.avatarUrl) {
-                  <img [src]="u.avatarUrl" class="w-9 h-9 rounded-full object-cover" />
+                <img [src]="u.avatar" class="w-9 h-9 rounded-full object-cover" />
+                @if (u.avatar) {
                 } @else {
                   <div class="w-9 h-9 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-semibold">
                     {{ initials(u.name) }}

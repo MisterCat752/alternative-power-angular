@@ -15,8 +15,8 @@
 
   <div class="flex items-center gap-3">
     <!-- LOCATION SELECT (под твой TS) -->
- <ui-select
-  class="w-[260px]" 
+<ui-select
+  placeholder="Location"
   [options]="locationOptions()"
   [value]="selectedLocation()"
   (valueChange)="selectedLocation.set($event)"
@@ -139,6 +139,7 @@
   </div>
 
   <ui-select
+   placeholder="status"
     [options]="statusOpts"
     [value]="status()"
     (valueChange)="status.set($event)"
@@ -239,7 +240,12 @@
                 >
                   📥
                 </button>
-
+  <button
+    class="px-4 py-2  rounded  "
+    (click)="onLockSelected()"
+  >
+    Lock  
+  </button>
                 <button
                   class="h-9 w-9 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100"
                   title="Delete"
