@@ -22,3 +22,14 @@ export interface PaginatedResponse<T> {
 }
 
 export type UserGroup = 'Customer' | 'Manager' | 'Admin';
+
+export interface UpdateUserPayload {
+  email?: string;
+  phone?: string;
+  first_name?: string;
+  last_name?: string;
+  is_active?: boolean;
+
+  /** ВАЖНО: для обновления ролей */
+  groups_input?: UserGroup[];
+}

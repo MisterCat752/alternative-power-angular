@@ -237,6 +237,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'accounts/users/:id/edit',
+        loadComponent: () =>
+          import('./pages/dashboard/accounts/users-page/edit-page/edit-page').then(
+            (m) => m.EditPage
+          ),
+      },
+      {
         path: 'accounts/group-and-roles',
         loadComponent: () =>
           import('./pages/dashboard/accounts/groups-and-roles-page/groups-and-roles-page').then(

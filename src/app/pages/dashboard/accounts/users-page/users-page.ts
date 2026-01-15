@@ -1,9 +1,10 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
 
 import { UsersService } from '../../../../core/services/users/users.service';
 import { User, UserGroup } from '../../../../core/models/users/user.model';
+import { ActionMenu } from '../../../../shared/ui/action-menu/action-menu';
 
 /* =======================
    UI TYPES
@@ -38,12 +39,12 @@ const ROLE_TO_GROUP_MAP: Record<Role, UserGroup> = {
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [UiSelect, RouterLink],
+  imports: [UiSelect, RouterLink, ActionMenu],
   templateUrl: './users-page.html',
 })
 export class UsersPage {
   private usersService = inject(UsersService);
-
+  private router = inject(Router);
   /* =======================
      UI STATE
   ======================= */
@@ -107,7 +108,16 @@ export class UsersPage {
   /* =======================
      ADAPTER (API → UI)
   ======================= */
-
+  rowActions(u: UserRow) {
+    return [
+      { label: 'Edit', action: 'edit' },
+      {
+        label: u.status === 'ACTIVE' ? 'Deactivate' : 'Activate',
+        action: u.status === 'ACTIVE' ? 'deactivate' : 'activate',
+      },
+      { label: 'Delete', danger: true, action: 'delete' },
+    ];
+  }
   private mapUser = (u: User): UserRow => ({
     id: u.id,
     name: `${u.first_name} ${u.last_name}`.trim(),
@@ -132,6 +142,34 @@ export class UsersPage {
       return byTab && byStatus;
     });
   });
+
+  onRowAction(action: string, row: UserRow) {
+    switch (action) {
+      case 'edit':
+        this.router.navigate(['/dashboard/accounts/users', row.id, 'edit']);
+        break;
+
+      case 'activate':
+        this.usersService.activateUser(row.id).subscribe(() => {
+          this.reload();
+        });
+        break;
+
+      case 'deactivate':
+        this.usersService.deactivateUser(row.id).subscribe(() => {
+          this.reload();
+        });
+        break;
+
+      case 'delete':
+        // если будет endpoint — подключишь
+        break;
+    }
+  }
+
+  private reload() {
+    this.page.update((p) => p); // триггер effect
+  }
 
   /* =======================
      COUNTERS

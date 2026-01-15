@@ -180,7 +180,8 @@
             </td>
 
             <td class="px-4 py-4 text-right">
-              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
+                         <ui-action-menu [actions]="rowActions(u)" (action)="onRowAction($event, u)"></ui-action-menu>
+
             </td>
           </tr>
         }

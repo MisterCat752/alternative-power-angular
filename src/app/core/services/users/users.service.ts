@@ -3,7 +3,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { PaginatedResponse, User, UserGroup } from '../../models/users/user.model';
+import {
+  PaginatedResponse,
+  UpdateUserPayload,
+  User,
+  UserGroup,
+} from '../../models/users/user.model';
 export interface CreateUserPayload {
   email: string;
   phone?: string;
@@ -26,35 +31,52 @@ export interface UsersQuery {
 export class UsersService {
   private http = inject(HttpClient);
   private baseUrl = environment.baseUrl;
-  // users.service.ts
+
   createUser(payload: CreateUserPayload) {
     return this.http.post(`${this.baseUrl}/auth/register/`, payload);
   }
+
   getUsers(query: UsersQuery = {}): Observable<PaginatedResponse<User>> {
     let params = new HttpParams();
 
-    if (query.page) {
-      params = params.set('page', query.page);
-    }
+    if (query.page) params = params.set('page', query.page);
+    if (query.page_size) params = params.set('page_size', query.page_size);
+    if (query.search) params = params.set('search', query.search);
 
-    if (query.page_size) {
-      params = params.set('page_size', query.page_size);
-    }
-
-    if (query.search) {
-      params = params.set('search', query.search);
-    }
-
-    /**
-     * Django обычно принимает:
-     * ?groups=Customer&groups=Manager
-     */
     if (query.groups?.length) {
-      query.groups.forEach((group) => {
-        params = params.append('group', group);
-      });
+      query.groups.forEach((g) => (params = params.append('groups', g)));
     }
 
     return this.http.get<PaginatedResponse<User>>(`${this.baseUrl}/manage/users/`, { params });
+  }
+
+  /** PATCH user */
+  getUserById(id: string) {
+    return this.http.get<User>(`${this.baseUrl}/manage/users/${id}/`);
+  }
+
+  updateUser(
+    id: string,
+    payload: {
+      first_name?: string;
+      last_name?: string;
+      phone?: string;
+      is_active?: boolean;
+      groups_input?: string[];
+    }
+  ) {
+    return this.http.patch(`${this.baseUrl}/manage/users/${id}/`, payload);
+  }
+
+  activateUser(userId: string) {
+    return this.updateUser(userId, { is_active: true });
+  }
+
+  deactivateUser(userId: string) {
+    return this.updateUser(userId, { is_active: false });
+  }
+
+  updateUserRoles(userId: string, roles: UserGroup[]) {
+    return this.updateUser(userId, { groups_input: roles });
   }
 }
