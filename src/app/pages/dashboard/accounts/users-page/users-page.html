@@ -139,7 +139,12 @@
             </td>
 
             <td class="px-4 py-4">
-              <a class="text-blue-600 hover:underline cursor-pointer">{{ u.email }}</a>
+             <a
+  class="text-blue-600 hover:underline cursor-pointer"
+  [routerLink]="['/dashboard/accounts/users/detail', u.id]"
+>
+  {{ u.email }}
+</a>
             </td>
 
             <td class="px-4 py-4">

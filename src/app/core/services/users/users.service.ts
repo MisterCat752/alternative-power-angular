@@ -27,6 +27,29 @@ export interface UsersQuery {
   groups?: UserGroup[]; // фильтр по группам
 }
 
+export type UserDetail = {
+  id: string;
+
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string | null;
+
+  account_type: 'individual' | 'company' | string;
+
+  avatar: string | null;
+
+  groups: string[];
+
+  is_active: boolean;
+  is_staff: boolean;
+
+  is_email_verified: boolean;
+  email_verified_at: string | null;
+
+  date_joined: string; // ISO string
+};
+
 @Injectable({ providedIn: 'root' })
 export class UsersService {
   private http = inject(HttpClient);
@@ -53,6 +76,9 @@ export class UsersService {
   /** PATCH user */
   getUserById(id: string) {
     return this.http.get<User>(`${this.baseUrl}/manage/users/${id}/`);
+  }
+  getUserByDetail(id: string) {
+    return this.http.get<UserDetail>(`${this.baseUrl}/manage/users/${id}/`);
   }
 
   updateUser(

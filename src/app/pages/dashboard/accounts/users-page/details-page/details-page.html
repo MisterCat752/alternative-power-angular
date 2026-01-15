@@ -1,0 +1,176 @@
+<!-- user-detail.page.html -->
+@if (loading()) {
+  <div class="p-6 text-gray-500">Loading user...</div>
+} @else if (user()) {
+  <div class="flex gap-6 p-6">
+
+    <!-- LEFT -->
+    <div class="flex-1 bg-white rounded-xl border p-6">
+      <div class="flex justify-between items-start mb-6">
+        <h2 class="text-lg font-semibold">User Information</h2>
+
+        <div class="flex gap-2">
+          <button class="btn-outline">Edit</button>
+
+          @if (user()!.is_active) {
+            <button class="btn-danger" (click)="deactivate()">Deactivate</button>
+          } @else {
+            <button class="btn-success" (click)="activate()">Activate</button>
+          }
+        </div>
+      </div>
+
+      <div class="flex gap-6 mb-6">
+        <img
+          class="w-20 h-20 rounded-full object-cover"
+           [src]="user()!.avatar"
+        />
+
+        <div>
+          <div class="text-xl font-semibold">
+            {{ user()!.first_name }} {{ user()!.last_name }}
+          </div>
+          <div class="text-blue-600 text-sm">{{ user()!.email }}</div>
+
+          <span
+            class="inline-block mt-2 px-2 py-0.5 text-xs rounded"
+            [class.bg-green-100]="user()!.is_active"
+            [class.text-green-700]="user()!.is_active"
+            [class.bg-red-100]="!user()!.is_active"
+            [class.text-red-700]="!user()!.is_active"
+          >
+            {{ user()!.is_active ? 'ACTIVE' : 'INACTIVE' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 text-sm">
+         
+
+      
+        
+ 
+
+    
+      </div>
+      <div class="grid grid-cols-2 gap-6 text-sm">
+  <div>
+    <div class="text-gray-400">First Name</div>
+    <div>{{ user()!.first_name }}</div>
+  </div>
+
+  <div>
+    <div class="text-gray-400">Last Name</div>
+    <div>{{ user()!.last_name }}</div>
+  </div>
+
+  <div>
+    <div class="text-gray-400">Email</div>
+    <div class="text-blue-600">{{ user()!.email }}</div>
+  </div>
+
+  <div>
+    <div class="text-gray-400">Phone</div>
+    <div>{{ user()!.phone || '—' }}</div>
+  </div>
+
+  <!-- Account type -->
+  <div>
+    <div class="text-gray-400">Account Type</div>
+    <span class="badge-blue">
+      {{ user()!.account_type }}
+    </span>
+  </div>
+
+  <!-- Groups -->
+  <div>
+    <div class="text-gray-400">Groups</div>
+    <div class="flex flex-wrap gap-1">
+      @for (g of user()!.groups; track g) {
+        <span class="badge-purple">{{ g }}</span>
+      }
+    </div>
+  </div>
+
+  <!-- Staff -->
+  <div>
+    <div class="text-gray-400">Staff User</div>
+    <span
+      class="px-2 py-0.5 text-xs rounded"
+      [class.bg-green-100]="user()!.is_staff"
+      [class.text-green-700]="user()!.is_staff"
+      [class.bg-gray-100]="!user()!.is_staff"
+      [class.text-gray-600]="!user()!.is_staff"
+    >
+      {{ user()!.is_staff ? 'YES' : 'NO' }}
+    </span>
+  </div>
+
+  <!-- Email verified -->
+  <div>
+    <div class="text-gray-400">Email Verified</div>
+    <span
+      class="px-2 py-0.5 text-xs rounded"
+      [class.bg-green-100]="user()!.is_email_verified"
+      [class.text-green-700]="user()!.is_email_verified"
+      [class.bg-red-100]="!user()!.is_email_verified"
+      [class.text-red-700]="!user()!.is_email_verified"
+    >
+      {{ user()!.is_email_verified ? 'YES' : 'NO' }}
+    </span>
+  </div>
+
+  <!-- Email verified at -->
+  <div>
+    <div class="text-gray-400">Email Verified At</div>
+    <div>
+      {{ user()!.email_verified_at
+        ? (user()!.email_verified_at | date:'medium')
+        : '—' }}
+    </div>
+  </div>
+
+  <!-- User ID -->
+  <div>
+    <div class="text-gray-400">User ID</div>
+    <div class="text-xs break-all text-gray-600">
+      {{ user()!.id }}
+    </div>
+  </div>
+</div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="w-[280px] bg-white rounded-xl border p-6">
+      <h3 class="font-semibold mb-4">Account Activity</h3>
+
+      <div class="text-sm mb-4">
+        <div class="text-gray-400">Date Joined</div>
+        <div>{{ user()!.date_joined | date: 'medium' }}</div>
+      </div>
+
+      <div class="text-sm mb-4">
+        <div class="text-gray-400">Last Login</div>
+        <div>
+          <!-- {{ user()!.last_login ? (user()!.last_login | date:'medium') : '—' }} -->
+        </div>
+      </div>
+
+      <div class="text-sm">
+        <div class="text-gray-400 mb-1">Status</div>
+        <span
+          class="px-2 py-1 text-xs rounded"
+          [class.bg-green-100]="user()!.is_active"
+          [class.text-green-700]="user()!.is_active"
+          [class.bg-red-100]="!user()!.is_active"
+          [class.text-red-700]="!user()!.is_active"
+        >
+          {{ user()!.is_active ? 'ACTIVE' : 'INACTIVE' }}
+        </span>
+      </div>
+      
+    </div>
+
+  </div>
+}

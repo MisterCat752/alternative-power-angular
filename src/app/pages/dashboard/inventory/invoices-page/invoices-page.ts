@@ -20,7 +20,7 @@ type InvoiceRow = {
   id: number;
   invoice: string;
   date: string;
-  vendor: string;
+  vendor_name: string;
   amount: number;
   currency: Currency;
   status: InvoiceStatus;
@@ -143,7 +143,7 @@ export class InvoicesPage {
       month: 'short',
       year: 'numeric',
     }),
-    vendor: i.vendor?.name ?? '—',
+    vendor_name: i.vendor_name ?? '—',
     amount: Number(i.doc_sum),
     currency: i.currency,
     status:

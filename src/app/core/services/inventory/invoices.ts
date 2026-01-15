@@ -4,11 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PurchaseInvoiceDetailsDto } from '../../models/invoice';
 
-export interface Vendor {
-  id: number;
-  name: string;
-  email: string;
-}
 // Интерфейс
 export interface Location {
   code: string;
@@ -17,7 +12,7 @@ export interface Location {
 }
 export interface PurchaseInvoice {
   id: number;
-  vendor: Vendor;
+  vendor_name: string;
   doc_number: string;
   doc_date: string;
   currency: 'MDL' | 'USD' | 'EUR' | 'RON';

@@ -244,6 +244,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'accounts/users/detail/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/accounts/users-page/details-page/details-page').then(
+            (m) => m.UserDetailPage
+          ),
+      },
+      {
         path: 'accounts/group-and-roles',
         loadComponent: () =>
           import('./pages/dashboard/accounts/groups-and-roles-page/groups-and-roles-page').then(
