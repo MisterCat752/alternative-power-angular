@@ -42,7 +42,7 @@ export class SyncLogsPage {
 
   loadLogs() {
     this.integrationsService.getSyncLogs().subscribe({
-      next: (logs) => this.rows.set(logs),
+      next: (logs) => this.rows.set(logs.results), // <-- вот здесь
       error: (err) => console.error('Failed to load sync logs:', err),
     });
   }

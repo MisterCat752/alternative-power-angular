@@ -5,6 +5,7 @@ import { InventoryLocation } from '../../../../core/models/inventory-location.mo
 import { UiModal } from '../../../../shared/ui/ui-modal/ui-modal';
 import { LocationForm } from '../../../../shared/form/location-form/location-form';
 import { ActionMenu } from '../../../../shared/ui/action-menu/action-menu';
+import { CommonModule } from '@angular/common';
 
 type UsageType = 'supplier' | 'customer' | 'virtual' | 'internal';
 type Status = 'ACTIVE' | 'EMPTY';
@@ -23,7 +24,7 @@ type LocationRow = {
 @Component({
   selector: 'app-locations-page',
   standalone: true,
-  imports: [UiSelect, UiModal, LocationForm, ActionMenu],
+  imports: [UiSelect, UiModal, LocationForm, ActionMenu, CommonModule],
   templateUrl: './locations-page.html',
 })
 export class LocationsPage {
@@ -60,7 +61,7 @@ export class LocationsPage {
   loadLocations() {
     this.loading.set(true);
     this.locationsService.getLocations().subscribe({
-      next: (data) => this.rows.set(this.mapApiToRows(data)),
+      next: (res) => this.rows.set(this.mapApiToRows(res.results)),
       complete: () => this.loading.set(false),
     });
   }

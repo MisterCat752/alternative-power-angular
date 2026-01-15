@@ -11,7 +11,7 @@ type Spec = { label: string; value: string };
 @Component({
   selector: 'app-product-page',
   standalone: true,
-  imports: [Container, Slider, RouterLink, MatIconModule, NgIf, NgClass],
+  imports: [Container, RouterLink, MatIconModule, NgClass],
   templateUrl: './product.html',
   styleUrl: './product.css',
 })

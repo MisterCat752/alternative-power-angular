@@ -117,7 +117,7 @@ export class UsersPage {
     joined: this.formatDate(u.date_joined),
     lastSeen: '—',
     status: u.is_active ? 'ACTIVE' : 'INACTIVE',
-    avatar: undefined,
+    avatar: u.avatar || undefined,
   });
 
   /* =======================

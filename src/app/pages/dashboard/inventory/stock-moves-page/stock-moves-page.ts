@@ -37,9 +37,9 @@ export class StockMovesPage {
     this.locationsApi.getLocations().subscribe((locations) => {
       this.locOpts.set([
         { label: 'All locations', value: 'ALL' },
-        ...locations.map((l) => ({
+        ...locations.results.map((l) => ({
           label: `${l.code} — ${l.name}`,
-          value: l.code, // 👈 ВАЖНО
+          value: l.code,
         })),
       ]);
     });

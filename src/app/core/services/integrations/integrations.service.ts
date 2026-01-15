@@ -18,6 +18,12 @@ export interface SyncLog {
   message: string;
   error_details: string;
 }
+export interface ISyncLogs {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SyncLog[];
+}
 export interface InvoiceSyncResult {
   vendors_created: number;
   vendors_updated: number;
@@ -36,8 +42,8 @@ export class IntegrationsService {
   constructor(private http: HttpClient) {}
 
   /** Получить список всех синхронизаций */
-  getSyncLogs(): Observable<SyncLog[]> {
-    return this.http.get<SyncLog[]>(`${this.apiUrl}/sync-logs/`);
+  getSyncLogs(): Observable<ISyncLogs> {
+    return this.http.get<ISyncLogs>(`${this.apiUrl}/sync-logs/`);
   }
 
   /** 🔥 Запуск синхронизации инвойсов */

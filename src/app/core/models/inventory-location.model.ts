@@ -9,7 +9,12 @@ export interface InventoryLocation {
   is_active: boolean;
   products?: number;
 }
-
+export interface ILocation {
+  count: number;
+  next: null;
+  previous: null;
+  results: InventoryLocation[];
+}
 export type LocationUsage = 'internal' | 'supplier' | 'customer' | 'virtual';
 export interface LocationFormValue {
   code: string;

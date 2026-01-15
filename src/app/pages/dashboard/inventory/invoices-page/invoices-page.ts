@@ -105,7 +105,7 @@ export class InvoicesPage {
     this.locationsService.getLocations().subscribe((locations) => {
       const opts: UiSelectOption<string | 'ALL'>[] = [
         { label: 'All locations', value: 'ALL' },
-        ...locations.map((l) => ({
+        ...locations.results.map((l) => ({
           label: `${l.code} — ${l.name}`,
           value: l.code,
         })),

@@ -6,7 +6,7 @@ import { CartUiService } from '../../services/cart-ui';
 @Component({
   selector: 'app-cart-drawer',
   standalone: true,
-  imports: [NgIf, MatIconModule],
+  imports: [MatIconModule],
   templateUrl: './cart-drawer.html',
 })
 export class CartDrawerComponent {
