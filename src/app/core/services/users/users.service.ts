@@ -88,6 +88,7 @@ export class UsersService {
       last_name?: string;
       phone?: string;
       is_active?: boolean;
+      is_email_verified?: boolean;
       groups_input?: string[];
     }
   ) {
@@ -96,6 +97,9 @@ export class UsersService {
 
   activateUser(userId: string) {
     return this.updateUser(userId, { is_active: true });
+  }
+  emailVerify(userId: string) {
+    return this.updateUser(userId, { is_email_verified: true });
   }
 
   deactivateUser(userId: string) {

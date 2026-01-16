@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { FormField } from '../../../../../shared/form/form-field/form-field';
@@ -33,7 +33,7 @@ export class UserCreatePage implements OnInit {
   private usersService = inject(UsersService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-
+  @Input() status: string = '';
   mode: 'create' | 'edit' = 'create';
   userId?: string;
 

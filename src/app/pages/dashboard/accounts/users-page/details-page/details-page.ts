@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserDetail, UsersService } from '../../../../../core/services/users/users.service';
 import { User } from '../../../../../core/models/users/user.model';
@@ -13,7 +13,7 @@ import { User } from '../../../../../core/models/users/user.model';
 export class UserDetailPage {
   private route = inject(ActivatedRoute);
   private usersService = inject(UsersService);
-
+  private router = inject(Router);
   user = signal<UserDetail | null>(null);
   loading = signal(true);
 
@@ -44,13 +44,25 @@ export class UserDetailPage {
       this.user.update((u) => (u ? { ...u, is_active: true } : u));
     });
   }
-
+  edit() {
+    const user = this.user();
+    if (!user) return;
+    this.router.navigate(['/dashboard/accounts/users', user.id, 'edit']);
+  }
   deactivate() {
     const user = this.user();
     if (!user) return;
 
     this.usersService.deactivateUser(user.id).subscribe(() => {
       this.user.update((u) => (u ? { ...u, is_active: false } : u));
+    });
+  }
+  verificationActivate() {
+    const user = this.user();
+    if (!user) return;
+
+    this.usersService.emailVerify(user.id).subscribe(() => {
+      this.user.update((u) => (u ? { ...u, is_email_verified: true } : u));
     });
   }
 }

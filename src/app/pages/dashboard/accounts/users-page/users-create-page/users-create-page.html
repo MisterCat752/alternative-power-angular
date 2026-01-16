@@ -6,9 +6,11 @@
 
   <!-- PAGE HEADER -->
   <div class="space-y-1">
-    <h1 class="text-2xl font-semibold text-slate-800">
-      Add User
-    </h1>
+@if (status === 'edit') {
+  <h1 class="text-2xl font-semibold text-slate-800">Edit User</h1>
+} @else {
+  <h1 class="text-2xl font-semibold text-slate-800">Create User</h1>
+}
     <p class="text-sm text-slate-500">
       Fill in the information below to create a new user account.
     </p>
@@ -87,73 +89,49 @@
         />
       </app-form-field>
     </div>
+</section>
 
-    <!-- Active -->
-    <label class="flex items-center gap-2 text-sm text-slate-700">
-      <input
-        type="checkbox"
-        formControlName="isActive"
-        class="rounded border-slate-300"
-      />
-      Is active
-    </label>
-  </section>
-
+    @if (status === 'edit') {
+  <!-- Active -->
+  <label class="flex items-center gap-2 text-sm text-slate-700">
+    <input
+      type="checkbox"
+      formControlName="isActive"
+      class="rounded border-slate-300"
+    />
+    Is active
+  </label>
   <!-- ROLES -->
   <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
     <h2 class="text-lg font-semibold text-slate-800">
       Roles / Groups
     </h2>
 
-    <div
-      formGroupName="roles"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-slate-700"
-    >
+ <div  
+  formGroupName="roles" 
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-slate-700" >
       <label class="flex items-center gap-2">
         <input type="checkbox" formControlName="customer" /> Customer
-      </label>
-
-      <label class="flex items-center gap-2">
-        <input type="checkbox" formControlName="sales" /> Sales
-      </label>
-
-      <label class="flex items-center gap-2">
-        <input type="checkbox" formControlName="salesManager" /> Sales Manager
-      </label>
-
-      <label class="flex items-center gap-2">
-        <input type="checkbox" formControlName="warehouseClerk" /> Warehouse Clerk
-      </label>
-
-      <label class="flex items-center gap-2">
-        <input type="checkbox" formControlName="warehouseManager" /> Warehouse Manager
-      </label>
-
-      <label class="flex items-center gap-2">
-        <input type="checkbox" formControlName="productManager" /> Product Manager
-      </label>
+      </label> 
 
       <label class="flex items-center gap-2">
         <input type="checkbox" formControlName="manager" /> Manager
-      </label>
-
-      <label class="flex items-center gap-2">
-        <input type="checkbox" formControlName="admin" /> Admin
-      </label>
-
-      <label class="flex items-center gap-2">
-        <input type="checkbox" formControlName="translator" /> Translator
-      </label>
-    </div>
+      </label> 
+    </div> 
   </section>
-
-  <!-- ACTIONS -->
+} @else {
+  <h1 class="text-2xl font-semibold text-slate-800">Create User</h1>
+} 
   <div class="flex justify-end gap-3">
     <button
       type="submit"
       class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
     >
-      Create User
+        @if (status === 'edit') {
+   Edit
+} @else {
+   Create User 
+}
     </button>
   </div>
 
