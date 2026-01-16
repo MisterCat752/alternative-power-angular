@@ -2,6 +2,7 @@ export interface VendorListDto {
   id: number;
   name: string;
   email: string;
+  phone: string;
 }
 
 export interface VendorDetailsDto extends VendorListDto {
@@ -13,6 +14,7 @@ export interface PurchaseInvoiceListDto {
   vendor: VendorListDto;
   doc_number: string;
   doc_date: string;
+  source: string;
   currency: 'MDL' | 'USD' | 'EUR' | 'RON';
   channel: 'resale' | 'project' | 'internal';
   doc_sum: string;
@@ -25,12 +27,8 @@ export interface InvoiceLineDto {
   qty: string;
   unit_cost: string;
   line_sum: string;
-  product: {
-    id: number;
-    code: string;
-    name: string;
-    uom: string;
-  };
+  product_code: string;
+  product_name: string;
 }
 
 export interface PurchaseInvoiceDetailsDto extends PurchaseInvoiceListDto {

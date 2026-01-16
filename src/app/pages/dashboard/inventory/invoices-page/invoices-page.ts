@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
 import { InvoicesService, PurchaseInvoice } from '../../../../core/services/inventory/invoices';
 import { InventoryLocationsService } from '../../../../core/services/locations/inventory-locations.service';
+import { MatIconModule } from '@angular/material/icon';
 
 type Currency = 'MDL' | 'EUR' | 'USD' | 'RON';
 type InvoiceStatus = 'RECEIVED' | 'PENDING' | 'DRAFT' | 'LOCKED';
@@ -37,7 +38,7 @@ type Tab = {
 @Component({
   selector: 'app-invoices-page',
   standalone: true,
-  imports: [UiSelect, DecimalPipe, RouterLink],
+  imports: [UiSelect, DecimalPipe, RouterLink, MatIconModule],
   templateUrl: './invoices-page.html',
 })
 export class InvoicesPage {
@@ -184,11 +185,18 @@ export class InvoicesPage {
     });
   }
 
-  onLockSelected() {
-    const id = this.selectedInvoiceId();
+  onLockSelected(id: number) {
     if (!id) return;
 
     this.invoicesService.lockInvoice(id).subscribe(() => {
+      this.loadInvoices();
+      this.selectedInvoiceId.set(null);
+    });
+  }
+  unLockSelected(id: number) {
+    if (!id) return;
+
+    this.invoicesService.unLockInvoice(id).subscribe(() => {
       this.loadInvoices();
       this.selectedInvoiceId.set(null);
     });

@@ -1,7 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { InvoicesService } from '../../../../../core/services/inventory/invoices';
+import { PurchaseInvoiceDetailsDto } from '../../../../../core/models/invoice';
+import { MatIconModule } from '@angular/material/icon';
 
 type InvoiceStatus = 'DRAFT' | 'RECEIVED' | 'LOCKED' | 'PENDING';
 
@@ -14,7 +16,7 @@ interface InvoiceLine {
   product: {
     id: number;
     code: string;
-    name: string;
+    product_name: string;
     uom: string;
   };
 }
@@ -39,14 +41,14 @@ export interface InvoiceDetailsDto {
 @Component({
   selector: 'app-invoice-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, DecimalPipe],
+  imports: [CommonModule, RouterModule, DecimalPipe, MatIconModule],
   templateUrl: './invoice-details.html',
 })
 export class InvoiceDetails {
   private route = inject(ActivatedRoute);
   private invoicesService = inject(InvoicesService);
-
-  invoice = signal<InvoiceDetailsDto | null>(null);
+  lineItemsCount = computed(() => this.invoice()?.lines?.length ?? 0);
+  invoice = signal<PurchaseInvoiceDetailsDto | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
 

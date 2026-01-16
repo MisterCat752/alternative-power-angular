@@ -65,6 +65,9 @@ export class InvoicesService {
   lockInvoice(id: number): Observable<{ detail: string }> {
     return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/lock/`, {});
   }
+  unLockInvoice(id: number): Observable<{ detail: string }> {
+    return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/unlock/`, {});
+  }
 
   receiveInvoice(id: number, locationCode: string = 'WH/MAIN'): Observable<{ detail: string }> {
     return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/receive/`, {

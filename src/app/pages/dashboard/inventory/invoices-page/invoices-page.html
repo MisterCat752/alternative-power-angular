@@ -218,26 +218,40 @@
             </td>
 
             <td class="px-4 py-4 text-right">
-              <button
-                class="px-3 py-1 border rounded"
-                (click)="onLockSelected()"
-              >
-                Lock
-              </button>
-              <button 
-                   [routerLink]="['/dashboard/inventory/invoices', r.id]"
-                  class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100"
-                  title="View"
-                >
-                  👁
-                </button>
-
+           <div class="flex gap-1 items-center  justify-end">
+             @if (r.status === 'LOCKED') {
+                    <button
+                      class=" h-9 w-9 py-1 border rounded-xl   text-red-600 border-red-300"
+                      (click)="unLockSelected(r.id)"
+                    >
+                      <mat-icon
+             
+                      class="  h-9 w-9   ">lock_open</mat-icon>
+             
+                    </button>
+                  } @else {
+                    <button
+                      class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100"
+                      (click)="onLockSelected(r.id)"
+                    >
+                      <mat-icon class="material-symbols-outlined text-slate-700">lock</mat-icon>
+             
+                    </button>
+                  }
                 <button
-                  class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700"
-                  title="Receive"
-                >
-                  📥
-                </button> 
+                     [routerLink]="['/dashboard/inventory/invoices', r.id]"
+                    class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100"
+                    title="View"
+                  >
+                    👁
+                  </button>
+                  <button
+                    class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700"
+                    title="Receive"
+                  >
+                    📥
+                  </button>
+           </div>
             </td>
           </tr>
         }

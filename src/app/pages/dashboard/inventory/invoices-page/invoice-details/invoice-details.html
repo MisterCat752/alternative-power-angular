@@ -38,14 +38,18 @@
     </span>
   </div>
 
-  <!-- table -->
-  <div class="mt-6 bg-white border border-slate-200 rounded-2xl overflow-hidden">
-    <table class="w-full text-sm">
-      <thead class="bg-slate-50 text-slate-600">
+ <!-- table -->
+<div
+  class="mt-6 bg-white border border-slate-200 rounded-2xl overflow-hidden"
+>
+  <!-- scroll container -->
+  <div class="max-h-[600px] overflow-auto">
+    <table class="w-full text-sm border-collapse">
+      <thead class="bg-slate-50 text-slate-600 sticky top-0 z-10">
         <tr>
+          <th class="px-4 py-3 text-left">ID</th>
           <th class="px-4 py-3 text-left">PRODUCT</th>
           <th class="px-4 py-3 text-right">QTY</th>
-          <th class="px-4 py-3 text-left">UOM</th>
           <th class="px-4 py-3 text-right">UNIT COST</th>
           <th class="px-4 py-3 text-right">TOTAL</th>
         </tr>
@@ -53,21 +57,24 @@
 
       <tbody>
         @for (l of invoice()!.lines; track l.id) {
-          <tr class="border-t border-slate-100">
+          <tr class="border-t border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-3">{{ l.id }}</td>
+
             <td class="px-4 py-3">
               <div class="font-semibold text-blue-600">
-                {{ l.product.code }}
+                {{ l.product_code }}
               </div>
               <div class="text-slate-500 text-xs">
-                {{ l.product.name }}
+                {{ l.product_name }}
               </div>
             </td>
 
             <td class="px-4 py-3 text-right">{{ l.qty }}</td>
-            <td class="px-4 py-3">{{ l.product.uom }}</td>
+
             <td class="px-4 py-3 text-right">
               {{ l.unit_cost | number:'1.2-2' }} {{ invoice()!.currency }}
             </td>
+
             <td class="px-4 py-3 text-right font-semibold">
               {{ l.line_sum | number:'1.2-2' }} {{ invoice()!.currency }}
             </td>
@@ -76,22 +83,125 @@
       </tbody>
     </table>
   </div>
-
-  <!-- summary -->
-  <div class="mt-6 flex justify-end">
-    <div class="w-[360px] bg-white border border-slate-200 rounded-2xl p-5">
-      <div class="flex justify-between text-sm mb-2">
-        <span class="text-slate-500">Items subtotal</span>
-        <span class="font-semibold">
-          {{ invoice()!.doc_sum }} {{ invoice()!.currency }}
-        </span>
+</div>
+  <div class="grid grid-cols-2 gap-2">
+    <div class="flex gap-3  bg-white border border-slate-200 rounded-2xl p-5 mt-5">
+      <div class="flex flex-col gap-3">
+        <h2 class="text-2xl text-bold">
+          Vendor details
+        </h2>
+        <!-- Vendor -->
+         <div class="flex gap-2 ">
+          <mat-icon class="material-symbols-outlined !text-dark">event</mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >Vendor  </p>
+            <p class="text-[12px] text-black">{{invoice()!.vendor.name}}</p>
+          </div>
+        </div>
+        <!-- Email -->
+         <div class="flex gap-2 ">
+          <mat-icon class="material-symbols-outlined !text-dark">email</mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >Email  </p>
+         @if (invoice()?.vendor?.email) {
+  <p class="text-[12px] text-black">
+    {{ invoice()!.vendor.email }}
+  </p>
+} @else {
+  <p class="text-[12px] text-black">N/A</p>
+}
+          </div>
+        </div>
+           <!-- phone -->
+         <div class="flex gap-2 ">
+          <mat-icon class="material-symbols-outlined !text-dark">phone</mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >phone  </p>
+         @if (invoice()?.vendor?.phone) {
+  <p class="text-[12px] text-black">
+    {{ invoice()!.vendor.phone }}
+  </p>
+} @else {
+  <p class="text-[12px] text-black">N/A</p>
+}
+          </div>
+        </div>
       </div>
-
-      <div class="border-t border-slate-200 mt-3 pt-3 flex justify-between text-lg font-bold">
-        <span>Total</span>
-        <span>
-          {{ invoice()!.doc_sum }} {{ invoice()!.currency }}
-        </span>
+      <div class="flex flex-col gap-3">
+        <h2 class="text-2xl text-bold">
+          Invoice details
+        </h2>
+        <!-- date -->
+         <div class="flex gap-2 ">
+          <mat-icon class="material-symbols-outlined !text-dark">event</mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >Date  </p>
+            <p class="text-[12px] text-black">{{invoice()!.doc_date}}</p>
+          </div>
+        </div>
+        <!-- Invoice Number -->
+         <div class="flex gap-2 ">
+          <mat-icon class="material-symbols-outlined !text-dark">receipt_long</mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >Invoice Number  </p>
+            <p class="text-[12px] text-black">{{invoice()!.doc_number}}</p>
+          </div>
+        </div>
+        <!-- Invoice Number -->
+         <div class="flex gap-2 ">
+       <mat-icon class="material-symbols-outlined !text-dark">
+  payments
+</mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >Currency  </p>
+            <p class="text-[12px] text-black">{{invoice()!.currency}}</p>
+          </div>
+        </div>
+        
+      </div>
+      <div class="flex flex-col gap-3">
+        <h2 class="text-2xl text-bold">
+          Other details
+        </h2>
+         <!-- Invoice Number -->
+         <div class="flex gap-2 ">
+       <mat-icon class="material-symbols-outlined !text-dark">
+          source
+      </mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >source  </p>
+            <p class="text-[12px] text-black">{{invoice()!.source}}</p>
+          </div>
+        </div>
+         <!-- Line Items -->
+         <div class="flex gap-2 ">
+       <mat-icon class="material-symbols-outlined !text-dark">
+          list_alt
+      </mat-icon>
+          <div class="">
+            <p class="font-bold text-[13px] text-black" >Line Items  </p>
+           <p class="text-[12px] text-black">
+  {{ lineItemsCount() }}
+</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- summary -->
+    <div class="mt-6 flex justify-end">
+      <div class="w-[360px] bg-white border border-slate-200 rounded-2xl p-5">
+        <div class="flex justify-between text-sm mb-2">
+          <span class="text-slate-500">Items subtotal</span>
+          <span class="font-semibold">
+            {{ invoice()!.doc_sum }} {{ invoice()!.currency }}
+          </span>
+        </div>
+        <div class="border-t border-slate-200 mt-3 pt-3 flex justify-between text-lg font-bold">
+          <span>Total</span>
+          <span>
+            {{ invoice()!.doc_sum }} {{ invoice()!.currency }}
+          </span>
+        </div>
       </div>
     </div>
   </div>
