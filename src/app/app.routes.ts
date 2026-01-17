@@ -297,6 +297,12 @@ export const routes: Routes = [
         data: { requiredGroup: 'Manager' },
       },
       {
+        path: 'sales/orders/create',
+        loadComponent: () => import('./shared/form/order-form/order-form').then((m) => m.OrderForm),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
+      {
         path: 'sales/orders/:id',
         loadComponent: () =>
           import('./pages/dashboard/sales/order-details-page/order-details-page').then(
@@ -305,6 +311,13 @@ export const routes: Routes = [
         canActivate: [RoleGuard],
         data: { requiredGroup: 'Manager' },
       },
+      {
+        path: 'sales/orders/edit/:id',
+        loadComponent: () => import('./shared/form/order-form/order-form').then((m) => m.OrderForm),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
+
       {
         path: 'sales/sold-products',
         loadComponent: () =>

@@ -8,7 +8,12 @@
     <h1 class="text-4xl font-bold text-slate-900">My Orders</h1>
     <div class="text-slate-500 mt-1">Track and manage your purchases</div>
   </div>
-
+        <a
+             [routerLink]="'/dashboard/sales/orders/edit/' + 1"
+              class="text-blue-600 hover:underline cursor-pointer">edit</a>
+                        <a
+             routerLink="/dashboard/sales/orders/create/"
+              class="text-blue-600 hover:underline cursor-pointer">create</a>
   <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
     🛒 Continue Shopping
   </button>
@@ -111,9 +116,11 @@
               <a
              [routerLink]="'/dashboard/sales/orders/' + 1"
               class="text-blue-600 hover:underline cursor-pointer">{{ r.order }}</a>
+      
             </td>
 
             <td class="px-4 py-4">
+    
               <span class="inline-flex items-center justify-center h-6 min-w-8 px-2 rounded-lg bg-slate-100 border border-slate-200 text-xs">
                 {{ r.items }}
               </span>
