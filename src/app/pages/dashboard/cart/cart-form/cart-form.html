@@ -1,0 +1,54 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <app-form-field label="Customer Email">
+    <app-text-input formControlName="customerEmail"></app-text-input>
+  </app-form-field>
+
+  <app-form-field label="Status">
+    <select formControlName="status">
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+    </select>
+  </app-form-field>
+
+  <div formArrayName="items">
+  
+             @for( item of items.controls ; track item.value.sku){
+        <div  [formGroupName]="items.controls.indexOf(item)">
+         
+      <app-form-field label="Product Name">
+          <app-text-input formControlName="name"></app-text-input>
+        </app-form-field>
+
+        <app-form-field label="SKU">
+          <app-text-input formControlName="sku"></app-text-input>
+        </app-form-field>
+
+        <app-form-field label="Unit Price">
+          <app-number-input formControlName="unitPrice"></app-number-input>
+        </app-form-field>
+
+        <app-form-field label="Quantity">
+          <app-number-input formControlName="quantity"></app-number-input>
+        </app-form-field>
+
+        <app-form-field label="Total">
+          <!-- Вместо [value], используем formControlName -->
+          <app-number-input formControlName="total" [disabled]="true"></app-number-input>
+        </app-form-field>
+
+      <button type="button" (click)="removeItem(1)">Remove</button>
+    </div>
+        }
+  </div>
+
+  <button type="button" (click)="addItem()">Add Item</button>
+
+  <div>Total: {{ cartTotal() | number:'1.2-2' }} MDL</div>
+
+  <button type="submit"> 
+       @if (isEdit()) {
+       Update cart
+      } @else { 
+       Create cart
+      }</button>
+</form>

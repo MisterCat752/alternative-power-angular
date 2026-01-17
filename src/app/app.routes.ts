@@ -440,8 +440,22 @@ export const routes: Routes = [
           import('./pages/dashboard/cart/carts-list-page/carts-list-page').then(
             (m) => m.CartsListPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'cart/edit/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/cart/cart-form/cart-form').then((m) => m.CartForm),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'cart/create',
+        loadComponent: () =>
+          import('./pages/dashboard/cart/cart-form/cart-form').then((m) => m.CartForm),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
 
       // project

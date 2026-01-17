@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type CartStatus = 'ACTIVE' | 'SUBMITTED';
 
@@ -17,7 +18,7 @@ type TabKey = 'ALL' | 'ACTIVE' | 'SUBMITTED';
 @Component({
   selector: 'app-carts-list-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './carts-list-page.html',
 })
 export class CartsListPage {

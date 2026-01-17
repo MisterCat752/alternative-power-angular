@@ -8,7 +8,19 @@
     <h1 class="text-4xl font-bold text-slate-900">Carts</h1>
     <div class="text-slate-500 mt-1">Manage customer shopping carts</div>
   </div>
-
+  <a
+  routerLink="/dashboard/cart/create"
+  class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold inline-flex items-center gap-2">
+    <span class="text-lg leading-none">+</span>
+    Add Category
+  </a>
+       <a
+  [routerLink]="'/dashboard/cart/edit/'+ 1"
+  class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold inline-flex items-center gap-2"
+>
+  <span class="text-lg leading-none">+</span>
+  Edit Category
+</a>
   <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
     ⤓ Export
   </button>
