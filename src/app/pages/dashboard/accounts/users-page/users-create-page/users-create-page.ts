@@ -47,7 +47,7 @@ export class UserCreatePage implements OnInit {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
 
-    accountType: ['individual', Validators.required],
+    account_type: ['individual', Validators.required],
     companyName: [''],
 
     password: ['', Validators.required],
@@ -155,8 +155,8 @@ export class UserCreatePage implements OnInit {
         phone: value.phone || undefined,
         first_name: value.firstName!,
         last_name: value.lastName!,
-        account_type: value.accountType === 'company' ? 'Company' : 'individual',
-        company_name: value.accountType === 'company' ? value.companyName || undefined : undefined,
+        account_type: value.account_type === 'company' ? 'Company' : 'individual',
+        company_name: value.account_type === 'company' ? value.companyName || undefined : undefined,
         password: value.password!,
         is_active: value.isActive!,
         groups,
@@ -182,6 +182,8 @@ export class UserCreatePage implements OnInit {
         last_name: value.lastName!,
         phone: value.phone || undefined,
         is_active: value.isActive!,
+        account_type: value.account_type === 'company' ? 'Company' : 'individual',
+        company_name: value.account_type === 'company' ? value.companyName || undefined : null,
         groups_input: groups,
       })
       .subscribe({

@@ -10,6 +10,7 @@ export interface User {
   is_email_verified: boolean;
   email_verified_at: string | null;
   date_joined: string;
+  account_type: string;
   is_staff: boolean;
   groups: string[];
 }

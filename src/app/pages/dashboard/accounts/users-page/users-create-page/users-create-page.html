@@ -50,22 +50,8 @@
       </app-form-field>
     </div>
 
-    <!-- Account type -->
-    <app-form-field label="Account type">
-      <ui-select
-        [options]="accountTypeOptions"
-        formControlName="accountType"
-      />
-    </app-form-field>
-
-    <!-- Company name -->
-    @if (form.value.accountType === 'company') {
-      <app-form-field label="Company name">
-        <app-text-input
-          formControlName="companyName"
-        />
-      </app-form-field>
-    }
+ 
+  
   </section>
 
   <!-- SECURITY -->

@@ -13,6 +13,7 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { AppInitService } from './services/appInit.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,12 +21,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
 
-    // Подключаем HTTP с interceptors
+    // HTTP с interceptor
     provideHttpClient(withInterceptorsFromDi()),
-
-    // Регистрируем interceptor в DI
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 
+    // Swiper registration
     {
       provide: ENVIRONMENT_INITIALIZER,
       multi: true,
@@ -33,6 +33,19 @@ export const appConfig: ApplicationConfig = {
         if (isPlatformBrowser(inject(PLATFORM_ID))) {
           register();
         }
+      },
+    },
+
+    // App init
+    {
+      provide: ENVIRONMENT_INITIALIZER,
+      multi: true,
+      useValue: () => {
+        const platformId = inject(PLATFORM_ID);
+        if (!isPlatformBrowser(platformId)) return;
+
+        const appInit = inject(AppInitService);
+        return appInit.init(); // должно возвращать Promise<void>
       },
     },
   ],

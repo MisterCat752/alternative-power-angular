@@ -88,6 +88,8 @@ export class UsersService {
       last_name?: string;
       phone?: string;
       is_active?: boolean;
+      account_type?: string;
+      company_name?: string;
       is_email_verified?: boolean;
       groups_input?: string[];
     }

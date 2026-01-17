@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+import { RouterLink } from '@angular/router';
 
 type OrderStatus =
   | 'ALL'
@@ -26,7 +27,7 @@ type Tab = { key: OrderStatus; label: string; count?: number };
 @Component({
   selector: 'app-my-orders-list-page',
   standalone: true,
-  imports: [UiSelect],
+  imports: [UiSelect, RouterLink],
   templateUrl: './my-orders-list-page.html',
 })
 export class MyOrdersListPage {

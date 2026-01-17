@@ -108,7 +108,9 @@
         @for (r of filtered(); track r.order) {
           <tr class="border-b border-slate-100 hover:bg-slate-50">
             <td class="px-4 py-4">
-              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.order }}</a>
+              <a
+             [routerLink]="'/dashboard/sales/orders/' + 1"
+              class="text-blue-600 hover:underline cursor-pointer">{{ r.order }}</a>
             </td>
 
             <td class="px-4 py-4">

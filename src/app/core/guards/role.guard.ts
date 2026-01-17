@@ -1,27 +1,39 @@
-// src/app/core/guards/role.guard.ts
-import { inject, Injectable } from '@angular/core';
+import { inject, signal } from '@angular/core';
 import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthStore } from '../services/auth.store';
+import { firstValueFrom, timer } from 'rxjs';
 
-export const RoleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+export const RoleGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
   const auth = inject(AuthStore);
   const router = inject(Router);
-
   const requiredGroup = route.data['requiredGroup'] as string;
 
-  const user = auth.user();
   const tokenExists = !!auth.token();
 
-  // Сначала проверяем авторизацию
-  if (!tokenExists || !user) {
-    console.log('[RoleGuard] Пользователь не залогинен, редирект на /login');
-    return router.parseUrl('/auth/login');
+  if (!tokenExists) {
+    console.log('[RoleGuard] Нет токена, редирект на /login');
+    return router.parseUrl('/login');
   }
 
-  // Если группа обязательна, проверяем
+  // Ждём пока user загрузится (макс 3 сек)
+  const waitForUser = async () => {
+    const start = Date.now();
+    while (!auth.user() && Date.now() - start < 1000) {
+      await new Promise((res) => setTimeout(res, 0)); // polling
+    }
+    return auth.user();
+  };
+
+  const user = await waitForUser();
+
+  if (!user) {
+    console.log('[RoleGuard] Профиль не загрузился, редирект на /login');
+    return router.parseUrl('/login');
+  }
+
   if (requiredGroup && !user.groups?.includes(requiredGroup)) {
     console.log(`[RoleGuard] Нет нужной группы (${requiredGroup}), редирект на /dashboard`);
-    return router.parseUrl('/dashboard'); // или страница "Access Denied"
+    return router.parseUrl('/dashboard');
   }
 
   console.log('[RoleGuard] Доступ разрешен');

@@ -293,8 +293,17 @@ export const routes: Routes = [
           import('./pages/dashboard/sales/orders-list-page/orders-list-page/orders-list-page').then(
             (m) => m.OrdersListPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'sales/orders/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/sales/order-details-page/order-details-page').then(
+            (m) => m.OrderDetailsPage
+          ),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'sales/sold-products',
@@ -302,8 +311,8 @@ export const routes: Routes = [
           import(
             './pages/dashboard/sales/sold-products-page/sold-products-page/sold-products-page'
           ).then((m) => m.SoldProductsPage),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
 
       {
@@ -312,8 +321,8 @@ export const routes: Routes = [
           import(
             './pages/dashboard/sales/warehouse-fulfillment-page/warehouse-fulfillment-page'
           ).then((m) => m.WarehouseFulfillmentPage),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'sales/my-orders-list',
@@ -321,8 +330,8 @@ export const routes: Routes = [
           import('./pages/dashboard/sales/my-orders-list-page/my-orders-list-page').then(
             (m) => m.MyOrdersListPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
 
       // cart
