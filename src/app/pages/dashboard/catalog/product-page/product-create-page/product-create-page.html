@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
+<form [formGroup]="form" (ngSubmit)="submit()" class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
 
   <!-- LEFT COLUMN -->
   <div class="space-y-6">
@@ -277,6 +277,12 @@
         <app-text-input placeholder="Extra colors (comma separated)" />
       </app-form-field>
     </section>
-
+  <button type="submit" class="px-4 py-2 bg-black text-white rounded">
+    @if (isEdit()) {
+       Update Product 
+      } @else { 
+       Create Product
+      }
+  </button>
   </aside>
 </form>

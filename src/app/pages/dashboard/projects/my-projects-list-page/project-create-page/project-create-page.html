@@ -7,7 +7,11 @@
   <!-- HEADER -->
   <div class="space-y-1">
     <h1 class="text-2xl font-semibold text-slate-800">
-      Create a project
+          @if (isEdit()) {
+       Update Project 
+      } @else { 
+       Create Project
+      } 
     </h1>
   </div>
 
@@ -113,7 +117,11 @@
       class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700
              text-white font-semibold"
     >
-      Create Project
+     @if (isEdit()) {
+       Update Project 
+      } @else { 
+       Create Project
+      } 
     </button>
   </div>
 

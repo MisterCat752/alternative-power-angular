@@ -49,8 +49,12 @@
       class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700
              text-white font-semibold"
     >
-      Create
-    </button>
+      @if (isEdit()) {
+        Update Product 
+      } @else { 
+        Create Product   
+      }
+    </button> 
   </div>
 
 </form>

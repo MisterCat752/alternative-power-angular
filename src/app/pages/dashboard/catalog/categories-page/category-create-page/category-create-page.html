@@ -7,11 +7,13 @@
   <!-- PAGE HEADER -->
   <div class="space-y-1">
     <h1 class="text-2xl font-semibold text-slate-800">
-      Add Category
+        @if (isEdit()) {
+       Update Category 
+      } @else { 
+       Create Category
+      } 
     </h1>
-    <p class="text-sm text-slate-500">
-      Create new category
-    </p>
+    
   </div>
 
   <!-- BASIC INFORMATION -->
@@ -103,7 +105,11 @@
       type="submit"
       class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
     >
-      Create Category
+      @if (isEdit()) {
+       Update Category 
+      } @else { 
+       Create Category
+      } 
     </button>
   </div>
 

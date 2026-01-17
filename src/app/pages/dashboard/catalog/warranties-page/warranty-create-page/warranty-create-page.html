@@ -91,7 +91,11 @@
       type="submit"
       class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
     >
-      Create Warranty
+     @if (isEdit()) {
+       Update Warranty 
+      } @else { 
+       Create Warranty
+      }
     </button>
   </div>
 
