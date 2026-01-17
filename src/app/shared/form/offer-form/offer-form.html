@@ -1,0 +1,78 @@
+<h2 class="text-xl font-semibold mb-4">
+ @if (isEdit()) {
+  <h2 class="text-xl font-semibold mb-4">Edit Offer</h2>
+} @else {
+  <h2 class="text-xl font-semibold mb-4">Create Offer</h2>
+}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+
+  <app-form-field label="Offer Code">
+    <app-text-input formControlName="code"></app-text-input>
+  </app-form-field>
+
+  <app-form-field label="Version">
+    <app-text-input formControlName="version"></app-text-input>
+  </app-form-field>
+
+  <app-form-field label="Project Name">
+    <app-text-input formControlName="project_name"></app-text-input>
+  </app-form-field>
+
+  <app-form-field label="Project Owner">
+    <app-text-input formControlName="project_owner"></app-text-input>
+  </app-form-field>
+
+  <app-form-field label="Status">
+    <app-text-input formControlName="status"></app-text-input>
+  </app-form-field>
+
+  <app-form-field label="Valid Until">
+    <app-text-input formControlName="valid_until"></app-text-input>
+  </app-form-field>
+
+  <h3 class="font-semibold mt-6">Items</h3>
+
+  <div formArrayName="items" class="space-y-4">
+    @for (item of items.controls; track $index) {
+      <div [formGroupName]="$index" class="border p-4 rounded space-y-2">
+
+        <app-form-field label="Group">
+          <app-text-input formControlName="group"></app-text-input>
+        </app-form-field>
+
+        <app-form-field label="Product">
+          <app-text-input formControlName="name"></app-text-input>
+        </app-form-field>
+
+        <app-form-field label="SKU">
+          <app-text-input formControlName="sku"></app-text-input>
+        </app-form-field>
+
+        <app-form-field label="Qty">
+          <app-number-input formControlName="qty"></app-number-input>
+        </app-form-field>
+
+        <app-form-field label="Unit Price">
+          <app-number-input formControlName="unit_price"></app-number-input>
+        </app-form-field>
+
+        <button type="button" class="text-red-600 text-sm" (click)="removeItem(1)">Remove</button>
+      </div>
+    }
+  </div>
+
+  <button type="button" class="px-3 py-1 border rounded" (click)="addItem()">+ Add Item</button>
+
+  <div class="pt-4">
+    <button type="submit" class="px-4 py-2 bg-black text-white rounded">
+     @if (isEdit()) {
+  <h2 class="text-xl font-semibold mb-4">Edit Offer</h2>
+} @else {
+  <h2 class="text-xl font-semibold mb-4">Create Offer</h2>
+}
+    </button>
+  </div>
+
+</form>

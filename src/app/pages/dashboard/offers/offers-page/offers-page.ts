@@ -1,4 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type OfferStatus = 'DRAFT' | 'SENT' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED';
 
@@ -17,6 +18,8 @@ type Tab = 'ALL' | 'DRAFT' | 'SENT' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED';
 
 @Component({
   selector: 'app-offers-page',
+  imports: [RouterLink],
+
   standalone: true,
   templateUrl: './offers-page.html',
 })

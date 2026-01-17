@@ -8,7 +8,12 @@
     <h1 class="text-4xl font-bold text-slate-900">Offers</h1>
     <div class="text-slate-500 mt-1">Manage project quotes and proposals</div>
   </div>
-
+  <a
+             [routerLink]="'/dashboard/offers/edit/' + 1"
+              class="text-blue-600 hover:underline cursor-pointer">edit</a>
+                        <a
+             routerLink="/dashboard/offers/create/"
+              class="text-blue-600 hover:underline cursor-pointer">create</a>
   <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
     + Create Offer
   </button>
@@ -87,7 +92,9 @@
         @for (r of view(); track r.number) {
           <tr class="border-b border-slate-100 hover:bg-slate-50">
             <td class="px-4 py-3">
-              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.number }}</a>
+              <a
+              [routerLink]="'/dashboard/offers/detail/' + 1"
+              class="text-blue-600 hover:underline cursor-pointer">{{ r.number }}</a>
             </td>
             <td class="px-4 py-3 text-slate-600">{{ r.project }}</td>
             <td class="px-4 py-3">

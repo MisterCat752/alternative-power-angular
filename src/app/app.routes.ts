@@ -283,10 +283,30 @@ export const routes: Routes = [
         path: 'offers',
         loadComponent: () =>
           import('./pages/dashboard/offers/offers-page/offers-page').then((m) => m.OffersPage),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
-
+      {
+        path: 'offers/create',
+        loadComponent: () => import('./shared/form/offer-form/offer-form').then((m) => m.OfferForm),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'offers/edit/:id',
+        loadComponent: () => import('./shared/form/offer-form/offer-form').then((m) => m.OfferForm),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'offers/detail/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/offers/offer-details-page/offer-details-page').then(
+            (m) => m.OfferDetailsPage
+          ),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
+      },
       {
         path: 'sales/orders-list',
         loadComponent: () =>

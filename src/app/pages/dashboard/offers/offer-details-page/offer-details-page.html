@@ -1,0 +1,66 @@
+<!-- offer-details.html -->
+@if (offer(); as o) {
+
+  <h2 class="text-xl font-semibold mb-4">Offer Details</h2>
+
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div><b>Offer No:</b> {{ o.code }}</div>
+    <div><b>Version:</b> {{ o.version }}</div>
+    <div><b>Created:</b> {{ o.created_at | date:'mediumDate' }}</div>
+    <div>
+      <b>Valid Until:</b>
+      {{ o.valid_until | date:'mediumDate' }}
+      @if (o.status === 'Expired') { <span class="text-red-600">Expired</span> }
+    </div>
+  </div>
+
+  <h3 class="font-semibold mt-6 mb-2">Project Info</h3>
+  <p><b>Name:</b> {{ o.project_name }}</p>
+  <p><b>Owner:</b> {{ o.project_owner }}</p>
+  <p><b>Status:</b> {{ o.status }}</p>
+
+  @for (group of groupedItems() | keyvalue; track group.key) {
+    <h3 class="mt-6 font-semibold">{{ group.key }}</h3>
+
+    <table class="w-full text-sm border mt-2">
+      <thead class="bg-gray-100">
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of group.value; track item.sku) {
+          <tr class="border-t">
+            <td>
+              {{ item.name }}<br />
+              <span class="text-gray-500">SKU: {{ item.sku }}</span>
+            </td>
+            <td>{{ item.qty | number:'1.2-2' }}</td>
+            <td>{{ item.unit_price | number:'1.2-2' }} MDL</td>
+            <td>{{ item.total | number:'1.2-2' }} MDL</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+ <div class="text-right mt-2 font-medium">
+  Group Subtotal:
+ 
+</div>
+  }
+
+  <div class="text-right text-lg font-semibold mt-6">
+    Total Amount: {{ subtotal() | number:'1.2-2' }} MDL
+  </div>
+
+  <div class="mt-6 text-sm text-gray-600">
+    Created By: {{ o.created_by }} <br />
+    {{ o.created_at | date:'medium' }}
+  </div>
+
+} @else {
+  <p>Loading offer...</p>
+}
