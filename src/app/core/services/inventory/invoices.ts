@@ -58,7 +58,7 @@ export class InvoicesService {
     });
   }
 
-  getInvoiceById(id: number) {
+  getInvoiceById(id: any) {
     return this.http.get<PurchaseInvoiceDetailsDto>(`${this.apiUrl}/purchase-invoices/${id}/`);
   }
 

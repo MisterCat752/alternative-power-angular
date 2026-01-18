@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+import { RouterLink } from '@angular/router';
 
 type Currency = 'MDL' | 'EUR' | 'USD';
 
@@ -18,7 +19,7 @@ type PurchaseLineRow = {
 @Component({
   selector: 'app-purchase-lines-page',
   standalone: true,
-  imports: [UiSelect],
+  imports: [UiSelect, RouterLink],
   templateUrl: './purchase-lines-page.html',
 })
 export class PurchaseLinesPage {

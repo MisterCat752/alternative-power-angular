@@ -120,7 +120,9 @@
             </td>
 
             <td class="px-4 py-4">
-              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.invoice }}</a>
+              <a 
+                 [routerLink]="'/dashboard/inventory/invoices/'+ 360"
+              class="text-blue-600 hover:underline cursor-pointer">{{ r.invoice }}</a>
             </td>
 
             <td class="px-4 py-4 text-slate-700">{{ r.product }}</td>

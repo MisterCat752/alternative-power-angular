@@ -223,8 +223,8 @@ export const routes: Routes = [
           import('./pages/dashboard/inventory/product-stock-page/product-stock-page').then(
             (m) => m.ProductStockPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'inventory/stock-moves',
@@ -232,8 +232,8 @@ export const routes: Routes = [
           import('./pages/dashboard/inventory/stock-moves-page/stock-moves-page').then(
             (m) => m.StockMovesPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'inventory/fifo-lots',
@@ -241,8 +241,8 @@ export const routes: Routes = [
           import('./pages/dashboard/inventory/fifo-lots-page/fifo-lots-page').then(
             (m) => m.FifoLotsPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'inventory/invoices',
@@ -250,8 +250,8 @@ export const routes: Routes = [
           import('./pages/dashboard/inventory/invoices-page/invoices-page').then(
             (m) => m.InvoicesPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'inventory/invoices/:id',
@@ -266,8 +266,8 @@ export const routes: Routes = [
           import('./pages/dashboard/inventory/vendors-page/vendors-page').then(
             (m) => m.VendorsPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'inventory/purchase-lines',
@@ -275,8 +275,8 @@ export const routes: Routes = [
           import('./pages/dashboard/inventory/purchase-lines-page/purchase-lines-page').then(
             (m) => m.PurchaseLinesPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'inventory/locations',
@@ -284,16 +284,16 @@ export const routes: Routes = [
           import('./pages/dashboard/inventory/locations-page/locations-page').then(
             (m) => m.LocationsPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
 
       {
         path: 'accounts/users',
         loadComponent: () =>
           import('./pages/dashboard/accounts/users-page/users-page').then((m) => m.UsersPage),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'accounts/users/create-user',
@@ -308,6 +308,8 @@ export const routes: Routes = [
           import('./pages/dashboard/accounts/users-page/edit-page/edit-page').then(
             (m) => m.EditPage
           ),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'accounts/users/detail/:id',
@@ -315,6 +317,8 @@ export const routes: Routes = [
           import('./pages/dashboard/accounts/users-page/details-page/details-page').then(
             (m) => m.UserDetailPage
           ),
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'accounts/group-and-roles',
@@ -322,8 +326,8 @@ export const routes: Routes = [
           import('./pages/dashboard/accounts/groups-and-roles-page/groups-and-roles-page').then(
             (m) => m.GroupsAndRolesPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
 
       {
@@ -332,8 +336,8 @@ export const routes: Routes = [
           import('./pages/dashboard/translations/translations-page/translations-page').then(
             (m) => m.TranslationsPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
 
       {
@@ -342,8 +346,8 @@ export const routes: Routes = [
           import('./pages/dashboard/core/sync-logs-page/sync-logs-page').then(
             (m) => m.SyncLogsPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'offers',
@@ -465,8 +469,8 @@ export const routes: Routes = [
           import('./pages/dashboard/projects/projects-list-page/projects-list-page').then(
             (m) => m.ProjectsListPage
           ),
-        // canActivate: [RoleGuard],
-        // data: { requiredGroup: 'Manager' },
+        canActivate: [RoleGuard],
+        data: { requiredGroup: 'Manager' },
       },
       {
         path: 'projects/my-projects-list',

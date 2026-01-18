@@ -53,7 +53,7 @@ export class InvoiceDetails {
   error = signal<string | null>(null);
 
   constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id');
 
     this.invoicesService.getInvoiceById(id).subscribe({
       next: (res) => {

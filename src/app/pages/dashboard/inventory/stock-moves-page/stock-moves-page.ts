@@ -8,13 +8,14 @@ import {
 } from '../../../../core/services/stock/inventory-stock.service';
 import { InventoryLocationsService } from '../../../../core/services/locations/inventory-locations.service';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 type LocKey = 'ALL' | 'WH_MAIN' | 'WH_STORE' | 'WH_TRANSIT' | 'WH_DAMAGED' | 'WH_RETURNS';
 type Direction = 'all' | 'in' | 'out';
 @Component({
   selector: 'app-stock-page',
   standalone: true,
-  imports: [UiSelect, StatCard, CommonModule],
+  imports: [UiSelect, StatCard, CommonModule, RouterLink],
   templateUrl: './stock-moves-page.html',
 })
 export class StockMovesPage {

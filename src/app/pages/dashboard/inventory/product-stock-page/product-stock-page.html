@@ -129,7 +129,9 @@
             <td class="px-4 py-4"><input type="checkbox" class="h-4 w-4" /></td>
 
             <td class="px-4 py-4">
-              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.sku }}</a>
+              <a
+                [routerLink]="'/product/'+ r.sku"
+              class="text-blue-600 hover:underline cursor-pointer">{{ r.sku }}</a>
             </td>
 
             <td class="px-4 py-4">

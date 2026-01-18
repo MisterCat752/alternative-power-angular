@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
+import { RouterLink } from '@angular/router';
 
 type StockRow = {
   sku: string;
@@ -29,7 +30,7 @@ type StockStatusKey = 'ALL' | 'IN_STOCK_ONLY';
 @Component({
   selector: 'app-product-stock-page',
   standalone: true,
-  imports: [UiSelect],
+  imports: [UiSelect, RouterLink],
   templateUrl: './product-stock-page.html',
 })
 export class ProductStockPage {
