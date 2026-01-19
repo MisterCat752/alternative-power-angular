@@ -25,6 +25,13 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/cart/cart-detail/cart-detail').then((m) => m.CartPage),
       },
       {
+        path: 'wish-list',
+        loadComponent: () =>
+          import('./pages/wish-list/wish-list-detail/wish-list-detail').then(
+            (m) => m.WishListDetail,
+          ),
+      },
+      {
         path: 'order',
         loadComponent: () =>
           import('./pages/order/order-detail/order-detail').then((m) => m.OrderDetail),

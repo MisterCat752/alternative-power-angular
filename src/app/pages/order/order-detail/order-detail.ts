@@ -8,7 +8,7 @@ import { TextInput } from '../../../shared/form/text-input/text-input';
 import { NumberInput } from '../../../shared/form/number-input/number-input';
 @Component({
   selector: 'app-order-detail',
-  imports: [ReactiveFormsModule, FormField, NumberInput, TextInput],
+  imports: [ReactiveFormsModule, FormField, TextInput],
   templateUrl: './order-detail.html',
   styleUrl: './order-detail.css',
 })

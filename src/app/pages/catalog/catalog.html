@@ -44,6 +44,7 @@
       <div class="">
         
                 <app-product-card
+                [product]="p"
         [title]="p.title"
         [imageUrl]="p.image || 'https://picsum.photos/id/1011/900/900'"
         [inStock]="p.quantity > 0"

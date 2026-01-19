@@ -33,7 +33,13 @@
     <div class="mt-2 font-semibold text-gray-900">
       {{ price.toFixed(2) }} {{ currency }}
     </div>
-
+<button (click)="onToggleWithList()">
+  @if(isInWishlist(product.id)) {
+    <mat-icon class="text-red-500">favorite</mat-icon>
+  } @else {
+    <mat-icon>favorite_border</mat-icon>
+  }
+</button>
     <button
   type="button"
   (click)="onAddToCart(); $event.stopPropagation()"
