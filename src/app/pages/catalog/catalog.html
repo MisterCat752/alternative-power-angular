@@ -41,14 +41,18 @@
 @if (view() === 'grid') {
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
     @for (p of visibleProducts(); track trackByTitle(p)) {
-      <a [routerLink]="['/product', p.id]">
-        <app-product-card
-          [title]="p.title"
-          [imageUrl]="p.image || 'https://picsum.photos/id/1011/900/900'"
-          [inStock]="p.quantity > 0"
-          [price]="p.price"
-        ></app-product-card>
-      </a>
+      <div class="">
+        
+                <app-product-card
+        [title]="p.title"
+        [imageUrl]="p.image || 'https://picsum.photos/id/1011/900/900'"
+        [inStock]="p.quantity > 0"
+        [price]="p.price"
+        (addToCart)="addToCart(p)"
+         [productId]="p.id ?? 0" 
+      ></app-product-card>
+         
+      </div>
     }
   </div>
 } @else {

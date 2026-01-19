@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CartUiService } from '../../services/cart-ui';
-
+import { CartService } from '../../core/services/cart.service';
+import { signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-cart-drawer',
   standalone: true,
-  imports: [MatIconModule],
+  imports: [MatIconModule, RouterLink],
   templateUrl: './cart-drawer.html',
 })
 export class CartDrawerComponent {
@@ -22,7 +23,24 @@ export class CartDrawerComponent {
     inStockText: 'În stoc furnizor',
     img: 'https://picsum.photos/id/1019/120/120',
   };
+  cartService = inject(CartService);
+  cart = signal<any>(null);
 
+  constructor() {
+    this.cartService.getCart().subscribe((c) => this.cart.set(c));
+  }
+
+  remove(id: number) {
+    this.cartService.removeItem(id);
+  }
+
+  inc(id: number, q: number) {
+    this.cartService.changeQty(id, q + 1);
+  }
+
+  dec(id: number, q: number) {
+    this.cartService.changeQty(id, q - 1);
+  }
   close() {
     this.cartUi.close();
   }

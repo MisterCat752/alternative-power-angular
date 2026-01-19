@@ -1,4 +1,5 @@
 export interface CartItem {
+  id?: number;
   name: string;
   sku: string;
   unitPrice: number; // для упрощения будем хранить как number

@@ -12,7 +12,7 @@ import { ProductService } from '../../core/services/products/product.service';
 import { Product } from '../../core/models/products/product.model';
 import { CATEGORY_FILTERS_MOCK } from '../../core/mock/filters.mock';
 import { CategoryFilterService } from '../../core/services/filter.service';
-
+import { CartService } from '../../core/services/cart.service';
 @Component({
   selector: 'app-catalog-page',
   standalone: true,
@@ -56,7 +56,11 @@ export class CatalogPage {
       this.loadFilters(slug);
     });
   }
+  cartService = inject(CartService);
 
+  addToCart(product: Product) {
+    this.cartService.addProduct(product);
+  }
   // получаем продукты через сервис
   loadProducts(categorySlug: string) {
     this.productService.getProducts({ category: categorySlug }).subscribe((res) => {

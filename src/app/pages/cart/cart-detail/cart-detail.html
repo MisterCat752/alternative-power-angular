@@ -1,0 +1,88 @@
+<div class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6">
+  <!-- Список товаров -->
+  <div class="bg-white rounded-2xl border border-gray-200 p-6">
+    <h1 class="text-2xl font-semibold mb-6">Корзина</h1>
+
+    @if(cart()) {
+      @if(cart()?.items?.length) {
+        <div class="space-y-4">
+          @for(item of cart()!.items; track item!.id) {
+            <div class="grid grid-cols-[1fr_1fr_1fr_1fr] items-center gap-4 border-b border-gray-200 py-4">
+              <!-- Товар -->
+              <div class="flex items-center gap-4">
+                <img src="https://picsum.photos/id/1019/80/80" alt="{{ item.name }}" class="w-20 h-20 object-contain rounded"/>
+                <div>
+                  <div class="font-medium">{{ item.name }}</div>
+                  <div class="text-sm text-gray-500">SKU: {{ item.sku }}</div>
+                </div>
+              </div>
+
+              <!-- Цена -->
+              <div class="font-medium text-gray-900 text-center">{{ item.unitPrice | number:'1.2-2' }} €</div>
+
+              <!-- Количество -->
+              <div class="flex items-center justify-center gap-2">
+                <button class="px-2 py-1 border rounded hover:bg-gray-100" (click)="updateQuantity(item, -1)">-</button>
+                <span>{{ item.quantity }}</span>
+                <button class="px-2 py-1 border rounded hover:bg-gray-100" (click)="updateQuantity(item, 1)">+</button>
+              </div>
+
+              <!-- Итог и удалить -->
+              <div class="flex items-center justify-between">
+                <div class="font-medium text-gray-900">{{ item.total | number:'1.2-2' }} €</div>
+                <button class="text-red-600 hover:underline" (click)="removeItem(item)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Итого по пунктам -->
+        <div class="flex justify-end mt-6 font-semibold text-lg">
+          Итого по пунктам: {{ cart()!.cartTotal | number:'1.2-2' }} €
+        </div>
+      } @else {
+        <div class="text-center text-gray-500 py-20">В корзине пока нет товаров.</div>
+      }
+    } @else {
+      <div class="text-center text-gray-500 py-20">Загрузка корзины...</div>
+    }
+  </div>
+
+  <!-- Боковая панель -->
+  <div class="bg-white rounded-2xl border border-gray-200 p-6">
+    <h2 class="text-lg font-semibold mb-4">Краткая статистика</h2>
+
+    @if(cart()) {
+      <div class="space-y-2">
+        <div class="flex justify-between">
+          <span>Итого по пунктам:</span>
+          <span>{{ cart()!.cartTotal | number:'1.2-2' }} €</span>
+        </div>
+        <div class="flex justify-between text-red-600">
+          <span>Скидка:</span>
+          <span>0</span>
+        </div>
+        <div class="flex justify-between">
+          <span>TVA:</span>
+          <span>0</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Стоимость доставки:</span>
+          <span>0</span>
+        </div>
+        <div class="flex justify-between border-t border-gray-200 pt-2 font-semibold text-lg">
+          <span>Общий:</span>
+          <span>{{ cart()!.cartTotal | number:'1.2-2' }} €</span>
+        </div>
+      </div>
+
+      <button class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold">
+        Перейти к запросу
+      </button>
+    } @else {
+      <div class="text-center text-gray-500 py-10">Загрузка статистики...</div>
+    }
+  </div>
+</div>

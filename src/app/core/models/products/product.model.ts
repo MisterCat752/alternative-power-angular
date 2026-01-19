@@ -1,7 +1,7 @@
 // core/models/product.model.ts
 
 export interface Product {
-  id?: number; // optional, т.к. новый продукт еще не имеет id
+  id: number; // optional, т.к. новый продукт еще не имеет id
   title: string;
   description: string;
   shortDescription?: string;
