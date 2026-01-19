@@ -4,11 +4,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { CartService } from '../../../core/services/cart.service';
 import { Cart, CartItem } from '../../../core/models/cart.model';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart-page',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, CommonModule],
+  imports: [MatIconModule, MatButtonModule, CommonModule, RouterLink],
   templateUrl: './cart-detail.html',
 })
 export class CartPage {
