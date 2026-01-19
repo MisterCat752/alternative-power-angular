@@ -42,4 +42,37 @@ export class ProductService {
     }
     return of(product);
   }
+
+  filterProducts(products: Product[], filters: any): Product[] {
+    if (!filters || Object.keys(filters).length === 0) return products;
+
+    return products.filter((product) => {
+      const specMap: Record<string, string[]> = {};
+
+      product.specifications?.forEach((group) => {
+        group.items.forEach((item) => {
+          const key = item.label.toLowerCase();
+          if (!specMap[key]) specMap[key] = [];
+          specMap[key].push(item.value.toLowerCase());
+        });
+      });
+
+      // проверяем каждый активный фильтр
+      for (const key in filters) {
+        const filterValue = filters[key];
+        if (!filterValue || !filterValue.length) continue;
+
+        const productValues = specMap[key];
+        if (!productValues) return false;
+
+        const match = filterValue.some((v: string) =>
+          productValues.some((pv) => pv.includes(v.toLowerCase())),
+        );
+
+        if (!match) return false;
+      }
+
+      return true;
+    });
+  }
 }

@@ -10,6 +10,8 @@ import {
 } from '../../shared/filters-panel/filters-panel';
 import { ProductService } from '../../core/services/products/product.service';
 import { Product } from '../../core/models/products/product.model';
+import { CATEGORY_FILTERS_MOCK } from '../../core/mock/filters.mock';
+import { CategoryFilterService } from '../../core/services/filter.service';
 
 @Component({
   selector: 'app-catalog-page',
@@ -19,8 +21,9 @@ import { Product } from '../../core/models/products/product.model';
 })
 export class CatalogPage {
   private productService = inject(ProductService);
+  private categoryFilterService = inject(CategoryFilterService);
   private route = inject(ActivatedRoute);
-
+  filterGroups = CATEGORY_FILTERS_MOCK;
   categorySlug = signal<string>('accumulators');
   filters = signal<FiltersValue>({});
   perPage = signal(12);
@@ -29,10 +32,10 @@ export class CatalogPage {
 
   // список продуктов из сервиса
   products = signal<Product[]>([]);
-
+  filtered = computed(() => this.productService.filterProducts(this.products(), this.filters()));
   // итоговый список после сортировки/лимита
   visibleProducts = computed(() => {
-    let list = [...this.products()];
+    let list = [...this.filtered()];
 
     // сортировка
     if (this.sort() === 'priceAsc') list.sort((a, b) => a.price - b.price);
@@ -48,8 +51,9 @@ export class CatalogPage {
     this.route.paramMap.subscribe((p) => {
       const slug = p.get('categorySlug') || 'accumulators';
       this.categorySlug.set(slug);
-      this.loadProducts(slug);
       this.filters.set({});
+      this.loadProducts(slug);
+      this.loadFilters(slug);
     });
   }
 
@@ -72,7 +76,11 @@ export class CatalogPage {
     };
     this.groups = filtersByCategory[categorySlug] ?? [];
   }
-
+  loadFilters(category: string) {
+    this.categoryFilterService.getFilters(category).subscribe((f) => {
+      this.groups = f;
+    });
+  }
   trackByTitle = (p: Product) => p.title;
 
   onFiltersChange(v: FiltersValue) {
