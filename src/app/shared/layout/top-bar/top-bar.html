@@ -1,5 +1,6 @@
 <div class="bg-white shadow-md">
   <app-container className="py-2 flex items-center justify-between">
+    
     <!-- Левый блок: Категории -->
     <div class="relative">
       <button
@@ -12,30 +13,46 @@
       </button>
 
       <!-- Выпадающее меню -->
-      <div
-        *ngIf="isOpen"
-        class="absolute mt-2 w-[720px] bg-white border border-gray-300 rounded shadow-lg z-50 p-4"
-      >
-        <div class="grid grid-cols-3 gap-4">
-          <div *ngFor="let cat of categories" class="space-y-1">
-            <div class="font-semibold px-2 py-1 hover:bg-gray cursor-pointer rounded">
-              {{ cat.name }}
-            </div>
+      @if (isOpen) {
+        <div
+          class="absolute mt-2 w-[720px] bg-white border border-gray-300 rounded shadow-lg z-50 p-4"
+        >
+          <div class="grid grid-cols-3 gap-4">
+            
+            @for (cat of categories; track cat.id) {
+              <div class="space-y-1">
+                
+                <!-- Родитель -->
+                <div class="font-semibold px-2 py-1 hover:bg-gray cursor-pointer rounded">
+                  {{ cat.name }}
+                </div>
 
-            <ul *ngIf="cat.subcategories?.length" class="pl-4 space-y-1">
-              <li
-                *ngFor="let sub of cat.subcategories"
-                class="hover:bg-gray cursor-pointer rounded px-2 py-1 text-sm"
-              >
-                {{ sub }}
-              </li>
-            </ul>
+                <!-- Дети -->
+                @if (cat.children?.length) {
+                  <ul class="pl-4 space-y-1">
+                    @for (sub of cat.children; track sub.id) {
+                      <a   [routerLink]="['/catalog', sub.slug]"
+ class="">
+                        <li
+                          class="hover:bg-gray cursor-pointer rounded px-2 py-1 text-sm"
+                        >
+                          {{ sub.name }}
+                        </li>
+                      </a>
+                    }
+                  </ul>
+                }
+
+              </div>
+            }
+
           </div>
         </div>
-      </div>
+      }
     </div>
 
-    <!-- Правая часть: можно добавить что угодно -->
+    <!-- Правая часть -->
     <div></div>
+
   </app-container>
 </div>

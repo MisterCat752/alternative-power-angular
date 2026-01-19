@@ -3,7 +3,7 @@
     <!-- LEFT FILTERS -->
     <div class="sticky top-4">
       <app-filters-panel
-        [groups]="groups()"
+        [groups]="groups"
         [value]="filters()"
         (valueChange)="onFiltersChange($event)"
       ></app-filters-panel>
@@ -38,33 +38,37 @@
       </div>
 
       <!-- products -->
-      @if (view() === 'grid') {
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-          @for (p of visibleProducts(); track trackByTitle(p)) {
-            <app-product-card
-              [title]="p.title"
-              [imageUrl]="p.imageUrl"
-              [inStock]="p.inStock"
-              [price]="p.price"
-            ></app-product-card>
-          }
-        </div>
-      } @else {
-        <div class="space-y-4">
-          @for (p of visibleProducts(); track trackByTitle(p)) {
-            <div class="bg-white rounded-2xl border border-slate-200 p-4 flex gap-4 items-center">
-              <img [src]="p.imageUrl" class="w-28 h-20 object-cover rounded-xl" />
-              <div class="flex-1">
-                <div class="font-semibold text-slate-900">{{ p.title }}</div>
-                <div class="text-sm mt-1" [class.text-green-700]="p.inStock" [class.text-red-600]="!p.inStock">
-                  {{ p.inStock ? 'În stoc' : 'Nu este în stoc' }}
-                </div>
-              </div>
-              <div class="font-semibold">{{ p.price.toFixed(2) }} €</div>
+@if (view() === 'grid') {
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+    @for (p of visibleProducts(); track trackByTitle(p)) {
+      <a [routerLink]="['/product', p.id]">
+        <app-product-card
+          [title]="p.title"
+          [imageUrl]="p.image || 'https://picsum.photos/id/1011/900/900'"
+          [inStock]="p.quantity > 0"
+          [price]="p.price"
+        ></app-product-card>
+      </a>
+    }
+  </div>
+} @else {
+  <div class="space-y-4">
+    @for (p of visibleProducts(); track trackByTitle(p)) {
+      <a [routerLink]="['/product', p.id]">
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 flex gap-4 items-center">
+          <img [src]="p.image || 'https://picsum.photos/id/1011/900/900'" class="w-28 h-20 object-cover rounded-xl" />
+          <div class="flex-1">
+            <div class="font-semibold text-slate-900">{{ p.title }}</div>
+            <div class="text-sm mt-1" [class.text-green-700]="p.quantity > 0" [class.text-red-600]="p.quantity === 0">
+              {{ p.quantity > 0 ? 'În stoc' : 'Nu este în stoc' }}
             </div>
-          }
+          </div>
+          <div class="font-semibold">{{ p.price.toFixed(2) }} €</div>
         </div>
-      }
+      </a>
+    }
+  </div>
+}
     </div>
   </div>
 </app-container>

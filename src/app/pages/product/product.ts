@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Container } from '../../shared/container/container';
-import { Slider } from '../../shared/slider/slider';
 import { ProductService } from '../../core/services/products/product.service';
 import { Product } from '../../core/models/products/product.model';
 
@@ -18,30 +17,38 @@ type Spec = { label: string; value: string };
   styleUrl: './product.css',
 })
 export class ProductPage {
-  // mock (потом заменишь на API)
   private productService = inject(ProductService);
+  private route = inject(ActivatedRoute);
 
-  product: any = null;
+  product: Product | null = null;
   specGroups: any[] = [];
-  ngOnInit() {
-    this.productService.getProduct(1).subscribe((p) => {
-      if (!p) return;
 
-      this.product = {
-        brand: p.brand,
-        title: p.title,
-        price: p.pricing.salePrice ?? p.price,
-        currency: p.pricing.currency === 'EUR' ? '€' : p.pricing.currency,
-        inStock: p.quantity > 0,
-        warranty: p.settings.warranty ?? '-',
-        description: p.description,
-        specifications: p.specifications ?? [],
-        images: ['https://picsum.photos/id/1011/900/900', 'https://picsum.photos/id/1012/900/900'],
-      };
-      this.specGroups = this.product.specifications;
+  ngOnInit() {
+    // Подписка на параметр id из URL
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('slug');
+      const productId = idParam ? parseInt(idParam, 10) : 1; // по умолчанию 1
+      this.loadProduct(productId);
     });
   }
 
+  private loadProduct(id: number) {
+    this.productService.getProduct(id).subscribe((p) => {
+      if (!p) return;
+
+      this.product = p;
+      this.specGroups = p.specifications ?? [];
+    });
+  }
+  get images(): string[] {
+    if (!this.product) return [];
+    // если есть image, возвращаем его как массив, иначе пустой массив
+    const url = typeof this.product.image === 'string' ? this.product.image : null;
+    return url
+      ? [url]
+      : ['https://picsum.photos/id/1011/900/900', 'https://picsum.photos/id/1012/900/900'];
+  }
+  // UI
   activeIndex = 0;
   showFullDesc = false;
   activeTab: 'specs' | 'docs' | 'desc' = 'specs';

@@ -1,35 +1,51 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Container } from '../../container/container';
-interface Category {
-  name: string;
-  subcategories?: string[];
+import { CategoryService } from '../../../core/services/category.service';
+import { Category } from '../../../core/models/category.model';
+import { RouterLink } from '@angular/router';
+
+interface MenuCategory extends Category {
+  children?: MenuCategory[];
 }
+
 @Component({
   selector: 'app-top-bar',
-  imports: [NgIf, NgFor, MatIconModule, Container],
+  standalone: true,
+  imports: [Container, RouterLink, MatIconModule],
   templateUrl: './top-bar.html',
   styleUrl: './top-bar.css',
 })
-export class TopBar {
+export class TopBar implements OnInit {
   isOpen = false;
+  categories: MenuCategory[] = [];
 
-  categories: Category[] = [
-    { name: 'Инверторы', subcategories: ['Инверторы Deye'] },
-    { name: 'Солнечные Панели', subcategories: ['Солнечные Панели Longi'] },
-    {
-      name: 'Аккумуляторы',
-      subcategories: ['Аккумуляторы Deye', 'Аккумуляторы Dyness', 'Аккумуляторы V-TAC'],
-    },
-    { name: 'Солнечный комплект', subcategories: ['Kituri fotovoltaice hibrid'] },
-    { name: 'Аксессуары', subcategories: ['Кабели', 'Соединители'] },
-    { name: 'Услуги' },
-    { name: 'Подписки на обслуживание' },
-    { name: 'Посмотреть все продукты' },
-  ];
+  constructor(private categoryService: CategoryService) {}
+
+  ngOnInit() {
+    this.categoryService.list().subscribe((cats) => {
+      this.categories = this.buildTree(cats);
+    });
+  }
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
+  }
+
+  private buildTree(categories: Category[]): MenuCategory[] {
+    const map = new Map<number, MenuCategory>();
+    const roots: MenuCategory[] = [];
+
+    categories.forEach((c) => map.set(c.id, { ...c, children: [] }));
+
+    map.forEach((cat) => {
+      if (cat.parentCategory) {
+        map.get(cat.parentCategory)?.children?.push(cat);
+      } else {
+        roots.push(cat);
+      }
+    });
+
+    return roots.sort((a, b) => a.sortOrder - b.sortOrder);
   }
 }

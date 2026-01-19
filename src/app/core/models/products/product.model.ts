@@ -5,7 +5,7 @@ export interface Product {
   title: string;
   description: string;
   shortDescription?: string;
-  image?: File | null; // если используем ImageInput
+  image?: string | null; // если используем ImageInput
   sku?: string;
   quantity: number;
   price: number;

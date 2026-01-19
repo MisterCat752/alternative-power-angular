@@ -9,7 +9,25 @@ export class ProductService {
   getProduct(id: number): Observable<Product | undefined> {
     return of(PRODUCTS_MOCK.find((p) => p.id === id));
   }
+  getProducts(params?: { search?: string; category?: string }): Observable<Product[]> {
+    let data = PRODUCTS_MOCK;
 
+    if (params?.category) {
+      data = data.filter((p) => p.category === params.category);
+    }
+
+    if (params?.search) {
+      const s = params.search.toLowerCase();
+      data = data.filter(
+        (p) =>
+          p.title.toLowerCase().includes(s) ||
+          p.brand?.toLowerCase().includes(s) ||
+          p.sku?.toLowerCase().includes(s),
+      );
+    }
+
+    return of(data);
+  }
   createProduct(product: Product): Observable<Product> {
     product.id = PRODUCTS_MOCK.length + 1;
     PRODUCTS_MOCK.push(product);
