@@ -23,9 +23,11 @@
               <div class="space-y-1">
                 
                 <!-- Родитель -->
-                <div class="font-semibold px-2 py-1 hover:bg-gray cursor-pointer rounded">
+                <a 
+                [routerLink]="['/catalog', cat.slug]"
+                class="font-semibold px-2 py-1 hover:bg-gray cursor-pointer rounded">
                   {{ cat.name }}
-                </div>
+                </a>
 
                 <!-- Дети -->
                 @if (cat.children?.length) {

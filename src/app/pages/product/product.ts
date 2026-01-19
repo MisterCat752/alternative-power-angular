@@ -42,11 +42,16 @@ export class ProductPage {
   }
   get images(): string[] {
     if (!this.product) return [];
-    // если есть image, возвращаем его как массив, иначе пустой массив
-    const url = typeof this.product.image === 'string' ? this.product.image : null;
-    return url
-      ? [url]
-      : ['https://picsum.photos/id/1011/900/900', 'https://picsum.photos/id/1012/900/900'];
+    // Если есть массив изображений, возвращаем его
+    if (Array.isArray(this.product.images) && this.product.images.length > 0) {
+      return this.product.images;
+    }
+    // fallback на одиночное изображение, если есть только product.image
+    if (typeof this.product.image === 'string') {
+      return [this.product.image];
+    }
+    // иначе — заглушки
+    return ['https://picsum.photos/id/1011/900/900', 'https://picsum.photos/id/1012/900/900'];
   }
   // UI
   activeIndex = 0;
