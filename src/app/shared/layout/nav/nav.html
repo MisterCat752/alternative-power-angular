@@ -5,18 +5,43 @@
       <a routerLink="/" class="flex items-center">
         <img src="/logo.png" alt="logo" class="max-w-[100px] max-h-[40px]" />
       </a>
+<div class="flex-1 max-w-[592px] mx-6 relative">
+  <div class="relative">
+    <input
+      [(ngModel)]="search"
+      (input)="onSearchChange()"
+      type="text"
+      placeholder="Поиск..."
+      class="w-full rounded-full border border-gray-300 px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue"
+    />
+    <mat-icon class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+      search
+    </mat-icon>
+  </div>
 
-      <!-- Поиск -->
-      <div class="flex-1 max-w-[592px] mx-6">
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Поиск..."
-            class="w-full rounded-full border border-gray-300 px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue"
+  <!-- Выпадающие результаты -->
+  @if (searchOpen() && results().length) {
+    <div
+      class="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden"
+    >
+      @for (p of results(); track p.id) {
+        <button
+          (click)="goToProduct(p)"
+          class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3"
+        >
+          <img
+            [src]="p.image"
+            class="w-10 h-10 rounded-md object-cover border"
           />
-          <mat-icon class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">search</mat-icon>
-        </div>
-      </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-800">{{ p.title }}</p>
+            <p class="text-xs text-gray-500">{{ p.brand }}</p>
+          </div>
+        </button>
+      }
+    </div>
+  }
+</div>
 
       <!-- Иконки справа -->
       <div class="flex items-center space-x-4">
