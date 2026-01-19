@@ -57,16 +57,7 @@
       <div class="mt-6">
         <div class="text-lg font-semibold mb-2">Описание</div>
 
-        <ul class="space-y-2 text-gray-800">
-          @for (d of product.description; track d; let i = $index) {
-            @if (showFullDesc || i < 3) {
-              <li class="flex gap-2">
-                <span class="text-gray-400">-</span>
-                <span>{{ d }}</span>
-              </li>
-            }
-          }
-        </ul>
+      
 
         <button type="button" class="mt-2 text-blue-600 hover:underline" (click)="toggleDesc()">
           {{ showFullDesc ? 'Скрыть' : 'Read more' }}
@@ -84,50 +75,58 @@
     </div>
   </div>
 
-  <!-- TABS -->
-  <div class="mt-10">
-    <div class="flex gap-6 border-b border-gray-200">
-      <button
-        type="button"
-        class="tab"
-        [ngClass]="{ 'tab--active': activeTab === 'specs' }"
-        (click)="activeTab = 'specs'"
-      >
-        Характеристики
-      </button>
+<!-- TABS -->
+<div class="mt-10">
+  <div class="flex gap-6 border-b border-gray-200">
+    <button
+      type="button"
+      class="tab"
+      [ngClass]="{ 'tab--active': activeTab === 'specs' }"
+      (click)="activeTab = 'specs'"
+    >
+      Характеристики
+    </button>
+ 
+    <button
+      type="button"
+      class="tab"
+      [ngClass]="{ 'tab--active': activeTab === 'desc' }"
+      (click)="activeTab = 'desc'"
+    >
+      Описание
+    </button>
+  </div>
 
-      <button
-        type="button"
-        class="tab"
-        [ngClass]="{ 'tab--active': activeTab === 'docs' }"
-        (click)="activeTab = 'docs'"
-      >
-        Документы
-      </button>
+@if (activeTab === 'specs') {
+<div class="bg-white rounded-2xl border border-gray-200 p-6 mt-4 space-y-8">
+
+  @for (group of specGroups; track group.group) {
+    <div>
+      <h3 class="text-base font-semibold text-gray-900 mb-3">
+        {{ group.group }}
+      </h3>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        @for (item of group.items; track item.label) {
+          <div class="flex justify-between gap-3 border-b border-gray-100 pb-2">
+            <div class="text-gray-600">{{ item.label }}</div>
+            <div class="font-medium text-gray-900 text-right">{{ item.value }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</div>
+}  @else {
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-4">
+      <h2 class="text-lg font-semibold mb-3">Описание товара</h2>
+      <p class="text-[13px] text-black font-medium leading-6">
+        {{ product.description }}
+      </p>
     </div>
 
-    @if (activeTab === 'specs') {
-      <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-4">
-        <div class="grid sm:grid-cols-2 gap-4">
-          @for (s of specs; track s.label) {
-            <div class="flex justify-between gap-3 border-b border-gray-100 pb-2">
-              <div class="text-gray-600">{{ s.label }}</div>
-              <div class="font-medium text-gray-900 text-right">{{ s.value }}</div>
-            </div>
-          }
-        </div>
-      </div>
-    } @else {
-      <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-4">
-        <div class="space-y-3">
-          @for (d of docs; track d.name) {
-            <a [href]="d.url" class="text-blue-600 hover:underline flex items-center gap-2">
-              <mat-icon>description</mat-icon>
-              {{ d.name }}
-            </a>
-          }
-        </div>
-      </div>
-    }
-  </div>
+  }
+</div>
 </app-container>

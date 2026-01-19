@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Container } from '../../shared/container/container';
 import { Slider } from '../../shared/slider/slider';
+import { ProductService } from '../../core/services/products/product.service';
+import { Product } from '../../core/models/products/product.model';
 
 type Spec = { label: string; value: string };
 
@@ -17,42 +19,33 @@ type Spec = { label: string; value: string };
 })
 export class ProductPage {
   // mock (потом заменишь на API)
-  product = {
-    brand: 'Deye',
-    title: 'Инвертор Deye Hybrid 20кВт SUN-20K-SG05LP3-EU-SM2',
-    price: 3500,
-    currency: '€',
-    inStock: true,
-    warranty: '10 ani',
-    description: [
-      '100% несбалансированный выход',
-      'Возможность подключения по переменному току для модернизации существующей солнечной системы',
-      'Максимум 10 параллельных модулей для работы как с сетью, так и без нее',
-      'Поддержка параллельного подключения нескольких аккумуляторов',
-    ],
-    images: ['https://picsum.photos/id/1011/900/900', 'https://picsum.photos/id/1012/900/900'],
-  };
+  private productService = inject(ProductService);
 
-  // состояние галереи
+  product: any = null;
+  specGroups: any[] = [];
+  ngOnInit() {
+    this.productService.getProduct(1).subscribe((p) => {
+      if (!p) return;
+
+      this.product = {
+        brand: p.brand,
+        title: p.title,
+        price: p.pricing.salePrice ?? p.price,
+        currency: p.pricing.currency === 'EUR' ? '€' : p.pricing.currency,
+        inStock: p.quantity > 0,
+        warranty: p.settings.warranty ?? '-',
+        description: p.description,
+        specifications: p.specifications ?? [],
+        images: ['https://picsum.photos/id/1011/900/900', 'https://picsum.photos/id/1012/900/900'],
+      };
+      this.specGroups = this.product.specifications;
+    });
+  }
+
   activeIndex = 0;
   showFullDesc = false;
-  activeTab: 'specs' | 'docs' = 'specs';
+  activeTab: 'specs' | 'docs' | 'desc' = 'specs';
 
-  // настройки слайдера миниатюр
-  thumbsOpts = {
-    slidesPerView: 1,
-    spaceBetween: 12,
-    navigation: true,
-    pagination: false,
-    loop: false,
-    className: 'block w-[92px]',
-    breakpoints: {
-      640: { slidesPerView: 2 },
-      1024: { slidesPerView: 2 },
-    },
-  };
-
-  // мок характеристик/доков
   specs: Spec[] = [
     { label: 'Мощность', value: '20 кВт' },
     { label: 'Фазы', value: '3' },

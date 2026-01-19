@@ -15,8 +15,18 @@ export interface Product {
   pricing: ProductPricing;
   stock: ProductStock;
   settings: ProductSettings;
+
+  specifications?: ProductSpecGroup[]; // 👈 НОВОЕ
+}
+export interface ProductSpecGroup {
+  group: string; // Display / Storage / Audio / etc
+  items: ProductSpecItem[];
 }
 
+export interface ProductSpecItem {
+  label: string;
+  value: string;
+}
 export interface ProductPricing {
   currency: string;
   listPrice?: number;
