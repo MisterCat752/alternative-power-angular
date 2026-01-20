@@ -113,7 +113,7 @@
     <!-- Profile / Login -->
     @if(user) {
       <button (click)="toggleDropdown()" class="flex flex-col items-center text-gray-700">
-        <img [src]="avatarUrl" class="w-6 h-6 rounded-full object-cover border" />
+        <img routerLink="/dashboard/profile" [src]="avatarUrl" class="w-6 h-6 rounded-full object-cover border" />
         <span class="text-xs mt-1">Профиль</span>
       </button>
     } @else {

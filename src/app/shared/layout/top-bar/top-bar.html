@@ -6,7 +6,7 @@
       <button
         type="button"
         (click)="toggleMenu()"
-        class="py-2 flex items-center gap-2 text-green rounded hover:bg-darkBlue"
+        class="py-2 flex items-center gap-2 text-green rounded  cursor-pointer hover:text-green/80"
       >
         <mat-icon>menu</mat-icon>
         Категории
@@ -23,12 +23,12 @@
               <div class="space-y-1">
                 
                 <!-- Родитель -->
-                <a
-                  [routerLink]="['/catalog', cat.slug]"
-                  class="font-semibold px-2 py-1 hover:bg-gray cursor-pointer rounded block"
+                <p
+                  
+                  class="font-semibold px-2 py-1   rounded block"
                 >
                   {{ cat.name }}
-                </a>
+                </p>
 
                 <!-- Дети -->
                 @if(cat.children?.length) {

@@ -27,7 +27,10 @@ export class CartDrawerComponent {
   cart = signal<any>(null);
 
   constructor() {
-    this.cartService.getCart().subscribe((c) => this.cart.set(c));
+    this.cartService.getCart().subscribe((c) => {
+      console.log('Cart items:', c.items);
+      this.cart.set(c);
+    });
   }
 
   remove(id: number) {

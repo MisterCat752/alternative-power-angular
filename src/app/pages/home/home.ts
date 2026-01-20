@@ -4,6 +4,7 @@ import { Slider } from '../../shared/slider/slider';
 import { Container } from '../../shared/container/container';
 import { ProductService } from '../../core/services/products/product.service';
 import { Product } from '../../core/models/products/product.model';
+import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ import { Product } from '../../core/models/products/product.model';
 })
 export class Home {
   private productService = inject(ProductService);
-
+  private cartService = inject(CartService);
   /** hero */
   slides = [
     'https://alternativepower.md/media/sliders/Slider_10kw_10kw.jpeg',
@@ -85,7 +86,7 @@ export class Home {
   productTrackBy = (p: Product) => p.id;
   trackByStr = (src: string) => src;
 
-  add(p: Product) {
-    console.log('Add to cart:', p);
+  addToCart(product: Product) {
+    this.cartService.addProduct(product);
   }
 }

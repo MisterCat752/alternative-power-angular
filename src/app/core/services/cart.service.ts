@@ -74,6 +74,7 @@ export class CartService {
         unitPrice: product.price,
         quantity: 1,
         total: product.price,
+        image: product.image || (product.images?.[0] ?? null), // <--- сюда
       };
       this.cart.items.push(item);
     }

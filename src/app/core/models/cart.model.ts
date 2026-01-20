@@ -5,6 +5,8 @@ export interface CartItem {
   unitPrice: number; // для упрощения будем хранить как number
   quantity: number;
   total: number;
+  image?: string | null; // если используем ImageInput
+  images?: string[];
 }
 
 export interface Cart {

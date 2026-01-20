@@ -23,11 +23,12 @@
         <div class="p-2">
           <app-product-card
             [product]="p"
+            [productId]="p.id"
             [title]="p.title"
             [imageUrl]="p.image"
             [price]="p.pricing?.salePrice"
-            [inStock]="p.quantity > 0"
-            (addToCart)="add(p)"
+            [inStock]="p.quantity > 0" 
+             (addToCart)="addToCart(p)"
           />
         </div>
       </ng-template>
