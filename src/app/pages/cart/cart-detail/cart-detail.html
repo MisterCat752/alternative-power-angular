@@ -10,7 +10,7 @@
             <div class="grid grid-cols-[1fr_1fr_1fr_1fr] items-center gap-4 border-b border-gray-200 py-4">
               <!-- Товар -->
               <div class="flex items-center gap-4">
-                <img src="https://picsum.photos/id/1019/80/80" alt="{{ item.name }}" class="w-20 h-20 object-contain rounded"/>
+                <img   [src]="item.image || 'https://picsum.photos/id/1011/900/900'" alt="{{ item.name }}" class="w-20 h-20 object-contain rounded"/>
                 <div>
                   <div class="font-medium">{{ item.name }}</div>
                   <div class="text-sm text-gray-500">SKU: {{ item.sku }}</div>

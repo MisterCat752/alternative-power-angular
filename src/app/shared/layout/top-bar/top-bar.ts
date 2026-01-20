@@ -31,7 +31,9 @@ export class TopBar implements OnInit {
   toggleMenu() {
     this.isOpen = !this.isOpen;
   }
-
+  closeMenu() {
+    this.isOpen = false;
+  }
   private buildTree(categories: Category[]): MenuCategory[] {
     const map = new Map<number, MenuCategory>();
     const roots: MenuCategory[] = [];

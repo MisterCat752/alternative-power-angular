@@ -22,8 +22,9 @@ export class CartPage {
   }
 
   loadCart() {
-    this.cartService.getCarts().subscribe((carts) => {
-      if (carts.length > 0) this.cart.set(carts[0]);
+    this.cartService.getCart().subscribe((c) => {
+      console.log('Cart items:', c.items);
+      this.cart.set(c);
     });
   }
 

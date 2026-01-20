@@ -34,7 +34,9 @@
                 @if(cat.children?.length) {
                   <ul class="pl-4 space-y-1">
                     @for(sub of cat.children; track sub.id) {
-                      <a [routerLink]="['/catalog', sub.slug]">
+                      <a
+                      (click)="closeMenu()"
+                      [routerLink]="['/catalog', sub.slug]">
                         <li
                           class="hover:bg-gray cursor-pointer rounded px-2 py-1 text-sm"
                         >
