@@ -1,7 +1,7 @@
 <app-container>
   <!-- 1) Слайдер с картинками -->
   <ng-template #imgSlide let-src let-i="index">
-    <img [src]="src" class="w-full h-[320px] object-cover rounded-2xl" />
+    <img [src]="src" class="w-full h-[420px] object-cover rounded-2xl" />
   </ng-template>
 
   <app-slider
@@ -12,24 +12,32 @@
   ></app-slider>
 
   <h2 class="text-2xl font-semibold mt-10 mb-4">Популярные товары</h2>
+ <!-- КАТЕГОРИИ -->
+  @for (c of categories(); track trackByCategory(c)) {
+    <section class="mt-12">
+      <h2 class="text-2xl font-semibold mb-4 capitalize">
+        {{ c.category.replace('-', ' ') }}
+      </h2>
 
-  <!-- 2) Слайдер с карточками -->
-  <ng-template #cardSlide let-p let-i="index">
-    <div class="p-2">
-      <app-product-card
-        [title]="p.title"
-        [imageUrl]="p.imageUrl"
-        [inStock]="p.inStock"
-        [price]="p.price"
-        (addToCart)="add(p)"
-      ></app-product-card>
-    </div>
-  </ng-template>
+      <ng-template #productSlide let-p>
+        <div class="p-2">
+          <app-product-card
+            [product]="p"
+            [title]="p.title"
+            [imageUrl]="p.image"
+            [price]="p.pricing?.salePrice"
+            [inStock]="p.quantity > 0"
+            (addToCart)="add(p)"
+          />
+        </div>
+      </ng-template>
 
-  <app-slider
-    [items]="products"
-    [itemTpl]="cardSlide"
-    [options]="productOpts"
-    [trackBy]="trackByTitle"
-  ></app-slider>
+      <app-slider
+        [items]="c.items"
+        [itemTpl]="productSlide"
+        [options]="productOpts"
+        [trackBy]="productTrackBy"
+      />
+    </section>
+  }
 </app-container>

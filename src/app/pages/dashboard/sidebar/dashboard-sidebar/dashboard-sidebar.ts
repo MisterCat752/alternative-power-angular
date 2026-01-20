@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthStore } from '../../../../core/services/auth.store';
+import { MatIcon } from '@angular/material/icon';
 
 type NavItem = { label: string; to: string; requiredGroup?: string };
 type NavGroup = { key: string; label: string; icon?: string; items: NavItem[] };
@@ -8,12 +9,13 @@ type NavGroup = { key: string; label: string; icon?: string; items: NavItem[] };
 @Component({
   selector: 'app-dashboard-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, MatIcon],
   templateUrl: './dashboard-sidebar.html',
 })
 export class DashboardSidebar {
   private router = inject(Router);
   private authStore = inject(AuthStore);
+  mobileOpen = signal(false);
   groups: NavGroup[] = [
     {
       key: 'profile',
@@ -159,12 +161,14 @@ export class DashboardSidebar {
   toggle(key: string) {
     this.open.update((v) => ({ ...v, [key]: !v[key] }));
   }
-
+  toggleMobile() {
+    this.mobileOpen.set(!this.mobileOpen());
+  }
   // auto-open секции по текущему url
   activeGroupKey = computed(() => {
     const url = this.router.url;
     const found = this.filteredGroups().find((g) =>
-      g.items.some((i) => url.startsWith(i.to.replace(/\/[^/]+$/, '')) || url.startsWith(i.to))
+      g.items.some((i) => url.startsWith(i.to.replace(/\/[^/]+$/, '')) || url.startsWith(i.to)),
     );
     return found?.key ?? null;
   });

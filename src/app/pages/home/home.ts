@@ -1,20 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { ProductCardComponent } from '../../shared/product-card/product-card';
-import { NgFor } from '@angular/common';
 import { Slider } from '../../shared/slider/slider';
 import { Container } from '../../shared/container/container';
+import { ProductService } from '../../core/services/products/product.service';
+import { Product } from '../../core/models/products/product.model';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [ProductCardComponent, Slider, Container],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
+  private productService = inject(ProductService);
+
+  /** hero */
   slides = [
-    'https://picsum.photos/id/1018/1200/500',
-    'https://picsum.photos/id/1015/1200/500',
-    'https://picsum.photos/id/1019/1200/500',
+    'https://alternativepower.md/media/sliders/Slider_10kw_10kw.jpeg',
+    'https://alternativepower.md/media/sliders/Kit_10kw5kw.jpeg',
+    'https://alternativepower.md/media/sliders/kit_5kw_all_in_one.jpeg',
+    'https://alternativepower.md/media/sliders/Kit_6kw5kw.jpeg',
   ];
 
   heroOpts = {
@@ -30,67 +36,56 @@ export class Home {
 
   productOpts = {
     slidesPerView: 1,
-    spaceBetween: 5,
+    spaceBetween: 8,
     navigation: true,
     pagination: true,
-    loop: true,
+    loop: false,
     className: 'block w-full',
     breakpoints: {
       640: { slidesPerView: 2 },
       1024: { slidesPerView: 5 },
     },
   };
+  allowedCategories = ['longi-panels', 'vtac-batteries', 'accessories-cables'];
+  /** продукты */
+  private products = signal<Product[]>([]);
 
-  trackByStr = (s: string) => s;
-  trackByTitle = (p: any) => p.title;
+  /** категории → по 5 товаров */
+  categories = computed(() => {
+    const map = new Map<string, Product[]>();
 
-  products = [
-    {
-      title:
-        'Invertor Deye Hibrid 6KW monofazat + Baterie LPF 5.12KWh + 10 Panouri LONGI 610W Hi-MO X6',
-      imageUrl: 'https://picsum.photos/id/1019/1200/500',
-      inStock: false,
-      price: 5900,
-    },
-    {
-      title: 'Invertor DEYE Hibrid 5KW...',
-      imageUrl: 'https://picsum.photos/id/1019/1200/500',
-      inStock: true,
-      price: 5500,
-    },
-    {
-      title: 'Baterie 16.07kWh V-TAC LiFePO₄...',
-      imageUrl: 'https://picsum.photos/id/1019/1200/500',
-      inStock: true,
-      price: 3200,
-    },
-    {
-      title: 'Baterie 16.07kWh V-TAC LiFePO₄...',
-      imageUrl: 'https://picsum.photos/id/1019/1200/500',
-      inStock: true,
-      price: 3200,
-    },
-    {
-      title: 'Bat3erie 16.07kWh V-TAC LiFePO₄...',
-      imageUrl: 'https://picsum.photos/id/1019/1200/500',
-      inStock: true,
-      price: 3200,
-    },
-    {
-      title: 'Bater4ie 16.07kWh V-TAC LiFePO₄...',
-      imageUrl: 'https://picsum.photos/id/1019/1200/500',
-      inStock: true,
-      price: 3200,
-    },
-    {
-      title: 'Bater5ie 16.07kWh V-TAC LiFePO₄...',
-      imageUrl: 'https://picsum.photos/id/1019/1200/500',
-      inStock: true,
-      price: 3200,
-    },
-  ];
+    this.products().forEach((p) => {
+      // ❗ фильтр по нужным категориям
+      if (!this.allowedCategories.includes(p.category)) {
+        return;
+      }
 
-  add(p: any) {
+      if (!map.has(p.category)) {
+        map.set(p.category, []);
+      }
+
+      if (map.get(p.category)!.length < 5) {
+        map.get(p.category)!.push(p);
+      }
+    });
+
+    return this.allowedCategories
+      .filter((cat) => map.has(cat)) // порядок сохраняется
+      .map((category) => ({
+        category,
+        items: map.get(category)!,
+      }));
+  });
+  constructor() {
+    this.productService.getProducts().subscribe((data) => {
+      this.products.set(data.filter((p) => p.settings?.published));
+    });
+  }
+  trackByCategory = (c: { category: string }) => c.category;
+  productTrackBy = (p: Product) => p.id;
+  trackByStr = (src: string) => src;
+
+  add(p: Product) {
     console.log('Add to cart:', p);
   }
 }

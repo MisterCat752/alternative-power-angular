@@ -1,6 +1,6 @@
 <div class="bg-white shadow-md">
-  <app-container className="py-2 flex items-center justify-between">
-    
+  <app-container class="py-2 flex items-center justify-between">
+
     <!-- Левый блок: Категории -->
     <div class="relative">
       <button
@@ -13,28 +13,28 @@
       </button>
 
       <!-- Выпадающее меню -->
-      @if (isOpen) {
+      @if(isOpen) {
         <div
-          class="absolute mt-2 w-[720px] bg-white border border-gray-300 rounded shadow-lg z-50 p-4"
+          class="absolute mt-2 left-0 right-0 md:left-auto md:right-auto md:w-[720px] w-full max-w-screen-sm md:max-w-none bg-white border border-gray-300 rounded shadow-lg z-50 p-4 overflow-auto"
         >
-          <div class="grid grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             
-            @for (cat of categories; track cat.id) {
+            @for(cat of categories; track cat.id) {
               <div class="space-y-1">
                 
                 <!-- Родитель -->
-                <a 
-                [routerLink]="['/catalog', cat.slug]"
-                class="font-semibold px-2 py-1 hover:bg-gray cursor-pointer rounded">
+                <a
+                  [routerLink]="['/catalog', cat.slug]"
+                  class="font-semibold px-2 py-1 hover:bg-gray cursor-pointer rounded block"
+                >
                   {{ cat.name }}
                 </a>
 
                 <!-- Дети -->
-                @if (cat.children?.length) {
+                @if(cat.children?.length) {
                   <ul class="pl-4 space-y-1">
-                    @for (sub of cat.children; track sub.id) {
-                      <a   [routerLink]="['/catalog', sub.slug]"
- class="">
+                    @for(sub of cat.children; track sub.id) {
+                      <a [routerLink]="['/catalog', sub.slug]">
                         <li
                           class="hover:bg-gray cursor-pointer rounded px-2 py-1 text-sm"
                         >

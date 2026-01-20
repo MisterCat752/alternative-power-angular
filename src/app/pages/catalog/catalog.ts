@@ -13,16 +13,18 @@ import { Product } from '../../core/models/products/product.model';
 import { CATEGORY_FILTERS_MOCK } from '../../core/mock/filters.mock';
 import { CategoryFilterService } from '../../core/services/filter.service';
 import { CartService } from '../../core/services/cart.service';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-catalog-page',
   standalone: true,
-  imports: [Container, ProductCardComponent, FiltersPanelComponent, RouterLink],
+  imports: [Container, MatIcon, ProductCardComponent, FiltersPanelComponent, RouterLink],
   templateUrl: './catalog.html',
 })
 export class CatalogPage {
   private productService = inject(ProductService);
   private categoryFilterService = inject(CategoryFilterService);
   private route = inject(ActivatedRoute);
+  mobileFiltersOpen = false;
   filterGroups = CATEGORY_FILTERS_MOCK;
   categorySlug = signal<string>('accumulators');
   filters = signal<FiltersValue>({});

@@ -1,13 +1,50 @@
 <app-container className="py-6">
   <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
-    <!-- LEFT FILTERS -->
-    <div class="sticky top-4">
+    
+    <!-- DESKTOP FILTERS -->
+    <div class="sticky top-4 hidden lg:block">
       <app-filters-panel
         [groups]="groups"
         [value]="filters()"
         (valueChange)="onFiltersChange($event)"
       ></app-filters-panel>
     </div>
+
+    <!-- MOBILE FILTER BUTTON -->
+    <div class="lg:hidden mb-4 flex justify-between items-center">
+      <button
+        (click)="mobileFiltersOpen = true"
+        class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl"
+      >
+        <mat-icon>filter_list</mat-icon>
+        Фильтры
+      </button>
+      
+    </div>
+
+    <!-- MOBILE FILTER OVERLAY -->
+    @if(mobileFiltersOpen) {
+      <div class="fixed inset-0 z-50 flex">
+        <!-- overlay -->
+        <div class="absolute inset-0 bg-black/30" (click)="mobileFiltersOpen = false"></div>
+
+        <!-- panel -->
+        <div class="relative bg-white w-3/4 max-w-xs h-full p-4 overflow-auto">
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-lg font-bold">Фильтры</div>
+            <button (click)="mobileFiltersOpen = false" class="text-gray-500">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <app-filters-panel
+            [groups]="groups"
+            [value]="filters()"
+            (valueChange)="onFiltersChange($event)"
+          ></app-filters-panel>
+        </div>
+      </div>
+    }
 
     <!-- RIGHT CONTENT -->
     <div>
@@ -19,12 +56,6 @@
         </div>
 
         <div class="flex items-center gap-3">
-         
-          
-
-         
-
-           
           <select
             class="h-10 rounded-xl border border-slate-300 bg-white px-3 outline-none
                    focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
@@ -37,43 +68,39 @@
         </div>
       </div>
 
-      <!-- products -->
-@if (view() === 'grid') {
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-    @for (p of visibleProducts(); track trackByTitle(p)) {
-      <div class="">
-        
-                <app-product-card
-                [product]="p"
-        [title]="p.title"
-        [imageUrl]="p.image || 'https://picsum.photos/id/1011/900/900'"
-        [inStock]="p.quantity > 0"
-        [price]="p.price"
-        (addToCart)="addToCart(p)"
-         [productId]="p.id ?? 0" 
-      ></app-product-card>
-         
-      </div>
-    }
-  </div>
-} @else {
-  <div class="space-y-4">
-    @for (p of visibleProducts(); track trackByTitle(p)) {
-      <a [routerLink]="['/product', p.id]">
-        <div class="bg-white rounded-2xl border border-slate-200 p-4 flex gap-4 items-center">
-          <img [src]="p.image || 'https://picsum.photos/id/1011/900/900'" class="w-28 h-20 object-cover rounded-xl" />
-          <div class="flex-1">
-            <div class="font-semibold text-slate-900">{{ p.title }}</div>
-            <div class="text-sm mt-1" [class.text-green-700]="p.quantity > 0" [class.text-red-600]="p.quantity === 0">
-              {{ p.quantity > 0 ? 'În stoc' : 'Nu este în stoc' }}
-            </div>
-          </div>
-          <div class="font-semibold">{{ p.price.toFixed(2) }} €</div>
+      <!-- products grid/list -->
+      @if(view() === 'grid') {
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          @for(p of visibleProducts(); track trackByTitle(p)) {
+            <app-product-card
+              [product]="p"
+              [title]="p.title"
+              [imageUrl]="p.image || 'https://picsum.photos/id/1011/900/900'"
+              [inStock]="p.quantity > 0"
+              [price]="p.price"
+              (addToCart)="addToCart(p)"
+              [productId]="p.id"
+            ></app-product-card>
+          }
         </div>
-      </a>
-    }
-  </div>
-}
+      } @else {
+        <div class="space-y-4">
+          @for(p of visibleProducts(); track trackByTitle(p)) {
+            <a [routerLink]="['/product', p.id]">
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 flex gap-4 items-center">
+                <img [src]="p.image || 'https://picsum.photos/id/1011/900/900'" class="w-28 h-20 object-cover rounded-xl" />
+                <div class="flex-1">
+                  <div class="font-semibold text-slate-900">{{ p.title }}</div>
+                  <div class="text-sm mt-1" [class.text-green-700]="p.quantity > 0" [class.text-red-600]="p.quantity === 0">
+                    {{ p.quantity > 0 ? 'În stoc' : 'Nu este în stoc' }}
+                  </div>
+                </div>
+                <div class="font-semibold">{{ p.price.toFixed(2) }} €</div>
+              </div>
+            </a>
+          }
+        </div>
+      }
     </div>
   </div>
 </app-container>

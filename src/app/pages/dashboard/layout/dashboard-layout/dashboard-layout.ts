@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DashboardSidebar } from '../../sidebar/dashboard-sidebar/dashboard-sidebar';
 import { ProfileService } from '../../../../core/services/profile.service';
@@ -15,6 +15,20 @@ import { Nav } from '../../../../shared/layout/nav/nav';
 })
 export class DashboardLayout implements OnInit {
   private profileService = inject(ProfileService);
+  mobileOpen = signal(false);
+
+  toggleMobile() {
+    this.mobileOpen.set(!this.mobileOpen());
+  }
+  open = signal<Record<string, boolean>>({});
+  toggle(key: string) {
+    this.open.update((prev) => ({ ...prev, [key]: !prev[key] }));
+  }
+
+  filteredGroups() {
+    // возвращает твои группы
+    return [];
+  }
   authStore = inject(AuthStore);
   ngOnInit() {
     this.profileService
