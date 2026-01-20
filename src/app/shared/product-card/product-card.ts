@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { Product } from '../../core/models/products/product.model';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -16,7 +16,7 @@ export class ProductCardComponent {
   @Input({ required: true }) title!: string;
   @Input({ required: true }) imageUrl!: string;
   private wishlistService = inject(WishlistService);
-
+  private snackBar = inject(MatSnackBar);
   wishlist = toSignal(this.wishlistService.getWishlist(), { initialValue: { items: [] } });
   // Статус наличия
   @Input() inStock = true;
@@ -36,6 +36,18 @@ export class ProductCardComponent {
   }
   onAddToCart() {
     this.addToCart.emit();
+    this.snackBar
+      .open('Товар добавлен в корзину', ' ', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+        panelClass: ['success-snackbar'],
+      })
+      .onAction()
+      .subscribe(() => {
+        // например открыть корзину
+        // this.cartUi.open();
+      });
   }
   onToggleWithList() {
     this.wishlistService.toggle(this.product);

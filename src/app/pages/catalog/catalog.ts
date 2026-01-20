@@ -14,6 +14,7 @@ import { CATEGORY_FILTERS_MOCK } from '../../core/mock/filters.mock';
 import { CategoryFilterService } from '../../core/services/filter.service';
 import { CartService } from '../../core/services/cart.service';
 import { MatIcon } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-catalog-page',
   standalone: true,
@@ -21,6 +22,7 @@ import { MatIcon } from '@angular/material/icon';
   templateUrl: './catalog.html',
 })
 export class CatalogPage {
+  snackBar = inject(MatSnackBar);
   private productService = inject(ProductService);
   private categoryFilterService = inject(CategoryFilterService);
   private route = inject(ActivatedRoute);
