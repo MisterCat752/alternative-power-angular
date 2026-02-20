@@ -25,12 +25,12 @@ export const MOCK_ORDER: OrderDetails = {
     },
   ],
   customer: {
-    name: 'Alexandru Gherasimov',
-    email: 'gherasimovalexandru@hotmail.com',
+    name: 'Nick',
+    email: 'nikitareznov@gmail.com',
     phone: '+37360096895',
   },
   shipping: {
-    email: 'gherasimovalexandru@hotmail.com',
+    email: 'nikitareznov@gmail.com',
     phone: '+37360096895',
     address: 'No shipping address',
   },

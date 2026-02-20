@@ -1,11 +1,11 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { OrderDetails } from '../../../../core/models/orders/orders.model';
 import { OrdersService } from '../../../../core/services/orders/order.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-order-details-page',
-  imports: [],
+  imports: [RouterLink],
   standalone: true,
   templateUrl: './order-details-page.html',
   styleUrl: './order-details-page.css',

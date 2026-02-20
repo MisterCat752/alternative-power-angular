@@ -1,4 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type FulfillmentRow = {
   order: string;
@@ -12,6 +13,7 @@ type FulfillmentRow = {
 @Component({
   selector: 'app-warehouse-fulfillment-page',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './warehouse-fulfillment-page.html',
 })
 export class WarehouseFulfillmentPage {
@@ -26,7 +28,7 @@ export class WarehouseFulfillmentPage {
   rows = signal<FulfillmentRow[]>([
     {
       order: '#SO-202601-0002',
-      customer: 'Alexandru Gherasimov',
+      customer: 'Nick',
       items: 2,
       total: '28 068,96 MDL',
       status: 'PROCESSING',

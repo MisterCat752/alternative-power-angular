@@ -36,7 +36,7 @@ export class CartsListPage {
     },
     {
       id: 80,
-      customerEmail: 'gherasimovalexandru@hotmail.com',
+      customerEmail: 'nikitareznov@gmail.com',
       customerInitial: 'A',
       items: 2,
       status: 'ACTIVE',

@@ -1,15 +1,6 @@
 <app-container>
-  <!-- 1) Слайдер с картинками -->
-  <ng-template #imgSlide let-src let-i="index">
-    <img [src]="src" class="w-full h-[420px] object-cover rounded-2xl" />
-  </ng-template>
-
-  <app-slider
-    [items]="slides"
-    [itemTpl]="imgSlide"
-    [options]="heroOpts"
-    [trackBy]="trackByStr"
-  ></app-slider>
+ 
+ 
 
   <h2 class="text-2xl font-semibold mt-10 mb-4">Популярные товары</h2>
  <!-- КАТЕГОРИИ -->

@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../../shared/ui/ui-select/ui-select';
+import { RouterLink } from '@angular/router';
 
 type SoldRow = {
   date: string; // "Янв 7, 2026"
@@ -20,7 +21,7 @@ type SortKey = 'NEWEST' | 'OLDEST';
 @Component({
   selector: 'app-sold-products-page',
   standalone: true,
-  imports: [UiSelect],
+  imports: [UiSelect, RouterLink],
   templateUrl: './sold-products-page.html',
 })
 export class SoldProductsPage {

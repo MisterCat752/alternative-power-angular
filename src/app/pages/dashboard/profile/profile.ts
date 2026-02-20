@@ -1,11 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { ProfileService } from '../../../core/services/profile.service';
 import { UserProfile } from '../../../core/services/auth.types';
-import { map, Observable, tap } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { AuthStore } from '../../../core/services/auth.store';
 
 @Component({
   selector: 'app-profile',
@@ -14,14 +9,35 @@ import { AuthStore } from '../../../core/services/auth.store';
   templateUrl: './profile.html',
 })
 export class Profile implements OnInit {
-  private profileService = inject(ProfileService);
-  private authStore = inject(AuthStore);
-  profile$: Observable<UserProfile> | null = null;
+  profile$ = signal<UserProfile | null>(null);
+
   ngOnInit() {
-    this.profile$ = this.profileService.loadProfile();
+    // Моковые данные
+    const mockProfile: UserProfile = {
+      id: '1',
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'john.doe@example.com',
+      phone: '+373 123 456 789',
+      preferred_language: 'en',
+      date_joined: new Date().toISOString(),
+      email_verified_at: new Date().toISOString(),
+      account_type: 'company',
+      company_name: 'Acme Corp',
+      company_reg_no: '12345678',
+      company_vat_id: 'VAT123456',
+      is_email_verified: true,
+      is_manager: true,
+      is_staff: false,
+      groups: ['Admin', 'Sales'],
+      avatar: 'https://i.pravatar.cc/150?img=8',
+    };
+
+    this.profile$.set(mockProfile);
   }
-  // Avatar можно использовать напрямую из computed signal
+
+  // Если нужен computed avatar
   get avatarUrl() {
-    return this.authStore.avatarUrl();
+    return this.profile$()?.avatar ?? null;
   }
 }

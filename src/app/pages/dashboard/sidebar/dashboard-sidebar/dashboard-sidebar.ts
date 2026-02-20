@@ -45,39 +45,7 @@ export class DashboardSidebar {
         { label: 'Categories', to: '/dashboard/catalog/categories' },
       ],
     },
-    {
-      key: 'inventory',
-      label: 'Inventory',
-      items: [
-        {
-          label: 'Product Stock',
-          to: '/dashboard/inventory/product-stock',
-          requiredGroup: 'Manager',
-        },
-        { label: 'Stock Moves', to: '/dashboard/inventory/stock-moves' },
-        { label: 'FIFO Lots', to: '/dashboard/inventory/fifo-lots' },
-        { label: 'Invoices', to: '/dashboard/inventory/invoices' },
-        { label: 'Vendors', to: '/dashboard/inventory/vendors' },
-        {
-          label: 'Purchase Lines',
-          to: '/dashboard/inventory/purchase-lines',
-          requiredGroup: 'Manager',
-        },
-        { label: 'Locations', to: '/dashboard/inventory/locations' },
-      ],
-    },
-    {
-      key: 'accounts',
-      label: 'Accounts',
-      items: [
-        { label: 'Users', to: '/dashboard/accounts/users' },
-        {
-          label: 'Group & Roles',
-          to: '/dashboard/accounts/group-and-roles',
-          requiredGroup: 'Manager',
-        },
-      ],
-    },
+
     {
       key: 'translations',
       label: 'Translations',
@@ -86,11 +54,7 @@ export class DashboardSidebar {
         { label: 'Rosetta Editor', to: '/dashboard/rosseta' },
       ],
     },
-    {
-      key: 'core',
-      label: 'Core',
-      items: [{ label: 'Sync Logs', to: '/dashboard/sync-logs' }],
-    },
+
     {
       key: 'Offers',
       label: 'Offers',
@@ -111,28 +75,6 @@ export class DashboardSidebar {
           label: 'My orders list',
           to: '/dashboard/sales/my-orders-list',
           requiredGroup: 'Manager',
-        },
-      ],
-    },
-    {
-      key: 'cart',
-      label: 'Cart',
-      items: [
-        { label: 'Carts list', to: '/dashboard/cart/cart-list' },
-        { label: 'My carts list', to: '/dashboard/cart/my-carts-list' },
-      ],
-    },
-    {
-      key: 'projects',
-      label: 'Projects',
-      items: [
-        {
-          label: 'Projects list',
-          to: '/dashboard/projects/projects-list',
-        },
-        {
-          label: 'My projects list',
-          to: '/dashboard/projects/my-projects-list',
         },
       ],
     },

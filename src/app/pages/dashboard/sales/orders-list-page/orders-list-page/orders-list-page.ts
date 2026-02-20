@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../../shared/ui/ui-select/ui-select';
+import { RouterLink } from '@angular/router';
 
 type OrderState =
   | 'DRAFT'
@@ -26,7 +27,7 @@ type StatusFilter = 'ALL' | OrderState;
 @Component({
   selector: 'app-orders-list-page',
   standalone: true,
-  imports: [UiSelect],
+  imports: [UiSelect, RouterLink],
   templateUrl: './orders-list-page.html',
 })
 export class OrdersListPage {
@@ -50,7 +51,7 @@ export class OrdersListPage {
   rows = signal<OrderRow[]>([
     {
       orderNo: '#SO-202601-0002',
-      customer: 'Alexandru Gherasimov',
+      customer: 'Nick',
       items: 2,
       totalMdl: 28068.96,
       state: 'FULFILLED',
@@ -58,7 +59,7 @@ export class OrdersListPage {
     },
     {
       orderNo: '#SO-202601-0001',
-      customer: 'gherasimovalexandru@hotmail.com',
+      customer: 'nikitareznov@gmail.com',
       items: 0,
       totalMdl: 1.0,
       state: 'DRAFT',
@@ -131,7 +132,7 @@ export class OrdersListPage {
   totalRevenue = computed(() =>
     this.rows()
       .filter((r) => r.state !== 'CANCELED')
-      .reduce((s, r) => s + r.totalMdl, 0)
+      .reduce((s, r) => s + r.totalMdl, 0),
   );
 
   avgOrderValue = computed(() => {
@@ -142,7 +143,7 @@ export class OrdersListPage {
   });
 
   pendingCount = computed(
-    () => this.rows().filter((r) => r.state === 'SUBMITTED' || r.state === 'CONFIRMED').length
+    () => this.rows().filter((r) => r.state === 'SUBMITTED' || r.state === 'CONFIRMED').length,
   );
 
   filtered = computed(() => {
