@@ -9,6 +9,13 @@ export class ProductService {
   getProduct(id: number): Observable<Product | undefined> {
     return of(PRODUCTS_MOCK.find((p) => p.id === id));
   }
+  deleteProduct(sku: string): Observable<void> {
+    const index = PRODUCTS_MOCK.findIndex((p) => p.sku === sku);
+    if (index !== -1) {
+      PRODUCTS_MOCK.splice(index, 1);
+    }
+    return of(void 0);
+  }
   getProducts(params?: { search?: string; category?: string }): Observable<Product[]> {
     let data = PRODUCTS_MOCK;
 

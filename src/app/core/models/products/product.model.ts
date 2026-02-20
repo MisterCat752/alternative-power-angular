@@ -9,6 +9,7 @@ export interface Product {
   images?: string[];
   sku?: string;
   quantity: number;
+  colors?: string;
   price: number;
   category: string;
   brand?: string;

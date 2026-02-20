@@ -29,7 +29,7 @@ export class DashboardSidebar {
       key: 'catalog',
       label: 'Catalog',
       items: [
-        { label: 'Products', to: '/dashboard/catalog/products', requiredGroup: 'Manager' },
+        { label: 'Products', to: '/dashboard/catalog/products' },
         {
           label: 'UOM Categories',
           to: '/dashboard/catalog/uom-categories',
@@ -40,9 +40,9 @@ export class DashboardSidebar {
           to: '/dashboard/catalog/units-of-measure',
           requiredGroup: 'Manager',
         },
-        { label: 'Warranties', to: '/dashboard/catalog/warranties', requiredGroup: 'Manager' },
-        { label: 'Brands', to: '/dashboard/catalog/brands', requiredGroup: 'Manager' },
-        { label: 'Categories', to: '/dashboard/catalog/categories', requiredGroup: 'Manager' },
+        { label: 'Warranties', to: '/dashboard/catalog/warranties' },
+        { label: 'Brands', to: '/dashboard/catalog/brands' },
+        { label: 'Categories', to: '/dashboard/catalog/categories' },
       ],
     },
     {
@@ -54,23 +54,23 @@ export class DashboardSidebar {
           to: '/dashboard/inventory/product-stock',
           requiredGroup: 'Manager',
         },
-        { label: 'Stock Moves', to: '/dashboard/inventory/stock-moves', requiredGroup: 'Manager' },
-        { label: 'FIFO Lots', to: '/dashboard/inventory/fifo-lots', requiredGroup: 'Manager' },
-        { label: 'Invoices', to: '/dashboard/inventory/invoices', requiredGroup: 'Manager' },
-        { label: 'Vendors', to: '/dashboard/inventory/vendors', requiredGroup: 'Manager' },
+        { label: 'Stock Moves', to: '/dashboard/inventory/stock-moves' },
+        { label: 'FIFO Lots', to: '/dashboard/inventory/fifo-lots' },
+        { label: 'Invoices', to: '/dashboard/inventory/invoices' },
+        { label: 'Vendors', to: '/dashboard/inventory/vendors' },
         {
           label: 'Purchase Lines',
           to: '/dashboard/inventory/purchase-lines',
           requiredGroup: 'Manager',
         },
-        { label: 'Locations', to: '/dashboard/inventory/locations', requiredGroup: 'Manager' },
+        { label: 'Locations', to: '/dashboard/inventory/locations' },
       ],
     },
     {
       key: 'accounts',
       label: 'Accounts',
       items: [
-        { label: 'Users', to: '/dashboard/accounts/users', requiredGroup: 'Manager' },
+        { label: 'Users', to: '/dashboard/accounts/users' },
         {
           label: 'Group & Roles',
           to: '/dashboard/accounts/group-and-roles',
@@ -82,26 +82,26 @@ export class DashboardSidebar {
       key: 'translations',
       label: 'Translations',
       items: [
-        { label: 'Manage Translations', to: '/dashboard/translations', requiredGroup: 'Manager' },
-        { label: 'Rosetta Editor', to: '/dashboard/rosseta', requiredGroup: 'Manager' },
+        { label: 'Manage Translations', to: '/dashboard/translations' },
+        { label: 'Rosetta Editor', to: '/dashboard/rosseta' },
       ],
     },
     {
       key: 'core',
       label: 'Core',
-      items: [{ label: 'Sync Logs', to: '/dashboard/sync-logs', requiredGroup: 'Manager' }],
+      items: [{ label: 'Sync Logs', to: '/dashboard/sync-logs' }],
     },
     {
       key: 'Offers',
       label: 'Offers',
-      items: [{ label: 'Offers', to: '/dashboard/offers', requiredGroup: 'Manager' }],
+      items: [{ label: 'Offers', to: '/dashboard/offers' }],
     },
     {
       key: 'sales',
       label: 'Sales',
       items: [
-        { label: 'Orders list', to: '/dashboard/sales/orders-list', requiredGroup: 'Manager' },
-        { label: 'Sold products', to: '/dashboard/sales/sold-products', requiredGroup: 'Manager' },
+        { label: 'Orders list', to: '/dashboard/sales/orders-list' },
+        { label: 'Sold products', to: '/dashboard/sales/sold-products' },
         {
           label: 'Warehouse Fulfillment',
           to: '/dashboard/sales/warehouse-fulfillment',
@@ -118,8 +118,8 @@ export class DashboardSidebar {
       key: 'cart',
       label: 'Cart',
       items: [
-        { label: 'Carts list', to: '/dashboard/cart/cart-list', requiredGroup: 'Manager' },
-        { label: 'My carts list', to: '/dashboard/cart/my-carts-list', requiredGroup: 'Manager' },
+        { label: 'Carts list', to: '/dashboard/cart/cart-list' },
+        { label: 'My carts list', to: '/dashboard/cart/my-carts-list' },
       ],
     },
     {
@@ -129,12 +129,10 @@ export class DashboardSidebar {
         {
           label: 'Projects list',
           to: '/dashboard/projects/projects-list',
-          requiredGroup: 'Manager',
         },
         {
           label: 'My projects list',
           to: '/dashboard/projects/my-projects-list',
-          requiredGroup: 'Manager',
         },
       ],
     },
@@ -153,7 +151,7 @@ export class DashboardSidebar {
     return this.groups
       .map((g) => ({
         ...g,
-        items: g.items.filter((i) => !i.requiredGroup || userGroups.includes(i.requiredGroup)),
+        items: g.items, //.filter((i) => !i.requiredGroup || userGroups.includes(i.requiredGroup)),
       }))
       .filter((g) => g.items.length > 0); // <-- убираем группы без доступных элементов
   });
