@@ -17,18 +17,35 @@ export class CategoryService {
   }
 
   create(payload: Omit<Category, 'id'>): Observable<Category> {
+    const maxId = this.categories.length ? Math.max(...this.categories.map((c) => c.id)) : 0;
+
     const newItem: Category = {
-      id: Math.max(...this.categories.map((c) => c.id)) + 1,
+      id: maxId + 1,
       ...payload,
     };
+
     this.categories.push(newItem);
+
     return of(newItem);
   }
 
   update(id: number, payload: Omit<Category, 'id'>): Observable<Category | undefined> {
-    const i = this.categories.findIndex((c) => c.id === id);
-    if (i === -1) return of(undefined);
-    this.categories[i] = { id, ...payload };
-    return of(this.categories[i]);
+    const index = this.categories.findIndex((c) => c.id === id);
+
+    if (index === -1) return of(undefined);
+
+    this.categories[index] = { id, ...payload };
+
+    return of(this.categories[index]);
+  }
+
+  delete(id: number): Observable<boolean> {
+    const index = this.categories.findIndex((c) => c.id === id);
+
+    if (index === -1) return of(false);
+
+    this.categories.splice(index, 1);
+
+    return of(true);
   }
 }

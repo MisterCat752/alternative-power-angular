@@ -14,13 +14,7 @@
   class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold inline-flex items-center gap-2">
     <span class="text-lg leading-none">+</span>
     Add Warranty
-  </a>
-  <a
-    [routerLink]="'/dashboard/catalog/warranties/edit/'+ 1"
-  class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold inline-flex items-center gap-2">
-    <span class="text-lg leading-none">+</span>
-   edit Warranty
-  </a>
+  </a> 
 </div>
 
 <div class="mt-6 bg-white border border-slate-200 rounded-2xl overflow-hidden">
@@ -36,40 +30,55 @@
         </tr>
       </thead>
 
-      <tbody>
-        @for (r of rows; track r.name) {
-          <tr class="border-b border-slate-100 hover:bg-slate-50">
-            <td class="px-4 py-4">
-              <a class="text-blue-600 hover:underline cursor-pointer">{{ r.name }}</a>
-            </td>
+     <tbody>
+  @for (r of rows; track r.id) {
 
-            <td class="px-4 py-4">
-              <div class="inline-flex items-center gap-2">
-                <span class="text-xs px-3 py-1 rounded-lg bg-blue-100 text-blue-700 border border-blue-200 font-semibold">
-                  {{ r.years }} YEARS
-                </span>
-                <span class="text-xs text-slate-500">({{ r.months }} months)</span>
-              </div>
-            </td>
+  <tr class="border-b border-slate-100 hover:bg-slate-50">
 
-            <td class="px-4 py-4">
-              <span class="text-xs px-3 py-1 rounded-lg bg-sky-100 text-sky-700 border border-sky-200 font-semibold">
-                {{ r.provider }}
-              </span>
-            </td>
+    <td class="px-4 py-4">
+      <a class="text-blue-600 hover:underline cursor-pointer">
+        {{ r.name }}
+      </a>
+    </td>
 
-            <td class="px-4 py-4">
-              <span class="text-xs px-3 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 font-semibold">
-                {{ r.serviceType }}
-              </span>
-            </td>
+    <td class="px-4 py-4">
+      <div class="inline-flex items-center gap-2">
+        <span class="text-xs px-3 py-1 rounded-lg bg-blue-100 text-blue-700 border border-blue-200 font-semibold">
+          {{ r.durationYears }} YEARS
+        </span>
+        <span class="text-xs text-slate-500">
+          ({{ r.durationYears * 12 }} months)
+        </span>
+      </div>
+    </td>
 
-            <td class="px-4 py-4 text-right">
-              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
-            </td>
-          </tr>
-        }
-      </tbody>
+    <td class="px-4 py-4">
+      <span class="text-xs px-3 py-1 rounded-lg bg-sky-100 text-sky-700 border border-sky-200 font-semibold">
+        {{ r.provider }}
+      </span>
+    </td>
+
+    <td class="px-4 py-4">
+      <span class="text-xs px-3 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 font-semibold">
+        {{ r.serviceType }}
+      </span>
+    </td>
+
+    <td class="px-4 py-4 text-right">
+      <ui-action-menu
+        [actions]="[
+          { label: 'View', type: 'button', action: 'view' },
+          { label: 'Edit', type: 'button', action: 'edit' },
+          { label: 'Delete', type: 'button', action: 'delete', danger: true }
+        ]"
+        (action)="handleAction(r, $event)"
+      ></ui-action-menu>
+    </td>
+
+  </tr>
+
+  }
+</tbody>
     </table>
   </div>
 

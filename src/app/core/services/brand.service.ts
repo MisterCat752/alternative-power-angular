@@ -17,18 +17,35 @@ export class BrandService {
   }
 
   create(payload: Omit<Brand, 'id'>): Observable<Brand> {
+    const maxId = this.brands.length ? Math.max(...this.brands.map((b) => b.id)) : 0;
+
     const newBrand: Brand = {
-      id: Math.max(...this.brands.map((b) => b.id)) + 1,
+      id: maxId + 1,
       ...payload,
     };
+
     this.brands.push(newBrand);
+
     return of(newBrand);
   }
 
   update(id: number, payload: Omit<Brand, 'id'>): Observable<Brand | undefined> {
-    const i = this.brands.findIndex((b) => b.id === id);
-    if (i === -1) return of(undefined);
-    this.brands[i] = { id, ...payload };
-    return of(this.brands[i]);
+    const index = this.brands.findIndex((b) => b.id === id);
+
+    if (index === -1) return of(undefined);
+
+    this.brands[index] = { id, ...payload };
+
+    return of(this.brands[index]);
+  }
+
+  delete(id: number): Observable<boolean> {
+    const index = this.brands.findIndex((b) => b.id === id);
+
+    if (index === -1) return of(false);
+
+    this.brands.splice(index, 1);
+
+    return of(true);
   }
 }

@@ -56,7 +56,18 @@ export class CategoryFormPage implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     this.categoryId.set(id ? Number(id) : null);
+    if (!this.isEdit()) {
+      this.form.get('name')?.valueChanges.subscribe((name) => {
+        if (!this.form.get('slug')?.value) {
+          const slug = name
+            ?.toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '');
 
+          this.form.patchValue({ slug }, { emitEvent: false });
+        }
+      });
+    }
     if (this.isEdit()) {
       this.service.get(this.categoryId()!).subscribe((c) => c && this.form.patchValue(c));
     }

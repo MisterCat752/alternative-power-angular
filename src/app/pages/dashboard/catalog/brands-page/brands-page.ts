@@ -1,12 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
-type BrandRow = {
-  name: string;
-  slug: string;
-  website?: string;
-  country?: string;
-};
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink, Router } from '@angular/router';
+import { ActionMenu } from '../../../../shared/ui/action-menu/action-menu';
+import { BrandService } from '../../../../core/services/brand.service';
+import { Brand } from '../../../../core/models/brand.model';
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -17,15 +13,36 @@ function initials(name: string) {
 @Component({
   selector: 'app-brands-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ActionMenu],
   templateUrl: './brands-page.html',
 })
-export class BrandsPage {
-  rows: BrandRow[] = [
-    { name: 'DEYE', slug: 'deye', website: '—', country: '—' },
-    { name: 'LONGI', slug: 'longi', website: '—', country: '—' },
-    { name: 'V-TAC', slug: 'v-tac', website: '—', country: '—' },
-  ];
+export class BrandsPage implements OnInit {
+  private service = inject(BrandService);
+  private router = inject(Router);
+
+  rows: Brand[] = [];
 
   initials = initials;
+
+  ngOnInit() {
+    this.service.list().subscribe((data) => {
+      this.rows = data;
+    });
+  }
+
+  handleAction(row: Brand, action: string) {
+    if (action === 'view') {
+      console.log('view', row);
+    }
+
+    if (action === 'edit') {
+      this.router.navigate(['/dashboard/catalog/brands/edit', row.id]);
+    }
+
+    if (action === 'delete') {
+      this.service.delete(row.id).subscribe(() => {
+        this.rows = this.rows.filter((b) => b.id !== row.id);
+      });
+    }
+  }
 }

@@ -31,4 +31,13 @@ export class WarrantyService {
   listWarranties(): Observable<Warranty[]> {
     return of(this.warranties);
   }
+  deleteWarranty(id: number): Observable<boolean> {
+    const index = this.warranties.findIndex((w) => w.id === id);
+
+    if (index === -1) return of(false);
+
+    this.warranties.splice(index, 1);
+
+    return of(true);
+  }
 }
