@@ -56,16 +56,12 @@ export class UomCategoryForm {
 
     const payload: Omit<UomCategory, 'id'> = this.form.value;
 
-    console.log('Submitting UOM Category:', payload, 'Edit mode:', this.isEdit());
-
     if (this.isEdit()) {
-      this.service.updateCategory(this.categoryId()!, payload).subscribe((res) => {
-        console.log('Updated category:', res);
+      this.service.updateCategory(this.categoryId()!, payload).subscribe(() => {
         this.router.navigate(['/dashboard/catalog/uom-categories']);
       });
     } else {
-      this.service.createCategory(payload).subscribe((res) => {
-        console.log('Created category:', res);
+      this.service.createCategory(payload).subscribe(() => {
         this.router.navigate(['/dashboard/catalog/uom-categories']);
       });
     }

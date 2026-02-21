@@ -63,16 +63,12 @@ export class UnitOfMeasureForm implements OnInit {
 
     const payload: Omit<UnitOfMeasure, 'id'> = this.form.value;
 
-    console.log('Submitting Unit of Measure:', payload, 'Edit mode:', this.isEdit());
-
     if (this.isEdit()) {
-      this.service.updateUnit(this.unitId()!, payload).subscribe((res) => {
-        console.log('Unit updated:', res);
+      this.service.updateUnit(this.unitId()!, payload).subscribe(() => {
         this.router.navigate(['/dashboard/catalog/units-of-measure']);
       });
     } else {
-      this.service.createUnit(payload).subscribe((res) => {
-        console.log('Unit created:', res);
+      this.service.createUnit(payload).subscribe(() => {
         this.router.navigate(['/dashboard/catalog/units-of-measure']);
       });
     }
