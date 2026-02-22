@@ -12,8 +12,8 @@ export const LOCATIONS_MOCK: InventoryLocation[] = [
   },
   {
     id: 2,
-    code: 'WH/SEC',
-    name: 'Secondary Warehouse',
+    code: 'WH Store',
+    name: 'Store Warehouse',
     usage: 'internal',
     parent: 1,
     is_active: true,
@@ -21,8 +21,8 @@ export const LOCATIONS_MOCK: InventoryLocation[] = [
   },
   {
     id: 3,
-    code: 'SUP/APPLE',
-    name: 'Apple Supplier',
+    code: 'WH_TRANSIT',
+    name: ' WH Transit',
     usage: 'supplier',
     parent: null,
     is_active: true,
@@ -30,8 +30,8 @@ export const LOCATIONS_MOCK: InventoryLocation[] = [
   },
   {
     id: 4,
-    code: 'SUP/SAMSUNG',
-    name: 'Samsung Supplier',
+    code: 'WH_DAMAGED',
+    name: 'WH Damaged',
     usage: 'supplier',
     parent: null,
     is_active: true,

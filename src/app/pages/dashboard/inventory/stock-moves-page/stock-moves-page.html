@@ -34,22 +34,11 @@
   </div>
 <ui-select
   placeholder="Location"
-  [options]="locOpts()"
+  [options]="locationOpts"
   [value]="location()"
   (valueChange)="location.set($event)"
-></ui-select>
-<ui-select
-  placeholder="Secondary Location"
-  [options]="locOpts2()"
-  [value]="location2()"
-  (valueChange)="location2.set($event)"
-></ui-select>
- <ui-select
-  placeholder="Direction"
-  [options]="directionOpts"
-  [value]="direction()"
-  (valueChange)="direction.set($event)"
-></ui-select>
+></ui-select> 
+ 
 <ui-select
   placeholder="State"
   [options]="stateOpts"

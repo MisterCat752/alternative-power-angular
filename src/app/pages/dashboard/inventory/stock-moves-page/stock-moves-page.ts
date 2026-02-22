@@ -3,15 +3,13 @@ import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-sel
 import { StatCard } from '../../../../shared/stat-card/stat-card';
 import {
   InventoryStockService,
-  StockItem,
   StockMove,
 } from '../../../../core/services/stock/inventory-stock.service';
-import { InventoryLocationsService } from '../../../../core/services/locations/inventory-locations.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 type LocKey = 'ALL' | 'WH_MAIN' | 'WH_STORE' | 'WH_TRANSIT' | 'WH_DAMAGED' | 'WH_RETURNS';
-type Direction = 'all' | 'in' | 'out';
+
 @Component({
   selector: 'app-stock-page',
   standalone: true,
@@ -20,27 +18,27 @@ type Direction = 'all' | 'in' | 'out';
 })
 export class StockMovesPage {
   private stockApi = inject(InventoryStockService);
-  private locationsApi = inject(InventoryLocationsService);
-  totalPages = computed(() => Math.ceil(this.total() / this.pageSize()));
-  // filters
-  location = signal<string | 'ALL'>('ALL');
-  location2 = signal<string | 'ALL'>('ALL');
-  direction = signal<Direction>('all');
-  state = signal<'ALL' | 'draft' | 'posted' | 'canceled'>('ALL');
-  search = signal('');
-  page = signal(1);
-  pageSize = signal(25);
 
-  total = signal(0);
+  search = signal('');
+  location = signal<LocKey>('ALL');
+  state = signal<'ALL' | 'draft' | 'posted' | 'canceled'>('ALL');
+
+  page = signal(1);
+  pageSize = signal(10);
+
   rows = signal<StockMove[]>([]);
+  total = signal(0);
   loading = signal(false);
 
-  locOpts = signal<UiSelectOption<string | 'ALL'>[]>([{ label: 'All locations', value: 'ALL' }]);
-  locOpts2 = signal<UiSelectOption<string | 'ALL'>[]>([{ label: 'All locations', value: 'ALL' }]);
-  directionOpts: UiSelectOption<Direction>[] = [
-    { label: 'All', value: 'all' },
-    { label: 'Inbound', value: 'in' },
-    { label: 'Outbound', value: 'out' },
+  totalPages = computed(() => Math.ceil(this.total() / this.pageSize()));
+
+  locationOpts: UiSelectOption<LocKey>[] = [
+    { label: 'All', value: 'ALL' },
+    { label: 'WH Main', value: 'WH_MAIN' },
+    { label: 'WH Store', value: 'WH_STORE' },
+    { label: 'WH Transit', value: 'WH_TRANSIT' },
+    { label: 'WH Damaged', value: 'WH_DAMAGED' },
+    { label: 'WH Returns', value: 'WH_RETURNS' },
   ];
 
   stateOpts: UiSelectOption<'ALL' | 'draft' | 'posted' | 'canceled'>[] = [
@@ -51,54 +49,31 @@ export class StockMovesPage {
   ];
 
   constructor() {
-    this.loadLocations();
-
     effect(() => {
       this.page();
+      this.search();
       this.location();
-      this.direction();
       this.state();
-
       this.loadMoves();
-    });
-  }
-
-  loadLocations() {
-    this.locationsApi.getLocations().subscribe((res) => {
-      const options = [
-        { label: 'All locations', value: 'ALL' },
-        ...res.results.map((l) => ({
-          label: `${l.code} — ${l.name}`,
-          value: l.code,
-        })),
-      ];
-      this.locOpts.set(options);
-      this.locOpts2.set(options); // 🆕 дублируем для второго селекта
     });
   }
 
   loadMoves() {
     this.loading.set(true);
 
-    const locValue = this.location() === 'ALL' ? undefined : this.location();
-    const loc2Value = this.location2() === 'ALL' ? undefined : this.location2();
-
     this.stockApi
       .getStockMoves({
+        search: this.search(),
+        location_code: this.location(),
+        state: this.state(),
         page: this.page(),
         page_size: this.pageSize(),
-        location_code: locValue, // старый
-        location: loc2Value, // новый
-        direction: this.direction() === 'all' ? undefined : this.direction(),
-        state: this.state() === 'ALL' ? undefined : this.state(),
       })
-      .subscribe({
-        next: (res) => {
-          this.rows.set(res.results);
-          this.total.set(res.count);
-          this.loading.set(false);
-        },
-        error: () => this.loading.set(false),
+      .subscribe((res) => {
+        this.rows.set(res.results);
+        this.total.set(res.count);
+        console.log(this.rows(), 'rows');
+        this.loading.set(false);
       });
   }
 
@@ -111,10 +86,14 @@ export class StockMovesPage {
   ]);
 
   nextPage() {
-    this.page.update((p) => p + 1);
+    if (this.page() < this.totalPages()) {
+      this.page.update((p) => p + 1);
+    }
   }
 
   prevPage() {
-    this.page.update((p) => Math.max(1, p - 1));
+    if (this.page() > 1) {
+      this.page.update((p) => p - 1);
+    }
   }
 }

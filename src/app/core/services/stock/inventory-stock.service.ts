@@ -1,25 +1,7 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { STOCK_MOVES_MOCK } from '../../mock/stock-moves.mock';
 
-export interface StockItem {
-  product: number;
-  product_code: string;
-  product_name: string;
-
-  location: number;
-  location_code: string;
-
-  qty_on_hand: string; // decimal как строка
-}
-
-export interface StockResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: StockItem[];
-}
 export interface StockMove {
   id: number;
   posted_at: string;
@@ -44,51 +26,49 @@ export interface StockMoveResponse {
   previous: string | null;
   results: StockMove[];
 }
-export type StockOrdering = 'qty_on_hand' | '-qty_on_hand' | 'product__code' | '-product__code';
 
 @Injectable({ providedIn: 'root' })
 export class InventoryStockService {
-  private http = inject(HttpClient);
-  private baseUrl = environment.baseUrl;
+  private moves = [...STOCK_MOVES_MOCK];
 
-  getStock(params: {
+  getStockMoves(params: {
     search?: string;
     location_code?: string;
-    ordering?: StockOrdering;
-    page?: number;
-    page_size?: number;
-  }) {
-    let httpParams = new HttpParams();
-
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== '' && value !== 'ALL') {
-        httpParams = httpParams.set(key, value as string);
-      }
-    });
-
-    return this.http.get<StockResponse>(`${this.baseUrl}/inventory/stock/`, { params: httpParams });
-  }
-
-  // 🆕 НОВОЕ — stock moves
-  getStockMoves(params: {
-    location_code?: string;
-    location?: string;
-    direction?: string;
     state?: string;
-    product?: number;
     page?: number;
     page_size?: number;
-  }) {
-    let httpParams = new HttpParams();
+  }): Observable<StockMoveResponse> {
+    let data = [...this.moves];
 
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== '' && value !== 'ALL') {
-        httpParams = httpParams.set(key, String(value));
-      }
-    });
+    if (params.search) {
+      const q = params.search.toLowerCase();
 
-    return this.http.get<StockMoveResponse>(`${this.baseUrl}/inventory/stock-moves/`, {
-      params: httpParams,
+      data = data.filter(
+        (m) => m.product_code.toLowerCase().includes(q) || m.product_name.toLowerCase().includes(q),
+      );
+    }
+
+    if (params.location_code && params.location_code !== 'ALL') {
+      data = data.filter(
+        (m) => m.source_code === params.location_code || m.dest_code === params.location_code,
+      );
+    }
+
+    if (params.state && params.state !== 'ALL') {
+      data = data.filter((m) => m.state === params.state);
+    }
+
+    const page = params.page ?? 1;
+    const pageSize = params.page_size ?? 25;
+
+    const start = (page - 1) * pageSize;
+    const results = data.slice(start, start + pageSize);
+
+    return of({
+      count: data.length,
+      next: null,
+      previous: null,
+      results,
     });
   }
 }
