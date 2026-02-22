@@ -45,7 +45,21 @@ export class DashboardSidebar {
         { label: 'Categories', to: '/dashboard/catalog/categories' },
       ],
     },
-
+    {
+      key: 'inventory',
+      label: 'Inventory',
+      items: [
+        {
+          label: 'Product Stock',
+          to: '/dashboard/inventory/product-stock',
+          requiredGroup: 'Manager',
+        },
+        { label: 'Stock Moves', to: '/dashboard/inventory/stock-moves' },
+        { label: 'Invoices', to: '/dashboard/inventory/invoices' },
+        { label: 'Vendors', to: '/dashboard/inventory/vendors' },
+        { label: 'Locations', to: '/dashboard/inventory/locations' },
+      ],
+    },
     {
       key: 'translations',
       label: 'Translations',

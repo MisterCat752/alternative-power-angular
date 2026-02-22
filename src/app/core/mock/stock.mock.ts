@@ -1,0 +1,48 @@
+import { StockItem } from '../models/stock.model';
+
+export const STOCK_MOCK: StockItem[] = [
+  {
+    id: 1,
+    productId: 1,
+    sku: 'LONGI-400',
+    location: 'WH_MAIN',
+    locationCode: 'WH/MAIN',
+    locationName: 'Main Warehouse',
+    qty: 8,
+    lastMove: 'EAY 000163196',
+    status: 'IN_STOCK',
+  },
+  {
+    id: 2,
+    productId: 2,
+    sku: 'DEYE-10K-SG05',
+    location: 'WH_MAIN',
+    locationCode: 'WH/MAIN',
+    locationName: 'Main Warehouse',
+    qty: 2,
+    lastMove: 'EAY 000833006',
+    status: 'IN_STOCK',
+  },
+  {
+    id: 3,
+    productId: 3,
+    sku: 'DYNESS-G2',
+    location: 'WH_STORE',
+    locationCode: 'WH/STORE',
+    locationName: 'Store / Showroom',
+    qty: 4,
+    lastMove: 'I11460',
+    status: 'IN_STOCK',
+  },
+  {
+    id: 4,
+    productId: 4,
+    sku: 'VTAC-5.12',
+    location: 'WH_RETURNS',
+    locationCode: 'WH/RETURNS',
+    locationName: 'Customer Returns',
+    qty: 0,
+    lastMove: 'RET-001',
+    status: 'OUT_OF_STOCK',
+  },
+];

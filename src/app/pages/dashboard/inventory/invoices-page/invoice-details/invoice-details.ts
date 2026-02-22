@@ -2,41 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { InvoicesService } from '../../../../../core/services/inventory/invoices';
-import { PurchaseInvoiceDetailsDto } from '../../../../../core/models/invoice';
+import { PurchaseInvoiceDetailsDto, InvoiceStatus } from '../../../../../core/models/invoice';
 import { MatIconModule } from '@angular/material/icon';
-
-type InvoiceStatus = 'DRAFT' | 'RECEIVED' | 'LOCKED' | 'PENDING';
-
-interface InvoiceLine {
-  id: number;
-  line_no: number;
-  qty: string;
-  unit_cost: string;
-  line_sum: string;
-  product: {
-    id: number;
-    code: string;
-    product_name: string;
-    uom: string;
-  };
-}
-
-export interface InvoiceDetailsDto {
-  id: number;
-  doc_number: string;
-  doc_date: string;
-  currency: string;
-  channel: string;
-  doc_sum: string;
-  status: string;
-  vendor: {
-    id: number;
-    name: string;
-    email: string;
-    vat_id: string;
-  };
-  lines: InvoiceLine[];
-}
 
 @Component({
   selector: 'app-invoice-details',
@@ -47,10 +14,14 @@ export interface InvoiceDetailsDto {
 export class InvoiceDetails {
   private route = inject(ActivatedRoute);
   private invoicesService = inject(InvoicesService);
-  lineItemsCount = computed(() => this.invoice()?.lines?.length ?? 0);
+
   invoice = signal<PurchaseInvoiceDetailsDto | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
+
+  lineItemsCount = computed(() => this.invoice()?.lines?.length ?? 0);
+
+  total = computed(() => this.invoice()?.lines?.reduce((sum, l) => sum + l.line_sum, 0) ?? 0);
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -67,16 +38,22 @@ export class InvoiceDetails {
     });
   }
 
-  badgeClass(status: string) {
+  badgeClass(status: InvoiceStatus) {
     switch (status) {
-      case 'draft':
+      case 'DRAFT':
         return 'bg-slate-100 text-slate-700 border-slate-200';
-      case 'received':
+
+      case 'RECEIVED':
         return 'bg-green-100 text-green-700 border-green-200';
-      case 'locked':
+
+      case 'LOCKED':
         return 'bg-purple-100 text-purple-700 border-purple-200';
-      default:
+
+      case 'PENDING':
         return 'bg-orange-100 text-orange-700 border-orange-200';
+
+      default:
+        return '';
     }
   }
 }

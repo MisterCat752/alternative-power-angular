@@ -9,14 +9,7 @@
     <div class="text-slate-500 mt-1">Current inventory levels by location</div>
   </div>
 
-  <div class="flex items-center gap-3">
-    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
-      ⤓ Export
-    </button>
-    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
-      👁 View moves
-    </button>
-  </div>
+  
 </div>
 
 <!-- summary cards -->
@@ -57,17 +50,7 @@
 
 <!-- tabs row -->
 <div class="mt-6 flex flex-wrap items-center gap-5 text-sm">
-  @for (t of tabs; track t.key) {
-    <button
-      type="button"
-      (click)="activeTab.set(t.key)"
-      class="uppercase text-xs font-semibold"
-      [class.text-blue-600]="activeTab() === t.key"
-      [class.text-slate-500]="activeTab() !== t.key"
-    >
-      {{ t.label }} @if (t.count) { <span class="text-slate-400">({{ t.count }})</span> }
-    </button>
-  }
+ 
 </div>
 
 <!-- filters row -->
@@ -79,7 +62,7 @@
 
   <ui-select
     placeholder="Location"
-    [options]="locationOpts"
+    [options]="locationOptions"
     [value]="location()"
     (valueChange)="location.set($event)"
   ></ui-select>
@@ -90,18 +73,7 @@
     [value]="stockStatus()"
     (valueChange)="stockStatus.set($event)"
   ></ui-select>
-
-  <div class="flex items-center justify-end gap-3">
-    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
-      ⤓ Export
-    </button>
-    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
-      + Add stock
-    </button>
-    <button class="h-10 px-4 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-sm font-semibold">
-      Delete selected
-    </button>
-  </div>
+  
 </div>
 
 <!-- table -->
@@ -137,7 +109,7 @@
             <td class="px-4 py-4">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">📦</div>
-                <div class="text-slate-800">{{ r.product }}</div>
+                <div class="text-slate-800">{{ r.productName  }}</div>
               </div>
             </td>
 
@@ -162,10 +134,7 @@
               </span>
             </td>
 
-            <td class="px-4 py-4 text-right">
-              <button class="h-9 w-9 rounded-xl hover:bg-slate-100">…</button>
-            </td>
-          </tr>
+             
         }
       </tbody>
     </table>

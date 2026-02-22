@@ -3,9 +3,10 @@ import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
-import { InvoicesService, PurchaseInvoice } from '../../../../core/services/inventory/invoices';
+import { InvoicesService } from '../../../../core/services/inventory/invoices';
 import { InventoryLocationsService } from '../../../../core/services/locations/inventory-locations.service';
 import { MatIconModule } from '@angular/material/icon';
+import { PurchaseInvoiceDetailsDto } from '../../../../core/models/invoice';
 
 type Currency = 'MDL' | 'EUR' | 'USD' | 'RON';
 type InvoiceStatus = 'RECEIVED' | 'PENDING' | 'DRAFT' | 'LOCKED';
@@ -23,7 +24,7 @@ type InvoiceRow = {
   date: string;
   vendor_name: string;
   amount: number;
-  currency: Currency;
+  currency: string;
   status: InvoiceStatus;
 };
 
@@ -136,7 +137,7 @@ export class InvoicesPage {
       });
   }
 
-  private mapInvoice = (i: PurchaseInvoice): InvoiceRow => ({
+  private mapInvoice = (i: PurchaseInvoiceDetailsDto): InvoiceRow => ({
     id: i.id,
     invoice: i.doc_number,
     date: new Date(i.doc_date).toLocaleDateString('ru-RU', {
@@ -144,17 +145,17 @@ export class InvoicesPage {
       month: 'short',
       year: 'numeric',
     }),
-    vendor_name: i.vendor_name ?? '—',
+    vendor_name: '—',
     amount: Number(i.doc_sum),
     currency: i.currency,
     status:
-      i.status === 'received'
+      i.status === 'RECEIVED'
         ? 'RECEIVED'
-        : i.status === 'draft'
-        ? 'DRAFT'
-        : i.status === 'locked'
-        ? 'LOCKED'
-        : 'PENDING',
+        : i.status === 'DRAFT'
+          ? 'DRAFT'
+          : i.status === 'LOCKED'
+            ? 'LOCKED'
+            : 'PENDING',
   });
 
   private updateTabs(rows: InvoiceRow[]) {
@@ -214,9 +215,9 @@ export class InvoicesPage {
     return s === 'RECEIVED'
       ? 'bg-green-100 text-green-700 border-green-200'
       : s === 'DRAFT'
-      ? 'bg-slate-100 text-slate-700 border-slate-200'
-      : s === 'LOCKED'
-      ? 'bg-purple-100 text-purple-700 border-purple-200'
-      : 'bg-orange-100 text-orange-700 border-orange-200';
+        ? 'bg-slate-100 text-slate-700 border-slate-200'
+        : s === 'LOCKED'
+          ? 'bg-purple-100 text-purple-700 border-purple-200'
+          : 'bg-orange-100 text-orange-700 border-orange-200';
   }
 }

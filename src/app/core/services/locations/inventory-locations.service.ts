@@ -1,41 +1,52 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { LOCATIONS_MOCK } from '../../mock/locations.mock';
 import { ILocation, InventoryLocation } from '../../models/inventory-location.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InventoryLocationsService {
-  private http = inject(HttpClient);
-  private baseUrl = environment.baseUrl;
+  private locations = [...LOCATIONS_MOCK];
 
-  /**
-   * GET /api/inventory/locations/
-   * Auth: JWT Bearer (через interceptor)
-   */
   getLocations(): Observable<ILocation> {
-    return this.http.get<ILocation>(`${this.baseUrl}/inventory/locations/`);
+    return of({
+      count: this.locations.length,
+      next: null,
+      previous: null,
+      results: this.locations,
+    });
   }
 
   createLocation(body: { code: string; name: string; usage: string; parent: number | null }) {
-    return this.http.post(`${this.baseUrl}/inventory/locations/`, body);
+    const newLoc: InventoryLocation = {
+      id: Date.now(),
+      code: body.code,
+      name: body.name,
+      usage: body.usage,
+      parent: body.parent,
+      is_active: true,
+      products: 0,
+    };
+
+    this.locations.push(newLoc);
+
+    return of(newLoc);
   }
 
-  updateLocation(
-    id: number,
-    body: Partial<{
-      code: string; // <-- добавляем сюда
-      name: string;
-      usage: string;
-      parent: number | null;
-    }>
-  ) {
-    return this.http.patch(`${this.baseUrl}/inventory/locations/${id}/`, body);
+  updateLocation(id: number, body: Partial<InventoryLocation>) {
+    const index = this.locations.findIndex((l) => l.id === id);
+
+    if (index !== -1) {
+      this.locations[index] = { ...this.locations[index], ...body };
+    }
+
+    return of(this.locations[index]);
   }
 
   deleteLocation(id: number) {
-    return this.http.delete(`${this.baseUrl}/inventory/locations/${id}/`);
+    this.locations = this.locations.filter((l) => l.id !== id);
+
+    return of({ success: true });
   }
 }

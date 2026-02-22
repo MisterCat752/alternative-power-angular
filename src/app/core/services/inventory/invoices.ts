@@ -1,30 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+import { Observable, of } from 'rxjs';
+import { INVOICES_MOCK } from '../../mock/invoices.mock';
 import { PurchaseInvoiceDetailsDto } from '../../models/invoice';
-
-// Интерфейс
-export interface Location {
-  code: string;
-  name: string;
-  type: 'internal' | 'external' | string;
-}
-export interface PurchaseInvoice {
-  id: number;
-  vendor_name: string;
-  doc_number: string;
-  doc_date: string;
-  currency: 'MDL' | 'USD' | 'EUR' | 'RON';
-  channel: 'resale' | 'project' | 'internal';
-  doc_sum: string;
-  status: 'draft' | 'received' | 'locked';
-  external_id: string;
-  changed_after_receipt: boolean;
-  last_sync_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
 
 export interface PaginatedResponse<T> {
   count: number;
@@ -32,51 +9,68 @@ export interface PaginatedResponse<T> {
   previous: string | null;
   results: T[];
 }
-@Injectable({
-  providedIn: 'root',
-})
-export class InvoicesService {
-  private apiUrl = `${environment.baseUrl}/inventory`;
 
-  constructor(private http: HttpClient) {}
+@Injectable({ providedIn: 'root' })
+export class InvoicesService {
+  private invoices = [...INVOICES_MOCK];
 
   getInvoices(
     status?: string,
     search?: string,
     page: number = 1,
-    pageSize: number = 20
-  ): Observable<PaginatedResponse<PurchaseInvoice>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('page_size', pageSize.toString());
+    pageSize: number = 20,
+  ): Observable<PaginatedResponse<PurchaseInvoiceDetailsDto>> {
+    let data = [...this.invoices];
 
-    if (status) params = params.set('status', status);
-    if (search) params = params.set('search', search);
+    if (status) {
+      data = data.filter((i) => i.status === status);
+    }
 
-    return this.http.get<PaginatedResponse<PurchaseInvoice>>(`${this.apiUrl}/purchase-invoices/`, {
-      params,
+    if (search) {
+      const q = search.toLowerCase();
+      data = data.filter((i) => i.doc_number.toLowerCase().includes(q));
+    }
+
+    const start = (page - 1) * pageSize;
+    const paginated = data.slice(start, start + pageSize);
+
+    return of({
+      count: data.length,
+      next: null,
+      previous: null,
+      results: paginated,
     });
   }
 
-  getInvoiceById(id: any) {
-    return this.http.get<PurchaseInvoiceDetailsDto>(`${this.apiUrl}/purchase-invoices/${id}/`);
+  getInvoiceById(id: string | null): Observable<PurchaseInvoiceDetailsDto> {
+    const invoice = INVOICES_MOCK.find((i) => i.id === Number(id));
+
+    if (!invoice) {
+      throw new Error('Invoice not found');
+    }
+
+    return of(invoice);
   }
 
-  lockInvoice(id: number): Observable<{ detail: string }> {
-    return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/lock/`, {});
-  }
-  unLockInvoice(id: number): Observable<{ detail: string }> {
-    return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/unlock/`, {});
-  }
-
-  receiveInvoice(id: number, locationCode: string = 'WH/MAIN'): Observable<{ detail: string }> {
-    return this.http.post<{ detail: string }>(`${this.apiUrl}/purchase-invoices/${id}/receive/`, {
-      location_code: locationCode,
-    });
+  lockInvoice(id: number) {
+    const inv = this.invoices.find((i) => i.id === id);
+    if (inv) inv.status = 'LOCKED';
+    return of({ detail: 'Locked' });
   }
 
-  // InvoicesService или InventoryService
-  getLocations(): Observable<Location> {
-    return this.http.get<Location>(`${this.apiUrl}/locations/`);
+  unLockInvoice(id: number) {
+    const inv = this.invoices.find((i) => i.id === id);
+    if (inv) inv.status = 'DRAFT';
+    return of({ detail: 'Unlocked' });
+  }
+
+  receiveInvoice(id: number, locationCode: string) {
+    const inv = this.invoices.find((i) => i.id === id);
+
+    if (inv) {
+      inv.status = 'RECEIVED';
+    }
+
+    return of({ detail: `Received in ${locationCode}` });
   }
 }
