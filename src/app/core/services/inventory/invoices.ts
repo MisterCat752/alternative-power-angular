@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { INVOICES_MOCK } from '../../mock/invoices.mock';
 import { PurchaseInvoiceDetailsDto } from '../../models/invoice';
+import { StockMovesService } from '../stock/inventory-stock.service';
 
 export interface PaginatedResponse<T> {
   count: number;
@@ -13,7 +14,7 @@ export interface PaginatedResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class InvoicesService {
   private invoices = [...INVOICES_MOCK];
-
+  constructor(private stockMoves: StockMovesService) {}
   getInvoices(
     status?: string,
     search?: string,
@@ -64,11 +65,35 @@ export class InvoicesService {
     return of({ detail: 'Unlocked' });
   }
 
-  receiveInvoice(id: number, locationCode: string) {
+  receiveInvoice(id: number, locationCode: string): Observable<{ detail: string }> {
     const inv = this.invoices.find((i) => i.id === id);
+    if (!inv) return of({ detail: 'Invoice not found' }); // никогда не возвращаем null
 
-    if (inv) {
-      inv.status = 'RECEIVED';
+    inv.status = 'RECEIVED';
+    console.log(inv, 'inv');
+    // HEADER MOVE
+    this.stockMoves.createMove({
+      from: 'SUPPLIER',
+      to: locationCode,
+      state: 'posted',
+      source: 'invoice',
+      sourceId: inv.id,
+      invoiceNumber: inv.doc_number,
+    });
+
+    // PRODUCT MOVES
+    for (const line of inv.lines) {
+      this.stockMoves.createMove({
+        productId: line.product.id,
+        productName: line.product.product_name,
+        qty: line.qty,
+        from: 'SUPPLIER',
+        to: locationCode,
+        state: 'posted',
+        source: 'invoice',
+        sourceId: inv.id,
+        invoiceNumber: inv.doc_number,
+      });
     }
 
     return of({ detail: `Received in ${locationCode}` });

@@ -69,7 +69,7 @@
       </thead>
 
       <tbody>
-        @for (r of rows(); track r.id) {
+        @for (r of filteredRows(); track r.id) {
           <tr class="border-b border-slate-100 hover:bg-slate-50">
             <!-- PRODUCT -->
             <td class="px-4 py-4">
@@ -77,9 +77,9 @@
                 {{ r.product_code }}
               </div> -->
               <a 
-                [routerLink]="'/dashboard/inventory/invoices/'+ r.invoice"
+                [routerLink]="'/dashboard/inventory/invoices/'+ 1"
               class="text-red-800 text-xs">
-                {{ r.product_name }}
+                {{ r.invoiceNumber  }}
               </a>
             </td>
 
@@ -87,7 +87,7 @@
             <td class="px-4 py-4 text-slate-600">
               <div class="flex items-center gap-2">
                 <span class="text-xs px-2 py-1 rounded bg-slate-100 border">
-                  {{ r.source_code || '—' }}
+                  {{ r.from }}
                 </span>
                 →
                
@@ -96,7 +96,7 @@
             <td class="px-4 py-4 text-slate-600">
               <div class="flex items-center gap-2">
                <span class="text-xs px-2 py-1 rounded bg-slate-100 border">
-                  {{ r.dest_code || '—' }}
+                  {{ r.to }} 
                 </span>
                
                
@@ -107,7 +107,7 @@
             <td class="px-4 py-4 text-right font-semibold">
               {{ r.qty }}
               <span class="text-xs text-slate-400 ml-1">
-                {{ r.uom_display || '' }}
+ 
               </span>
             </td>
 
@@ -133,12 +133,12 @@
 
             <!-- DATE -->
             <td class="px-4 py-4 text-slate-600">
-              {{ r.posted_at | date: 'dd MMM yyyy HH:mm' }}
+              {{ r.createdAt | date: 'dd MMM yyyy HH:mm' }}
             </td>
 
             <!-- INVOICE -->
             <td class="px-4 py-4 text-slate-600">
-              {{ r.invoice || '—' }}
+             {{ r.source || '—' }}
             </td>
           </tr>
         }

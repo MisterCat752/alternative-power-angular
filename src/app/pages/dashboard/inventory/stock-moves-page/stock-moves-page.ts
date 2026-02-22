@@ -1,12 +1,10 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
 import { StatCard } from '../../../../shared/stat-card/stat-card';
-import {
-  InventoryStockService,
-  StockMove,
-} from '../../../../core/services/stock/inventory-stock.service';
+import { StockMovesService } from '../../../../core/services/stock/inventory-stock.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { StockMove } from '../../../../core/models/stock-move';
 
 type LocKey = 'ALL' | 'WH_MAIN' | 'WH_STORE' | 'WH_TRANSIT' | 'WH_DAMAGED' | 'WH_RETURNS';
 
@@ -17,7 +15,7 @@ type LocKey = 'ALL' | 'WH_MAIN' | 'WH_STORE' | 'WH_TRANSIT' | 'WH_DAMAGED' | 'WH
   templateUrl: './stock-moves-page.html',
 })
 export class StockMovesPage {
-  private stockApi = inject(InventoryStockService);
+  private stockApi = inject(StockMovesService);
 
   search = signal('');
   location = signal<LocKey>('ALL');
@@ -57,26 +55,29 @@ export class StockMovesPage {
       this.loadMoves();
     });
   }
-
   loadMoves() {
-    this.loading.set(true);
+    this.stockApi.getMoves().subscribe((moves) => {
+      // фильтруем только HEADER MOVE (движения инвойсов)
+      const invoiceMoves = moves.filter((m) => m.invoiceNumber && !m.productId);
 
-    this.stockApi
-      .getStockMoves({
-        search: this.search(),
-        location_code: this.location(),
-        state: this.state(),
-        page: this.page(),
-        page_size: this.pageSize(),
-      })
-      .subscribe((res) => {
-        this.rows.set(res.results);
-        this.total.set(res.count);
-        console.log(this.rows(), 'rows');
-        this.loading.set(false);
-      });
+      this.rows.set(invoiceMoves);
+      this.total.set(invoiceMoves.length);
+    });
   }
+  filteredRows = computed(() => {
+    const q = this.search().toLowerCase();
 
+    return this.rows().filter((r) => {
+      const matchSearch = !q || r.productName?.toLowerCase().includes(q);
+
+      const matchLocation =
+        this.location() === 'ALL' ? true : r.from === this.location() || r.to === this.location();
+
+      const matchState = this.state() === 'ALL' ? true : r.state === this.state();
+
+      return matchSearch && matchLocation && matchState;
+    });
+  });
   stats = computed(() => [
     {
       title: 'Total moves',

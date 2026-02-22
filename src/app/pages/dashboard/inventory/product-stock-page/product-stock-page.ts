@@ -3,7 +3,14 @@ import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-sel
 import { RouterLink } from '@angular/router';
 import { ActionMenu } from '../../../../shared/ui/action-menu/action-menu';
 import { StockService } from '../../../../core/services/stock.service';
-
+type StockRow = {
+  id: string;
+  productId: number;
+  productName: string;
+  location: string;
+  qty: number;
+  lastMove: string;
+};
 type LocationKey =
   | 'ALL'
   | 'CUSTOMERS'
@@ -28,8 +35,15 @@ type StockStatusKey = 'ALL' | 'IN_STOCK_ONLY';
 export class ProductStockPage {
   private stockService = inject(StockService);
 
-  rows = signal(this.stockService.getStock());
+  rows = signal<StockRow[]>([]);
 
+  constructor() {
+    this.stockService.getProductStock().subscribe((data) => {
+      const productMoves = data.filter((m) => m.productId && !m.invoiceNumber);
+      this.rows.set(productMoves);
+      console.log(this.rows(), 'rows');
+    });
+  }
   search = signal('');
 
   location = signal<LocationKey>('ALL');
@@ -58,8 +72,7 @@ export class ProductStockPage {
     const q = this.search().toLowerCase();
 
     return this.rows().filter((r) => {
-      const matchSearch =
-        !q || r.sku.toLowerCase().includes(q) || r.productName.toLowerCase().includes(q);
+      const matchSearch = !q || r.productName.toLowerCase().includes(q);
 
       const matchLocation = this.location() === 'ALL' ? true : r.location === this.location();
 

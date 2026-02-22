@@ -1,31 +1,43 @@
 import { Injectable } from '@angular/core';
-import { STOCK_MOCK } from '../mock/stock.mock';
-import { PRODUCTS_MOCK } from '../mock/product.mock';
+import { map } from 'rxjs';
+import { StockMovesService } from './stock/inventory-stock.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class StockService {
-  getStock() {
-    return STOCK_MOCK.map((s) => {
-      const product = PRODUCTS_MOCK.find((p) => p.id === s.productId);
+  constructor(private moves: StockMovesService) {}
 
-      return {
-        ...s,
-        productName: product?.title ?? 'Unknown product',
-        image: product?.image ?? null,
-      };
-    });
+  getStockMoves() {
+    return this.moves.getMoves();
   }
 
-  getSummary() {
-    const items = this.getStock();
+  getProductStock() {
+    return this.moves.getMoves().pipe(
+      map((moves) => {
+        const mapStock = new Map();
 
-    const totalQty = items.reduce((a, b) => a + b.qty, 0);
+        for (const m of moves) {
+          const key = `${m.productId}_${m.to}`;
 
-    return {
-      totalItems: items.length,
-      inStock: items.filter((i) => i.qty > 0).length,
-      outStock: items.filter((i) => i.qty === 0).length,
-      totalQty,
-    };
+          if (!mapStock.has(key)) {
+            mapStock.set(key, {
+              id: key,
+              productId: m.productId,
+              productName: m.productName,
+              location: m.to,
+              qty: 0,
+              lastMove: m.createdAt,
+            });
+          }
+
+          const row = mapStock.get(key);
+          row.qty += m.qty;
+          row.lastMove = m.createdAt;
+        }
+
+        return Array.from(mapStock.values());
+      }),
+    );
   }
 }

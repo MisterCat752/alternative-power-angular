@@ -180,7 +180,7 @@ export class InvoicesPage {
 
     if (!id || !location) return;
 
-    this.invoicesService.receiveInvoice(id, location).subscribe(() => {
+    this.invoicesService.receiveInvoice(id, location)!.subscribe(() => {
       this.loadInvoices();
       this.selectedInvoiceId.set(null);
     });
