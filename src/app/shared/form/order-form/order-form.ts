@@ -63,7 +63,7 @@ export class OrderForm implements OnInit {
         unit: [item?.unit_price || 0],
         qty: [item?.quantity || 0],
         total: [item?.total || 0],
-      })
+      }),
     );
   }
 
@@ -95,7 +95,7 @@ export class OrderForm implements OnInit {
 
   submit() {
     const value: OrderDetails = this.form.value;
-    this.ordersService.saveOrder(value).subscribe((saved) => {
+    this.ordersService.createOrder(value).subscribe((saved) => {
       console.log('Order saved', saved);
     });
   }

@@ -35,10 +35,10 @@ export class OrderDetailsPage {
 
   ngOnInit() {
     this.idFromUrl.set(Number(this.route.snapshot.paramMap.get('id')));
+    const orderdId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log('ID from ngOnInit:', orderdId);
 
-    console.log('ID from ngOnInit:', this.idFromUrl);
-
-    this.ordersService.getOrderDetails(1).subscribe((res) => {
+    this.ordersService.getOrder(orderdId).subscribe((res) => {
       this.order.set(res);
     });
   }

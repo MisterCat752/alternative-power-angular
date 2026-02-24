@@ -1,37 +1,225 @@
 import { OrderDetails } from '../models/orders/orders.model';
 
-export const MOCK_ORDER: OrderDetails = {
-  id: 2,
-  code: 'SO-202601-0002',
-  status: 'processing',
-  date: '2026-01-07',
-  currency: 'MDL',
-  subtotal: 28320.64,
-  total: 28320.64,
-  items: [
-    {
-      id: 1,
-      sku: '921474',
-      unit_price: 26.25459,
-      quantity: 1000,
-      total: 26254.59,
+export const MOCK_ORDERS: OrderDetails[] = [
+  {
+    id: 1,
+    code: 'SO-202601-0001',
+    status: 'completed',
+    date: '2026-01-05',
+    currency: 'EUR',
+    subtotal: 3340,
+    total: 3340,
+    items: [
+      {
+        id: 1,
+        sku: 'LONGI-400',
+        unit_price: 320,
+        quantity: 2,
+        total: 640,
+      },
+      {
+        id: 2,
+        sku: 'DEYE-10K-SG05',
+        unit_price: 2700,
+        quantity: 1,
+        total: 2700,
+      },
+    ],
+    customer: {
+      name: 'Alex Popescu',
+      email: 'alex.popescu@gmail.com',
+      phone: '+37369000111',
     },
-    {
-      id: 2,
-      sku: '942275',
-      unit_price: 2066.05,
-      quantity: 1,
-      total: 2066.05,
+    shipping: {
+      email: 'alex.popescu@gmail.com',
+      phone: '+37369000111',
+      address: 'Chisinau, Moldova',
     },
-  ],
-  customer: {
-    name: 'Nick',
-    email: 'nikitareznov@gmail.com',
-    phone: '+37360096895',
   },
-  shipping: {
-    email: 'nikitareznov@gmail.com',
-    phone: '+37360096895',
-    address: 'No shipping address',
+
+  {
+    id: 2,
+    code: 'SO-202601-0002',
+    status: 'processing',
+    date: '2026-01-07',
+    currency: 'EUR',
+    subtotal: 12058,
+    total: 12058,
+    items: [
+      {
+        id: 1,
+        sku: 'VTAC-5.12',
+        unit_price: 1200,
+        quantity: 2,
+        total: 2400,
+      },
+      {
+        id: 2,
+        sku: 'DEYE-12K-SG04',
+        unit_price: 2800,
+        quantity: 2,
+        total: 5600,
+      },
+      {
+        id: 3,
+        sku: 'DYNESS-G2',
+        unit_price: 2400,
+        quantity: 1,
+        total: 2400,
+      },
+    ],
+    customer: {
+      name: 'Ion Rusu',
+      email: 'ion.rusu@gmail.com',
+      phone: '+37368000222',
+    },
+    shipping: {
+      email: 'ion.rusu@gmail.com',
+      phone: '+37368000222',
+      address: 'Balti, Moldova',
+    },
   },
-};
+
+  {
+    id: 3,
+    code: 'SO-202601-0003',
+    status: 'pending',
+    date: '2026-01-10',
+    currency: 'EUR',
+    subtotal: 5250,
+    total: 5250,
+    items: [
+      {
+        id: 1,
+        sku: 'KIT-5KW',
+        unit_price: 5200,
+        quantity: 1,
+        total: 5200,
+      },
+      {
+        id: 2,
+        sku: 'CONN-01',
+        unit_price: 15,
+        quantity: 2,
+        total: 30,
+      },
+      {
+        id: 3,
+        sku: 'CABLE-01',
+        unit_price: 25,
+        quantity: 2,
+        total: 50,
+      },
+    ],
+    customer: {
+      name: 'Maria Luca',
+      email: 'maria.luca@gmail.com',
+      phone: '+37379000333',
+    },
+    shipping: {
+      email: 'maria.luca@gmail.com',
+      phone: '+37379000333',
+      address: 'Cahul, Moldova',
+    },
+  },
+
+  {
+    id: 4,
+    code: 'SO-202601-0004',
+    status: 'cancelled',
+    date: '2026-01-12',
+    currency: 'EUR',
+    subtotal: 8699,
+    total: 8699,
+    items: [
+      {
+        id: 1,
+        sku: 'DEYE-10K-TRI',
+        unit_price: 8699,
+        quantity: 1,
+        total: 8699,
+      },
+    ],
+    customer: {
+      name: 'Vlad Moraru',
+      email: 'vlad.moraru@gmail.com',
+      phone: '+37379000444',
+    },
+    shipping: {
+      email: 'vlad.moraru@gmail.com',
+      phone: '+37379000444',
+      address: 'Orhei, Moldova',
+    },
+  },
+
+  {
+    id: 5,
+    code: 'SO-202601-0005',
+    status: 'processing',
+    date: '2026-01-15',
+    currency: 'EUR',
+    subtotal: 909,
+    total: 909,
+    items: [
+      {
+        id: 1,
+        sku: 'CS6.2-48TD-455-BF',
+        unit_price: 454,
+        quantity: 2,
+        total: 908,
+      },
+      {
+        id: 2,
+        sku: 'CONN-01',
+        unit_price: 15,
+        quantity: 1,
+        total: 15,
+      },
+    ],
+    customer: {
+      name: 'Sergiu Damian',
+      email: 'sergiu.damian@gmail.com',
+      phone: '+37379000555',
+    },
+    shipping: {
+      email: 'sergiu.damian@gmail.com',
+      phone: '+37379000555',
+      address: 'Ungheni, Moldova',
+    },
+  },
+  {
+    id: 6,
+    code: 'SO-202601-0002',
+    status: 'processing',
+    date: '2026-01-07',
+    currency: 'MDL',
+    subtotal: 12358,
+    total: 12358,
+    items: [
+      {
+        id: 1,
+        sku: 'DEYE-10K-SG0',
+        unit_price: 2700,
+        quantity: 1,
+        total: 2700,
+      },
+      {
+        id: 2,
+        sku: 'VTAC-5.12',
+        unit_price: 4829,
+        quantity: 2,
+        total: 9658,
+      },
+    ],
+    customer: {
+      name: 'Nick',
+      email: 'nikitareznov@gmail.com',
+      phone: '+37360096895',
+    },
+    shipping: {
+      email: 'nikitareznov@gmail.com',
+      phone: '+37360096895',
+      address: 'No shipping address',
+    },
+  },
+];

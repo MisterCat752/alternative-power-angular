@@ -1,7 +1,9 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../../shared/ui/ui-select/ui-select';
 import { RouterLink } from '@angular/router';
 
+import { OrderDetails } from '../../../../../core/models/orders/orders.model';
+import { OrdersService } from '../../../../../core/services/orders/order.service';
 type OrderState =
   | 'DRAFT'
   | 'SUBMITTED'
@@ -14,6 +16,7 @@ type OrderState =
 type TabKey = 'ALL' | OrderState;
 
 type OrderRow = {
+  id: number;
   orderNo: string;
   customer: string;
   items: number;
@@ -30,13 +33,16 @@ type StatusFilter = 'ALL' | OrderState;
   imports: [UiSelect, RouterLink],
   templateUrl: './orders-list-page.html',
 })
-export class OrdersListPage {
+export class OrdersListPage implements OnInit {
   tab = signal<TabKey>('ALL');
   search = signal('');
-
+  private ordersService = inject(OrdersService);
   // dropdown "All statuses"
   status = signal<StatusFilter>('ALL');
 
+  ngOnInit() {
+    this.loadOrders();
+  }
   statusOpts: UiSelectOption<StatusFilter>[] = [
     { label: 'All statuses', value: 'ALL' },
     { label: 'Draft', value: 'DRAFT' },
@@ -48,31 +54,56 @@ export class OrdersListPage {
     { label: 'Canceled', value: 'CANCELED' },
   ];
 
-  rows = signal<OrderRow[]>([
-    {
-      orderNo: '#SO-202601-0002',
-      customer: 'Nick',
-      items: 2,
-      totalMdl: 28068.96,
-      state: 'FULFILLED',
-      date: 'Янв 7, 01:57',
-    },
-    {
-      orderNo: '#SO-202601-0001',
-      customer: 'nikitareznov@gmail.com',
-      items: 0,
-      totalMdl: 1.0,
-      state: 'DRAFT',
-      date: 'Янв 7, 01:55',
-    },
-  ]);
-
+  rows = signal<OrderRow[]>([]);
   // ---- helpers
   private moneyFmt = new Intl.NumberFormat('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 
+  private mapStatus(status: string): OrderState {
+    switch (status) {
+      case 'draft':
+        return 'DRAFT';
+      case 'pending':
+        return 'SUBMITTED';
+      case 'processing':
+        return 'PROCESSING';
+      case 'completed':
+        return 'FULFILLED';
+      case 'cancelled':
+        return 'CANCELED';
+      default:
+        return 'DRAFT';
+    }
+  }
+
+  private formatDate(date: string) {
+    const d = new Date(date);
+    return d.toLocaleDateString('ru-RU', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+  private mapToRow(order: OrderDetails): OrderRow {
+    return {
+      id: order.id,
+      orderNo: '#' + order.code,
+      customer: order.customer.email || order.customer.name,
+      items: order.items.length,
+      totalMdl: order.total,
+      state: this.mapStatus(order.status),
+      date: this.formatDate(order.date),
+    };
+  }
+  loadOrders() {
+    this.ordersService.getOrders().subscribe((orders) => {
+      const rows = orders.map((o) => this.mapToRow(o));
+      this.rows.set(rows);
+    });
+  }
   fmtMoney(v: number) {
     return this.moneyFmt.format(v);
   }

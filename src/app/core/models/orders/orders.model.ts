@@ -16,7 +16,7 @@ export interface OrderCustomer {
 export interface OrderDetails {
   id: number;
   code: string;
-  status: 'processing' | 'draft';
+  status: 'processing' | 'draft' | 'cancelled' | 'pending' | 'completed';
   date: string;
   currency: string;
   total: number;
