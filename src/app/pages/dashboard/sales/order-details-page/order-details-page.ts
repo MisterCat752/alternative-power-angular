@@ -2,44 +2,66 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { OrderDetails } from '../../../../core/models/orders/orders.model';
 import { OrdersService } from '../../../../core/services/orders/order.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-order-details-page',
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe],
   standalone: true,
   templateUrl: './order-details-page.html',
-  styleUrl: './order-details-page.css',
 })
 export class OrderDetailsPage {
   private ordersService = inject(OrdersService);
   private route = inject(ActivatedRoute);
-  // Сигнал для заказа
-  order = signal<OrderDetails | null>(null);
-  idFromUrl = signal<number | null>(null);
 
-  // Computed, чтобы шаблон работал с локальной переменной
+  order = signal<OrderDetails | null>(null);
+  selectedStatus = signal<OrderDetails['status'] | null>(null);
+
   o = computed(() => this.order());
 
-  // Можно добавить вычисляемые свойства
   totalItems = computed(() => this.order()?.items.length ?? 0);
   totalAmount = computed(() => this.order()?.total ?? 0);
-  constructor() {
-    // Получаем id из URL
-    // Лог для проверки загрузки
-    console.log('ID from constructor:', this.idFromUrl);
 
-    effect(() => {
-      if (this.o()) console.log('Order loaded', this.o());
+  statusOptions: OrderDetails['status'][] = [
+    'draft',
+    'pending',
+    'processing',
+    'completed',
+    'cancelled',
+  ];
+
+  ngOnInit() {
+    const orderId = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.ordersService.getOrder(orderId).subscribe((res) => {
+      this.order.set(res);
+      this.selectedStatus.set(res.status);
     });
   }
 
-  ngOnInit() {
-    this.idFromUrl.set(Number(this.route.snapshot.paramMap.get('id')));
-    const orderdId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log('ID from ngOnInit:', orderdId);
+  updateStatus() {
+    if (!this.order() || !this.selectedStatus()) return;
 
-    this.ordersService.getOrder(orderdId).subscribe((res) => {
-      this.order.set(res);
+    const id = this.order()!.id;
+    const newStatus = this.selectedStatus()!;
+
+    this.ordersService.changeStatus(id, newStatus).subscribe((updated) => {
+      this.order.set({ ...updated });
     });
+  }
+
+  statusBadgeClass(status: OrderDetails['status']) {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-100 text-green-700';
+      case 'processing':
+        return 'bg-orange-100 text-orange-700';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'cancelled':
+        return 'bg-red-100 text-red-700';
+      case 'draft':
+        return 'bg-gray-100 text-gray-700';
+    }
   }
 }

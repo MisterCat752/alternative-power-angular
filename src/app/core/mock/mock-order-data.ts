@@ -189,8 +189,8 @@ export const MOCK_ORDERS: OrderDetails[] = [
   },
   {
     id: 6,
-    code: 'SO-202601-0002',
-    status: 'processing',
+    code: 'SO-202601-0006',
+    status: 'completed',
     date: '2026-01-07',
     currency: 'MDL',
     subtotal: 12358,

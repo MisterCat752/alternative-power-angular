@@ -1,5 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { OrdersService } from '../../../../core/services/orders/order.service';
 
 type FulfillmentRow = {
   order: string;
@@ -16,7 +17,7 @@ type FulfillmentRow = {
   imports: [RouterLink],
   templateUrl: './warehouse-fulfillment-page.html',
 })
-export class WarehouseFulfillmentPage {
+export class WarehouseFulfillmentPage implements OnInit {
   search = signal('');
 
   summary = signal({
@@ -25,16 +26,36 @@ export class WarehouseFulfillmentPage {
     shippedTotal: 0,
   });
 
-  rows = signal<FulfillmentRow[]>([
-    {
-      order: '#SO-202601-0002',
-      customer: 'Nick',
-      items: 2,
-      total: '28 068,96 MDL',
-      status: 'PROCESSING',
-      since: 'Янв 7, 02:36',
-    },
-  ]);
+  private ordersService = inject(OrdersService);
+
+  rows = signal<FulfillmentRow[]>([]);
+
+  ngOnInit() {
+    this.load();
+  }
+
+  load() {
+    this.ordersService.getOrdersByStatus('processing').subscribe((orders) => {
+      const list: FulfillmentRow[] = orders.map((order) => ({
+        order: `#${order.code}`,
+        customer: order.customer.name,
+        items: order.items.length,
+        total: `${order.total.toLocaleString()} ${order.currency}`,
+        status: 'PROCESSING',
+        since: order.date,
+      }));
+
+      this.rows.set(list);
+    });
+  }
+
+  ship(row: FulfillmentRow) {
+    const id = Number(row.order.replace('#SO-', '').split('-').pop());
+
+    this.ordersService.changeStatus(id, 'completed').subscribe(() => {
+      this.load(); // перезагружаем список
+    });
+  }
 
   filtered = computed(() => {
     const q = this.search().trim().toLowerCase();
@@ -53,11 +74,5 @@ export class WarehouseFulfillmentPage {
       case 'SHIPPED':
         return 'bg-green-100 text-green-700 border-green-200';
     }
-  }
-
-  ship(row: FulfillmentRow) {
-    // мок-логика
-    const next: FulfillmentRow = { ...row, status: 'SHIPPED' };
-    this.rows.set(this.rows().map((r) => (r.order === row.order ? next : r)));
   }
 }

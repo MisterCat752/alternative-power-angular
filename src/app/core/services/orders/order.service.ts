@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { MOCK_ORDERS } from '../../mock/mock-order-data';
 import { OrderDetails } from '../../models/orders/orders.model';
 
@@ -11,6 +11,22 @@ export class OrdersService {
   // получить все заказы
   getOrders(): Observable<OrderDetails[]> {
     return of(this.orders).pipe(delay(500));
+  }
+
+  // получить только по статусу
+  getOrdersByStatus(status: OrderDetails['status']): Observable<OrderDetails[]> {
+    return this.getOrders().pipe(map((orders) => orders.filter((o) => o.status === status)));
+  }
+
+  // изменить статус заказа
+  changeStatus(id: number, status: OrderDetails['status']): Observable<OrderDetails> {
+    const order = this.orders.find((o) => o.id === id);
+
+    if (!order) throw new Error('Order not found');
+
+    order.status = status;
+
+    return of(order).pipe(delay(300));
   }
 
   // получить один заказ

@@ -1,6 +1,7 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../../shared/ui/ui-select/ui-select';
 import { RouterLink } from '@angular/router';
+import { OrdersService } from '../../../../../core/services/orders/order.service';
 
 type SoldRow = {
   date: string; // "Янв 7, 2026"
@@ -24,7 +25,8 @@ type SortKey = 'NEWEST' | 'OLDEST';
   imports: [UiSelect, RouterLink],
   templateUrl: './sold-products-page.html',
 })
-export class SoldProductsPage {
+export class SoldProductsPage implements OnInit {
+  private ordersService = inject(OrdersService);
   search = signal('');
 
   // simple date inputs (string for now)
@@ -38,39 +40,42 @@ export class SoldProductsPage {
     { label: 'Oldest first', value: 'OLDEST' },
   ];
 
-  rows = signal<SoldRow[]>([
-    {
-      date: 'Янв 7, 2026',
-      orderNo: '#SO-202601-0002',
-      invoice: '—',
-      sku: '921474',
-      product: '—',
-      qty: 1,
-      stock: 5,
-      unitOrig: 1318.2,
-      unitMdl: 26021.27,
-      revenueMdl: 26021.27,
-      costMdl: 16680.3,
-    },
-    {
-      date: 'Янв 7, 2026',
-      orderNo: '#SO-202601-0002',
-      invoice: '—',
-      sku: '942275',
-      product: '—',
-      qty: 1,
-      stock: 700,
-      unitOrig: 103.73,
-      unitMdl: 2047.69,
-      revenueMdl: 2047.69,
-      costMdl: 1312.62,
-    },
-  ]);
-
+  rows = signal<SoldRow[]>([]);
+  loading = signal(true);
   private moneyFmt = new Intl.NumberFormat('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+
+  ngOnInit() {
+    this.ordersService.getOrdersByStatus('completed').subscribe((orders) => {
+      const flat: SoldRow[] = [];
+
+      orders.forEach((order) => {
+        order.items.forEach((item) => {
+          const revenueMdl = item.total; // если нужно — конвертируй
+          const costMdl = item.total * 0.7; // допустим себестоимость 70%
+
+          flat.push({
+            date: order.date,
+            orderNo: `#${order.code}`,
+            invoice: '—',
+            sku: item.sku,
+            product: item.sku, // позже заменишь на реальное имя
+            qty: item.quantity,
+            stock: 0,
+            unitOrig: item.unit_price,
+            unitMdl: item.unit_price,
+            revenueMdl,
+            costMdl,
+          });
+        });
+      });
+
+      this.rows.set(flat);
+      this.loading.set(false);
+    });
+  }
 
   fmtMoney(v: number) {
     return this.moneyFmt.format(v);
