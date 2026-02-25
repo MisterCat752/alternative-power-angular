@@ -1,66 +1,76 @@
-<!-- offer-details.html -->
 @if (offer(); as o) {
 
-  <h2 class="text-xl font-semibold mb-4">Offer Details</h2>
+  <!-- Заголовок -->
+  <h2 class="text-2xl font-bold text-slate-900 mb-6">Offer Details</h2>
 
-  <div class="grid grid-cols-2 gap-4 mb-6">
-    <div><b>Offer No:</b> {{ o.code }}</div>
-    <div><b>Version:</b> {{ o.version }}</div>
-    <div><b>Created:</b> {{ o.created_at | date:'mediumDate' }}</div>
+  <!-- Основные данные -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-white border border-slate-200 rounded-2xl p-6">
+    <div><span class="font-semibold">Offer No:</span> {{ o.code }}</div>
+    <div><span class="font-semibold">Version:</span> {{ o.version }}</div>
+    <div><span class="font-semibold">Created:</span> {{ o.created_at | date:'mediumDate' }}</div>
     <div>
-      <b>Valid Until:</b>
+      <span class="font-semibold">Valid Until:</span>
       {{ o.valid_until | date:'mediumDate' }}
-      @if (o.status === 'Expired') { <span class="text-red-600">Expired</span> }
+      @if (o.status === 'Expired') { 
+        <span class="text-red-600 font-semibold ml-2">Expired</span> 
+      }
     </div>
   </div>
 
-  <h3 class="font-semibold mt-6 mb-2">Project Info</h3>
-  <p><b>Name:</b> {{ o.project_name }}</p>
-  <p><b>Owner:</b> {{ o.project_owner }}</p>
-  <p><b>Status:</b> {{ o.status }}</p>
+  <!-- Project info -->
+  <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-6">
+    <h3 class="text-lg font-semibold mb-3">Project Info</h3>
+    <p><span class="font-semibold">Name:</span> {{ o.project_name }}</p>
+    <p><span class="font-semibold">Owner:</span> {{ o.project_owner }}</p>
+    <p><span class="font-semibold">Status:</span> {{ o.status }}</p>
+  </div>
 
+  <!-- Items by group -->
   @for (group of groupedItems() | keyvalue; track group.key) {
-    <h3 class="mt-6 font-semibold">{{ group.key }}</h3>
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-6">
+      <h3 class="text-lg font-semibold mb-3">{{ group.key }}</h3>
 
-    <table class="w-full text-sm border mt-2">
-      <thead class="bg-gray-100">
-        <tr>
-          <th>Product</th>
-          <th>Qty</th>
-          <th>Unit Price</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of group.value; track item.sku) {
-          <tr class="border-t">
-            <td>
-              {{ item.name }}<br />
-              <span class="text-gray-500">SKU: {{ item.sku }}</span>
-            </td>
-            <td>{{ item.qty | number:'1.2-2' }}</td>
-            <td>{{ item.unit_price | number:'1.2-2' }} MDL</td>
-            <td>{{ item.total | number:'1.2-2' }} MDL</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-4 py-2 text-left">Product</th>
+              <th class="px-4 py-2 text-right">Qty</th>
+              <th class="px-4 py-2 text-right">Unit Price</th>
+              <th class="px-4 py-2 text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of group.value; track item.sku) {
+              <tr class="border-t border-slate-100 hover:bg-slate-50">
+                <td class="px-4 py-2">
+                  <div class="font-semibold text-blue-600">{{ item.name }}</div>
+                  <div class="text-slate-500 text-xs">SKU: {{ item.sku }}</div>
+                </td>
+                <td class="px-4 py-2 text-right">{{ item.qty | number:'1.2-2' }}</td>
+                <td class="px-4 py-2 text-right">{{ item.unit_price | number:'1.2-2' }} MDL</td>
+                <td class="px-4 py-2 text-right font-semibold">{{ item.total | number:'1.2-2' }} MDL</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
 
- <div class="text-right mt-2 font-medium">
-  Group Subtotal:
- 
-</div>
+     
+    </div>
   }
 
-  <div class="text-right text-lg font-semibold mt-6">
+  <!-- Total Amount -->
+  <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-6 text-right text-lg font-semibold text-slate-900">
     Total Amount: {{ subtotal() | number:'1.2-2' }} MDL
   </div>
 
-  <div class="mt-6 text-sm text-gray-600">
+  <!-- Footer / Created By -->
+  <div class="bg-white border border-slate-200 rounded-2xl p-4 text-sm text-gray-600">
     Created By: {{ o.created_by }} <br />
     {{ o.created_at | date:'medium' }}
   </div>
 
 } @else {
-  <p>Loading offer...</p>
-}
+  <div class="text-slate-500 text-center py-6">Loading offer…</div>
+} 

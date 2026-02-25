@@ -1,80 +1,105 @@
-// core/services/offers/offer.service.ts
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+
 import { OfferDetails } from '../../models/offers/offer.model';
 import { OFFERS_MOCK } from '../../mock/offers.mock';
 
 @Injectable({ providedIn: 'root' })
 export class OffersService {
-  private offers = [...OFFERS_MOCK];
+  private offers: OfferDetails[] = [...OFFERS_MOCK];
 
-  getOffer(id: number): Observable<OfferDetails | undefined> {
-    return of(this.offers.find((o) => o.id === id));
+  /* =========================
+     LIST
+  ========================= */
+  getOffers(): Observable<OfferDetails[]> {
+    return of([...this.offers]).pipe(delay(400));
   }
 
-  createOffer(data: Partial<OfferDetails>): Observable<OfferDetails> {
-    const id = Math.max(...this.offers.map((o) => o.id)) + 1;
+  /* =========================
+     DETAILS
+  ========================= */
+  getOffer(id: number): Observable<OfferDetails | undefined> {
+    const offer = this.offers.find((o) => o.id === id);
+    return of(offer ? { ...offer } : undefined).pipe(delay(300));
+  }
 
-    const code = this.generateCode();
-
-    const items = (data.items || []).map((i: any) => ({
-      ...i,
-      total: i.qty * i.unit_price,
-    }));
-
-    const subtotal = items.reduce((s, i) => s + i.total, 0);
-
+  /* =========================
+     CREATE
+  ========================= */
+  createOffer(payload: Partial<OfferDetails>): Observable<OfferDetails> {
     const newOffer: OfferDetails = {
-      id,
-      code,
-      version: data.version || 'v1',
-      created_at: new Date().toISOString(),
-      valid_until: data.valid_until || '',
-      project_name: data.project_name || '',
-      project_owner: data.project_owner || '',
-      status: data.status || 'Draft',
-      created_by: 'mock@system.local',
-      items,
-      subtotal,
-      total: subtotal,
+      id: Date.now(),
+      created_at: String(Date.now()),
+      created_by: String(Date.now()),
+      code: payload.code || this.generateCode(),
+      version: payload.version || 'V1',
+      project_name: payload.project_name || '',
+      project_owner: payload.project_owner || '',
+      status: 'DRAFT',
+      valid_until: payload.valid_until || '',
+      total: payload.total || 0,
+      items: (payload.items || []).map((i: any) => ({
+        ...i,
+        total: i.qty * i.unit_price,
+      })),
     };
 
     this.offers.unshift(newOffer);
 
-    return of(newOffer);
+    return of(newOffer).pipe(delay(400));
   }
 
-  updateOffer(id: number, data: Partial<OfferDetails>): Observable<OfferDetails> {
+  /* =========================
+     UPDATE
+  ========================= */
+  updateOffer(id: number, payload: Partial<OfferDetails>): Observable<OfferDetails> {
     const index = this.offers.findIndex((o) => o.id === id);
     if (index === -1) throw new Error('Offer not found');
 
-    const items = (data.items || []).map((i: any) => ({
+    const items = (payload.items || this.offers[index].items).map((i: any) => ({
       ...i,
       total: i.qty * i.unit_price,
     }));
 
-    const subtotal = items.reduce((s, i) => s + i.total, 0);
+    const total = items.reduce((s, i) => s + i.total, 0);
 
     const updated: OfferDetails = {
       ...this.offers[index],
-      ...data,
+      ...payload,
       items,
-      subtotal,
-      total: subtotal,
+      total,
     };
 
     this.offers[index] = updated;
 
-    return of(updated);
+    return of(updated).pipe(delay(400));
   }
 
-  private generateCode(): string {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const rand = Math.floor(1000 + Math.random() * 9000);
+  /* =========================
+     DELETE
+  ========================= */
+  deleteOffer(id: number): Observable<boolean> {
+    this.offers = this.offers.filter((o) => o.id !== id);
+    return of(true).pipe(delay(300));
+  }
 
-    return `OF-${y}${m}${day}-${rand}`;
+  /* =========================
+     STATUS CHANGE
+  ========================= */
+  updateStatus(id: number, status: OfferDetails['status']) {
+    const index = this.offers.findIndex((o) => o.id === id);
+    if (index === -1) return of(false);
+
+    this.offers[index].status = status;
+    return of(true).pipe(delay(300));
+  }
+
+  /* =========================
+     UTILS
+  ========================= */
+  private generateCode(): string {
+    const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+    return `OF-${new Date().getFullYear()}-${random}`;
   }
 }

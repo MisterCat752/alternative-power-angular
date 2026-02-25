@@ -75,6 +75,18 @@ export class DashboardSidebar {
       items: [{ label: 'Offers', to: '/dashboard/offers' }],
     },
     {
+      key: 'accounts',
+      label: 'Accounts',
+      items: [
+        { label: 'Users', to: '/dashboard/accounts/users' },
+        {
+          label: 'Group & Roles',
+          to: '/dashboard/accounts/group-and-roles',
+          requiredGroup: 'Manager',
+        },
+      ],
+    },
+    {
       key: 'sales',
       label: 'Sales',
       items: [

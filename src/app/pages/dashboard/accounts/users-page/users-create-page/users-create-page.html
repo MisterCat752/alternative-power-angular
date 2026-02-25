@@ -55,27 +55,29 @@
   </section>
 
   <!-- SECURITY -->
-  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-    <h2 class="text-lg font-semibold text-slate-800">
-      Security
-    </h2>
+@if (mode === 'create') {
+<section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+  <h2 class="text-lg font-semibold text-slate-800">
+    Security
+  </h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <app-form-field label="Password *">
-        <app-text-input
-          type="password"
-          formControlName="password"
-        />
-      </app-form-field>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <app-form-field label="Password *">
+      <app-text-input
+        type="password"
+        formControlName="password"
+      />
+    </app-form-field>
 
-      <app-form-field label="Confirm password *">
-        <app-text-input
-          type="password"
-          formControlName="confirmPassword"
-        />
-      </app-form-field>
-    </div>
+    <app-form-field label="Confirm password *">
+      <app-text-input
+        type="password"
+        formControlName="confirmPassword"
+      />
+    </app-form-field>
+  </div>
 </section>
+}
 
     @if (status === 'edit') {
   <!-- Active -->

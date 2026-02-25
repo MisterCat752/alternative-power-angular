@@ -2,7 +2,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   PaginatedResponse,
   UpdateUserPayload,
@@ -50,65 +50,144 @@ export type UserDetail = {
   date_joined: string; // ISO string
 };
 
+import { delay } from 'rxjs/operators';
+
+import { USERS_MOCK } from '../../mock/users.mock';
+
+export interface UsersQuery {
+  page?: number;
+  page_size?: number;
+  search?: string;
+  groups?: UserGroup[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class UsersService {
-  private http = inject(HttpClient);
-  private baseUrl = environment.baseUrl;
+  private users: UserDetail[] = [...USERS_MOCK];
 
-  createUser(payload: CreateUserPayload) {
-    return this.http.post(`${this.baseUrl}/auth/register/`, payload);
-  }
-
+  /* =======================
+     GET USERS (LIST)
+  ======================= */
   getUsers(query: UsersQuery = {}): Observable<PaginatedResponse<User>> {
-    let params = new HttpParams();
+    let data = [...this.users];
 
-    if (query.page) params = params.set('page', query.page);
-    if (query.page_size) params = params.set('page_size', query.page_size);
-    if (query.search) params = params.set('search', query.search);
+    // search
+    if (query.search) {
+      const s = query.search.toLowerCase();
+      data = data.filter(
+        (u) =>
+          u.email.toLowerCase().includes(s) ||
+          u.first_name.toLowerCase().includes(s) ||
+          u.last_name.toLowerCase().includes(s),
+      );
+    }
 
+    // groups filter
     if (query.groups?.length) {
-      query.groups.forEach((g) => (params = params.append('groups', g)));
+      data = data.filter((u) => u.groups.some((g) => query.groups!.includes(g as UserGroup)));
     }
 
-    return this.http.get<PaginatedResponse<User>>(`${this.baseUrl}/manage/users/`, { params });
+    const page = query.page ?? 1;
+    const pageSize = query.page_size ?? 25;
+
+    const start = (page - 1) * pageSize;
+    const paginated = data.slice(start, start + pageSize);
+
+    // 👇 приводим к User (если User меньше чем UserDetail — это ок)
+    const results: User[] = paginated as unknown as User[];
+
+    return of({
+      count: data.length,
+      next: null,
+      previous: null,
+      results,
+    }).pipe(delay(400));
   }
 
-  /** PATCH user */
-  getUserById(id: string) {
-    return this.http.get<User>(`${this.baseUrl}/manage/users/${id}/`);
-  }
-  getUserByDetail(id: string) {
-    return this.http.get<UserDetail>(`${this.baseUrl}/manage/users/${id}/`);
+  /* =======================
+     GET USER DETAIL
+  ======================= */
+  getUserByDetail(id: string): Observable<UserDetail> {
+    const user = this.users.find((u) => u.id === id)!;
+    return of({ ...user }).pipe(delay(300));
   }
 
-  updateUser(
-    id: string,
-    payload: {
-      first_name?: string;
-      last_name?: string;
-      phone?: string;
-      is_active?: boolean;
-      account_type?: string;
-      company_name?: string;
-      is_email_verified?: boolean;
-      groups_input?: string[];
+  /* =======================
+     UPDATE USER
+  ======================= */
+  updateLocalUser(id: string, patch: Partial<UserDetail>) {
+    const index = this.users.findIndex((u) => u.id === id);
+    if (index === -1) return;
+
+    this.users[index] = {
+      ...this.users[index],
+      ...patch,
+    };
+  }
+
+  activateUser(id: string) {
+    this.updateLocalUser(id, { is_active: true });
+    return of(true).pipe(delay(300));
+  }
+  createUser(payload: CreateUserPayload): Observable<UserDetail> {
+    const newUser: UserDetail = {
+      id: crypto.randomUUID(),
+
+      first_name: payload.first_name,
+      last_name: payload.last_name,
+      email: payload.email,
+      phone: payload.phone ?? null,
+
+      account_type: payload.account_type,
+      avatar: null,
+
+      groups: payload.groups,
+
+      is_active: payload.is_active,
+      is_staff: payload.groups.includes('Admin'),
+
+      is_email_verified: false,
+      email_verified_at: null,
+
+      date_joined: new Date().toISOString(),
+    };
+
+    this.users.unshift(newUser);
+
+    return of(newUser).pipe(delay(400));
+  }
+
+  /* =======================
+   UPDATE USER
+======================= */
+  updateUser(id: string, patch: Partial<UserDetail>): Observable<UserDetail> {
+    const index = this.users.findIndex((u) => u.id === id);
+    if (index === -1) {
+      throw new Error('User not found');
     }
-  ) {
-    return this.http.patch(`${this.baseUrl}/manage/users/${id}/`, payload);
+
+    this.users[index] = {
+      ...this.users[index],
+      ...patch,
+    };
+
+    return of(this.users[index]).pipe(delay(400));
+  }
+  deactivateUser(id: string) {
+    this.updateLocalUser(id, { is_active: false });
+    return of(true).pipe(delay(300));
   }
 
-  activateUser(userId: string) {
-    return this.updateUser(userId, { is_active: true });
-  }
-  emailVerify(userId: string) {
-    return this.updateUser(userId, { is_email_verified: true });
-  }
-
-  deactivateUser(userId: string) {
-    return this.updateUser(userId, { is_active: false });
+  emailVerify(id: string) {
+    this.updateLocalUser(id, {
+      is_email_verified: true,
+      email_verified_at: new Date().toISOString(),
+    });
+    return of(true).pipe(delay(300));
   }
 
   updateUserRoles(userId: string, roles: UserGroup[]) {
-    return this.updateUser(userId, { groups_input: roles });
+    this.updateLocalUser(userId, { groups: roles });
+    return of(true).pipe(delay(300));
   }
 }

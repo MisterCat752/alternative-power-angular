@@ -8,7 +8,7 @@ export const OFFERS_MOCK: OfferDetails[] = [
     version: 'v1',
     created_at: '2025-12-11T02:33:00Z',
     valid_until: '2026-01-10T00:00:00Z',
-    status: 'Expired',
+    status: 'EXPIRED',
     project_name: 'PROJECT NAME',
     project_owner: 'gherasimovalexandru@hotmail.com',
     created_by: 'gherasimovalexandru@hotmail.com',

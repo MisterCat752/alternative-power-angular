@@ -115,8 +115,15 @@
                 {{ r.status }}
               </span>
             </td>
-            <td class="px-4 py-3 text-right">
-              <button class="h-9 w-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100">…</button>
+             <td class="px-4 py-4 text-right">
+              <ui-action-menu
+                [actions]="[
+                  { label: 'View', type: 'button', action: 'view' },
+                  { label: 'Edit', type: 'button', action: 'edit' },
+                  { label: 'Delete', type: 'button', action: 'delete', danger: true }
+                ]"
+                (action)="handleAction(r, $event)"
+              ></ui-action-menu>
             </td>
           </tr>
         }

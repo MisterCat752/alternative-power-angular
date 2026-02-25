@@ -1,112 +1,152 @@
-<h2 class="text-xl font-semibold mb-4">
- @if (isEdit()) {
-  <h2 class="text-xl font-semibold mb-4">Edit Offer</h2>
-} @else {
-  <h2 class="text-xl font-semibold mb-4">Create Offer</h2>
-}
+<h2 class="text-2xl font-bold text-slate-900 mb-6">
+  @if (isEdit()) {
+    Edit Offer
+  } @else {
+    Create Offer
+  }
 </h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
 
+  <!-- Основные поля -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
     <app-form-field label="Offer Code">
-      <app-text-input formControlName="code" class="w-full"></app-text-input>
+      <app-text-input
+        formControlName="code"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      ></app-text-input>
     </app-form-field>
 
     <app-form-field label="Version">
-      <app-text-input formControlName="version" class="w-full"></app-text-input>
+      <app-text-input
+        formControlName="version"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      ></app-text-input>
     </app-form-field>
 
     <app-form-field label="Project Name">
-      <app-text-input formControlName="project_name" class="w-full"></app-text-input>
+      <app-text-input
+        formControlName="project_name"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      ></app-text-input>
     </app-form-field>
 
     <app-form-field label="Project Owner">
-      <app-text-input formControlName="project_owner" class="w-full"></app-text-input>
+      <app-text-input
+        formControlName="project_owner"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      ></app-text-input>
     </app-form-field>
 
     <app-form-field label="Status">
-      <app-text-input formControlName="status" class="w-full"></app-text-input>
+      <app-text-input
+        formControlName="status"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      ></app-text-input>
     </app-form-field>
 
     <app-form-field label="Valid Until">
-      <app-text-input formControlName="valid_until" class="w-full"></app-text-input>
+      <app-text-input
+        type="date"
+        formControlName="valid_until"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      ></app-text-input>
     </app-form-field>
-
   </div>
 
-<h3 class="font-semibold text-lg mt-2">Items</h3>
+  <!-- Items -->
+  <h3 class="font-semibold text-lg mt-6">Items</h3>
 
-<div class="border rounded-xl p-6 bg-white relative">
+  <div class="border rounded-xl p-6 bg-white relative">
 
-  <!-- Кнопка плюс справа сверху -->
-  <button
-    type="button"
-    (click)="addItem()"
-    class="absolute top-4 right-4 w-8 h-8 rounded-md bg-blue-600 text-white flex items-center justify-center text-lg hover:bg-blue-700"
-  >
-    +
-  </button>
+    <!-- Кнопка добавить сверху -->
+    <button
+      type="button"
+      (click)="addItem()"
+      class="absolute top-4 right-4 w-8 h-8 rounded-md bg-blue-600 text-white flex items-center justify-center text-lg hover:bg-blue-700 transition"
+    >
+      +
+    </button>
 
-  <!-- Если пусто -->
-  @if (items.length === 0) {
-    <div class="flex flex-col items-center justify-center py-12 text-slate-400">
-      <span class="text-5xl mb-3">📦</span>
-      <p>No items added yet</p>
-    </div>
-  }
-
-  <!-- Items list -->
-  <div formArrayName="items" class="space-y-4">
-    @for (item of items.controls; track $index) {
-      <div [formGroupName]="$index" class="border rounded-lg p-4 bg-slate-50 space-y-2">
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-
-          <app-form-field label="Group">
-            <app-text-input formControlName="group"></app-text-input>
-          </app-form-field>
-
-          <app-form-field label="Product">
-            <app-text-input formControlName="name"></app-text-input>
-          </app-form-field>
-
-          <app-form-field label="SKU">
-            <app-text-input formControlName="sku"></app-text-input>
-          </app-form-field>
-
-          <app-form-field label="Qty">
-            <app-number-input formControlName="qty"></app-number-input>
-          </app-form-field>
-
-          <app-form-field label="Unit Price">
-            <app-number-input formControlName="unit_price"></app-number-input>
-          </app-form-field>
-
-        </div>
-
-        <button
-          type="button"
-          class="text-sm text-red-600 hover:underline"
-          (click)="removeItem($index)"
-        >
-          Remove
-        </button>
+    <!-- Если пусто -->
+    @if (items.length === 0) {
+      <div class="flex flex-col items-center justify-center py-12 text-slate-400">
+        <span class="text-5xl mb-3">📦</span>
+        <p>No items added yet</p>
       </div>
     }
-  </div>
+
+    <!-- Items list -->
+    <div formArrayName="items" class="space-y-4">
+      @for (item of items.controls; track $index) {
+        <div [formGroupName]="$index" class="border rounded-lg p-4 bg-slate-50 space-y-3">
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <app-form-field label="Group">
+              <app-text-input
+                formControlName="group"
+                class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></app-text-input>
+            </app-form-field>
+
+            <app-form-field label="Product">
+              <app-text-input
+                formControlName="name"
+                class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></app-text-input>
+            </app-form-field>
+
+            <app-form-field label="SKU">
+              <app-text-input
+                formControlName="sku"
+                class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></app-text-input>
+            </app-form-field>
+
+            <app-form-field label="Qty">
+              <app-number-input
+                formControlName="qty"
+                class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></app-number-input>
+            </app-form-field>
+
+            <app-form-field label="Unit Price">
+              <app-number-input
+                formControlName="unit_price"
+                class="w-full rounded-xl border border-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></app-number-input>
+            </app-form-field>
+          </div>
+
+          <button
+            type="button"
+            class="text-sm text-red-600 hover:underline mt-2"
+            (click)="removeItem($index)"
+          >
+            Remove
+          </button>
+
+        </div>
+      }
+    </div>
+
   </div>
 
-  <button type="button" class="px-3 py-1 border rounded" (click)="addItem()">+ Add Item</button>
+  <button
+    type="button"
+    class="px-3 py-1 border rounded mt-2 hover:bg-slate-100"
+    (click)="addItem()"
+  >
+    + Add Item
+  </button>
 
   <div class="pt-4">
-    <button type="submit" class="px-4 py-2 bg-black text-white rounded">
-     @if (isEdit()) {
-  <h2 class="text-xl font-semibold mb-4">Edit Offer</h2>
-} @else {
-  <h2 class="text-xl font-semibold mb-4">Create Offer</h2>
-}
+    <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-slate-900 transition">
+      @if (isEdit()) {
+        Edit Offer
+      } @else {
+        Create Offer
+      }
     </button>
   </div>
 

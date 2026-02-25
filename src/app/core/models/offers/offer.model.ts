@@ -15,7 +15,7 @@ export interface OfferDetails {
   version: string;
   created_at: string;
   valid_until: string;
-  status: 'Draft' | 'Expired' | 'Approved';
+  status: string;
   project_name: string;
   project_owner: string;
   created_by: string;

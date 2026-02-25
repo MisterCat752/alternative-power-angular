@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { FormField } from '../../../../../shared/form/form-field/form-field';
 import { TextInput } from '../../../../../shared/form/text-input/text-input';
 import { UiSelect } from '../../../../../shared/ui/ui-select/ui-select';
-import { UsersService } from '../../../../../core/services/users/users.service';
+import { UserDetail, UsersService } from '../../../../../core/services/users/users.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../../core/models/users/user.model';
 
@@ -82,6 +82,16 @@ export class UserCreatePage implements OnInit {
 
     if (this.userId) {
       this.mode = 'edit';
+
+      // ⛔ email нельзя редактировать
+      this.form.get('email')?.disable();
+
+      // ⛔ пароль не нужен в edit
+      this.form.get('password')?.clearValidators();
+      this.form.get('confirmPassword')?.clearValidators();
+      this.form.get('password')?.updateValueAndValidity();
+      this.form.get('confirmPassword')?.updateValueAndValidity();
+
       this.loadUser(this.userId);
     }
   }
@@ -91,7 +101,7 @@ export class UserCreatePage implements OnInit {
   ======================= */
 
   private loadUser(id: string) {
-    this.usersService.getUserById(id).subscribe((user: User) => {
+    this.usersService.getUserByDetail(id).subscribe((user: UserDetail) => {
       this.form.patchValue({
         email: user.email,
         phone: user.phone,
@@ -104,7 +114,7 @@ export class UserCreatePage implements OnInit {
       const rolesForm = this.form.get('roles')!;
       user.groups.forEach((group) => {
         const controlKey = Object.entries(ROLE_CONTROL_TO_GROUP_MAP).find(
-          ([, g]) => g === group
+          ([, g]) => g === group,
         )?.[0] as RoleControl | undefined;
 
         if (controlKey) {
@@ -180,18 +190,17 @@ export class UserCreatePage implements OnInit {
       .updateUser(this.userId!, {
         first_name: value.firstName!,
         last_name: value.lastName!,
-        phone: value.phone || undefined,
+        phone: value.phone || null,
         is_active: value.isActive!,
-        account_type: value.account_type === 'company' ? 'Company' : 'individual',
-        company_name: value.account_type === 'company' ? value.companyName || undefined : null,
-        groups_input: groups,
+        account_type: value.account_type === 'company' ? 'company' : 'individual',
+        groups,
       })
       .subscribe({
         next: () => {
           this.router.navigate(['/dashboard/accounts/users']);
         },
         error: (err) => {
-          console.error('Update user failed', err);
+          console.error('Update failed', err);
         },
       });
   }
