@@ -9,14 +9,7 @@
     <div class="text-slate-500 mt-1">Manage customer orders and sales</div>
   </div>
 
-  <div class="flex items-center gap-3">
-    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
-      ⤓ Export
-    </button>
-    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
-      + Add order
-    </button>
-  </div>
+  
 </div>
 
 <!-- summary cards -->
@@ -57,20 +50,7 @@
   </div>
 </div>
 
-<!-- tabs -->
-<div class="mt-6 flex flex-wrap items-center gap-5 text-sm">
-  @for (t of tabs; track t.key) {
-    <button
-      type="button"
-      (click)="tab.set(t.key)"
-      class="uppercase text-xs font-semibold"
-      [class.text-blue-600]="tab() === t.key"
-      [class.text-slate-500]="tab() !== t.key"
-    >
-      {{ t.label }} <span class="text-slate-400">({{ countFor(t.key) }})</span>
-    </button>
-  }
-</div>
+ 
 
 <!-- filters -->
 <div class="mt-4 grid grid-cols-1 lg:grid-cols-[280px_220px_auto_auto_1fr] gap-3 items-center">
@@ -87,17 +67,7 @@
     (valueChange)="status.set($event)"
   ></ui-select>
 
-  <button class="h-10 px-4 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-sm font-semibold">
-    Apply
-  </button>
-
-  <button
-    type="button"
-    (click)="resetFilters()"
-    class="h-10 px-4 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-sm font-semibold"
-  >
-    Reset
-  </button>
+ 
 </div>
 
 <!-- table -->

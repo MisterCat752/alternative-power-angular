@@ -8,15 +8,7 @@
     <h1 class="text-4xl font-bold text-slate-900">Sold Products</h1>
     <div class="text-slate-500 mt-1">Track shipped &amp; fulfilled order items with profit analysis</div>
   </div>
-
-  <div class="flex items-center gap-3">
-    <button class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2">
-      ⤓ Export
-    </button>
-    <button class="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold inline-flex items-center gap-2">
-      🛒 View Orders
-    </button>
-  </div>
+ 
 </div>
 
 <!-- summary cards -->
@@ -59,39 +51,9 @@
       (input)="search.set(($any($event.target).value))"
     />
   </div>
+ 
 
-  <input
-    class="h-10 rounded-2xl bg-white border border-slate-200 px-4 text-sm outline-none"
-    placeholder="mm/dd/yyyy"
-    [value]="dateFrom()"
-    (input)="dateFrom.set(($any($event.target).value))"
-  />
-
-  <input
-    class="h-10 rounded-2xl bg-white border border-slate-200 px-4 text-sm outline-none"
-    placeholder="mm/dd/yyyy"
-    [value]="dateTo()"
-    (input)="dateTo.set(($any($event.target).value))"
-  />
-
-  <ui-select
-    placeholder="Newest first"
-    [options]="sortOpts"
-    [value]="sort()"
-    (valueChange)="sort.set($event)"
-  ></ui-select>
-
-  <button class="h-10 px-4 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-sm font-semibold">
-    Apply
-  </button>
-
-  <button
-    type="button"
-    (click)="reset()"
-    class="h-10 px-4 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-sm font-semibold"
-  >
-    Reset
-  </button>
+ 
 </div>
 
 <!-- table -->
