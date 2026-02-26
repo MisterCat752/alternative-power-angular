@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef } from '@angular/core';
 import { FormField } from '../../../../../shared/form/form-field/form-field';
 import { ImageInput } from '../../../../../shared/form/image-input/image-input';
 import { NumberInput } from '../../../../../shared/form/number-input/number-input';
@@ -22,13 +22,12 @@ import { Product } from '../../../../../core/models/products/product.model';
   standalone: true,
   imports: [ReactiveFormsModule, FormField, ImageInput, NumberInput, TextInput, UiSelect],
   templateUrl: './product-create-page.html',
-  styleUrl: './product-create-page.css',
 })
 export class ProductForm {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-
+  private cdr = inject(ChangeDetectorRef);
   private service = inject(ProductService);
   private categoryService = inject(CategoryService);
   private brandService = inject(BrandService);
@@ -44,7 +43,6 @@ export class ProductForm {
 
   currencyOptions = [{ label: 'MDL', value: 'MDL' }];
 
-  /* ДАННЫЕ ИЗ API */
   categoryOptions: any[] = [];
   brandOptions: any[] = [];
   warrantyOptions: any[] = [];
@@ -55,8 +53,6 @@ export class ProductForm {
     { label: 'Bundle (Kit)', value: 'bundle' },
   ];
 
-  colors = ['Black', 'White', 'Silver'];
-
   ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('id');
     this.productId.set(idParam ? Number(idParam) : null);
@@ -66,12 +62,15 @@ export class ProductForm {
 
     if (this.isEdit()) {
       this.service.getProduct(this.productId()!).subscribe((p) => {
-        if (p) this.loadProduct(p);
+        if (p) {
+          this.loadProduct(p);
+          this.cdr.detectChanges();
+        }
       });
     }
   }
 
-  /* FORM */
+  /* ================= FORM INIT ================= */
 
   initForm() {
     this.form = this.fb.group({
@@ -85,7 +84,9 @@ export class ProductForm {
       category: [null, Validators.required],
       brand: [null],
       productType: ['single'],
-      colors: [[]],
+
+      specifications: this.fb.array([]),
+
       pricing: this.fb.group({
         currency: ['MDL'],
         listPrice: [null],
@@ -118,22 +119,88 @@ export class ProductForm {
     });
   }
 
-  /* ЗАГРУЗКА СЕЛЕКТОВ */
+  /* ================= SPEC HELPERS ================= */
+
+  get specifications(): FormArray {
+    return this.form.get('specifications') as FormArray;
+  }
+
+  getSpecItems(groupIndex: number): FormArray {
+    return this.specifications.at(groupIndex).get('items') as FormArray;
+  }
+
+  addSpecGroup() {
+    this.specifications.push(
+      this.fb.group({
+        group: [''],
+        items: this.fb.array([]),
+      }),
+    );
+  }
+
+  removeSpecGroup(index: number) {
+    this.specifications.removeAt(index);
+  }
+
+  addSpecItem(groupIndex: number) {
+    this.getSpecItems(groupIndex).push(
+      this.fb.group({
+        label: [''],
+        value: [''],
+      }),
+    );
+  }
+
+  removeSpecItem(groupIndex: number, itemIndex: number) {
+    this.getSpecItems(groupIndex).removeAt(itemIndex);
+  }
+
+  /* ================= LOAD PRODUCT ================= */
+
+  loadProduct(p: Product) {
+    this.form.patchValue({
+      ...p,
+    });
+
+    if (p.specifications?.length) {
+      p.specifications.forEach((group) => {
+        const groupForm = this.fb.group({
+          group: [group.group],
+          items: this.fb.array([]),
+        });
+
+        group.items.forEach((item) => {
+          (groupForm.get('items') as FormArray).push(
+            this.fb.group({
+              label: [item.label],
+              value: [item.value],
+            }),
+          );
+        });
+
+        this.specifications.push(groupForm);
+      });
+    }
+  }
+
+  /* ================= SELECT DATA ================= */
+
   generateSku(): string {
     return crypto.randomUUID();
   }
+
   loadSelects() {
     this.categoryService.list().subscribe((res) => {
       this.categoryOptions = res.map((c) => ({
         label: c.name,
-        value: c.id,
+        value: c.slug,
       }));
     });
 
     this.brandService.list().subscribe((res) => {
       this.brandOptions = res.map((b) => ({
         label: b.name,
-        value: b.id,
+        value: b.slug,
       }));
     });
 
@@ -152,40 +219,7 @@ export class ProductForm {
     });
   }
 
-  /* EDIT */
-
-  loadProduct(p: Product) {
-    this.form.patchValue({
-      title: p.title,
-      description: p.description,
-      shortDescription: p.shortDescription,
-      image: p.image,
-      sku: p.sku,
-      quantity: p.quantity,
-      price: p.price,
-      category: p.category,
-      brand: p.brand,
-      productType: p.productType,
-    });
-
-    if (p.pricing) {
-      this.form.get('pricing')?.patchValue(p.pricing);
-    }
-
-    if (p.stock) {
-      this.form.get('stock')?.patchValue(p.stock);
-    }
-
-    if (p.settings) {
-      this.form.get('settings')?.patchValue(p.settings);
-    }
-
-    if (p.colors) {
-      this.form.get('colors')?.setValue(p.colors); // если есть
-    }
-  }
-
-  /* SUBMIT */
+  /* ================= SUBMIT ================= */
 
   submit() {
     const payload: Product = this.form.value;

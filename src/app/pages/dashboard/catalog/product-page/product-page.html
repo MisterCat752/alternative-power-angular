@@ -65,8 +65,8 @@
           <th class="px-4 py-3 text-right">INVOICE</th>
           <th class="px-4 py-3 text-right">LANDED</th>
           <th class="px-4 py-3 text-right">WEBSITE</th>
-          <th class="px-4 py-3 text-right">WEBSITE MDL</th>
           <th class="px-4 py-3 text-left">CURR</th>
+          <th class="px-4 py-3 text-right">  MDL</th>
           <th class="px-4 py-3 text-left">CATEGORY</th>
           <th class="px-4 py-3 text-left">BRAND</th>
           <th class="px-4 py-3 text-left">STOCK</th>
@@ -108,17 +108,17 @@
             <td class="px-4 py-4 text-right text-slate-700">{{ r.invoice }}</td>
             <td class="px-4 py-4 text-right text-slate-700">{{ r.landed }}</td>
             <td class="px-4 py-4 text-right font-semibold text-green-600">{{ r.website }}</td>
-
+   <td class="px-4 py-4">
+              <span class="text-xs px-2 py-1 rounded-lg border border-slate-200 bg-slate-50">
+                {{ r.curr }}
+              </span>
+            </td>
             <td class="px-4 py-4 text-right">
               <div class="text-blue-600 font-semibold">{{ r.websiteMdl }}</div>
               <div class="text-xs text-slate-400">MDL</div>
             </td>
 
-            <td class="px-4 py-4">
-              <span class="text-xs px-2 py-1 rounded-lg border border-slate-200 bg-slate-50">
-                {{ r.curr }}
-              </span>
-            </td>
+         
 
             <td class="px-4 py-4 text-slate-500">{{ r.category || '—' }}</td>
             <td class="px-4 py-4 text-slate-500">{{ r.brand || '—' }}</td>

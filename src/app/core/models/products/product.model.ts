@@ -18,7 +18,7 @@ export interface Product {
   stock: ProductStock;
   settings: ProductSettings;
 
-  specifications?: ProductSpecGroup[]; // 👈 НОВОЕ
+  specifications?: ProductSpecGroup[];
 }
 export interface ProductSpecGroup {
   group: string; // Display / Storage / Audio / etc
