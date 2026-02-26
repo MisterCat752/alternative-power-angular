@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { Container } from '../../container/container';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { AuthStore } from '../../../core/services/auth.store';
 import { ProductService } from '../../../core/services/products/product.service';
 import { Product } from '../../../core/models/products/product.model';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-nav',
   standalone: true,
@@ -24,15 +25,23 @@ export class Nav {
   search = '';
   results = signal<Product[]>([]);
   searchOpen = signal(false);
-  // состояние дропдауна
   dropdownOpen = signal(false);
-  get user() {
-    return this.authStore.user();
-  }
 
-  get avatarUrl() {
-    return this.authStore.avatarUrl();
-  }
+  /* ===========================
+     AUTH STATE
+  =========================== */
+
+  user = computed(() => this.authStore.user());
+  isLoggedIn = computed(() => !!this.authStore.token() && !!this.authStore.user());
+
+  profileLink = computed(() => (this.isLoggedIn() ? '/dashboard/profile' : '/login'));
+
+  avatarUrl = computed(() => this.authStore.avatarUrl());
+
+  /* ===========================
+     SEARCH
+  =========================== */
+
   onSearchChange() {
     if (!this.search.trim()) {
       this.results.set([]);
@@ -41,7 +50,7 @@ export class Nav {
     }
 
     this.productService.getProducts({ search: this.search }).subscribe((res) => {
-      this.results.set(res.slice(0, 5)); // топ 5
+      this.results.set(res.slice(0, 5));
       this.searchOpen.set(true);
     });
   }
@@ -52,15 +61,26 @@ export class Nav {
     this.results.set([]);
     this.router.navigate(['/product', p.id]);
   }
-  logout() {
-    this.authStore.logout();
-  }
+
+  /* ===========================
+     DROPDOWN
+  =========================== */
 
   toggleDropdown() {
+    if (!this.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     this.dropdownOpen.set(!this.dropdownOpen());
   }
 
   closeDropdown() {
     this.dropdownOpen.set(false);
+  }
+
+  logout() {
+    this.authStore.logout();
+    this.dropdownOpen.set(false);
+    this.router.navigate(['/']);
   }
 }

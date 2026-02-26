@@ -48,6 +48,7 @@ export type UserDetail = {
   email_verified_at: string | null;
 
   date_joined: string; // ISO string
+  password?: string;
 };
 
 import { delay } from 'rxjs/operators';

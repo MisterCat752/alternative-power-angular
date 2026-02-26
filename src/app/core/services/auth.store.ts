@@ -9,47 +9,76 @@ export class AuthStore {
   refreshToken = signal<string | null>(null);
   user = signal<UserProfile | null>(null);
 
-  // computed для аватара
+  private platformId = inject(PLATFORM_ID);
+
+  /* =====================
+      AVATAR COMPUTED
+  ===================== */
   avatarUrl = computed<string | null>(() => {
     const profile = this.user();
     if (!profile?.avatar) return null;
+
     return profile.avatar.startsWith('http')
       ? profile.avatar
       : `${environment.mediaUrl}${profile.avatar}`;
   });
-  private platformId = inject(PLATFORM_ID);
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
       const savedAccess = localStorage.getItem('access_token');
       const savedRefresh = localStorage.getItem('refresh_token');
+      const savedUser = localStorage.getItem('auth_user');
+
       if (savedAccess) this.token.set(savedAccess);
       if (savedRefresh) this.refreshToken.set(savedRefresh);
+      if (savedUser) this.user.set(JSON.parse(savedUser));
     }
   }
 
+  /* =====================
+        SET USER
+  ===================== */
   setUser(user: UserProfile) {
     this.user.set(user);
+
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('auth_user', JSON.stringify(user));
+    }
   }
 
+  /* =====================
+        LOGIN SUCCESS
+  ===================== */
   loginSuccess(access: string, refresh: string, user: UserProfile | null = null) {
     this.token.set(access);
     this.refreshToken.set(refresh);
-    if (user) this.user.set(user);
+
+    if (user) {
+      this.user.set(user);
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('access_token', access);
       localStorage.setItem('refresh_token', refresh);
+
+      if (user) {
+        localStorage.setItem('auth_user', JSON.stringify(user));
+      }
     }
   }
 
+  /* =====================
+        LOGOUT
+  ===================== */
   logout() {
     this.token.set(null);
     this.refreshToken.set(null);
     this.user.set(null);
+
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
+      localStorage.removeItem('auth_user');
     }
   }
 }

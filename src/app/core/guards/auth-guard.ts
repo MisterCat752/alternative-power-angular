@@ -7,22 +7,18 @@ export const AuthGuard: CanActivateFn = () => {
   const platformId = inject(PLATFORM_ID);
   const auth = inject(AuthStore);
 
-  // SSR: nu avem localStorage, deci NU redirecționăm.
   if (!isPlatformBrowser(platformId)) {
-    console.log('[authGuard] Running on server (SSR), allowing access');
     return true;
   }
 
   const router = inject(Router);
+
   const token = auth.token();
+  const user = auth.user();
 
-  console.log('[authGuard] Browser check - Token exists:', !!token);
-
-  if (!token) {
-    console.log('[authGuard] No token found, redirecting to /login');
+  if (!token || !user) {
     return router.parseUrl('/login');
   }
 
-  console.log('[authGuard] Token found, access granted');
   return true;
 };
