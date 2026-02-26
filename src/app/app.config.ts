@@ -45,7 +45,7 @@ export const appConfig: ApplicationConfig = {
         if (!isPlatformBrowser(platformId)) return;
 
         const appInit = inject(AppInitService);
-        return appInit.init(); // должно возвращать Promise<void>
+        return appInit.init();
       },
     },
   ],

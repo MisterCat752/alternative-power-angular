@@ -1,0 +1,103 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-3xl space-y-6"
+>
+
+  <!-- PAGE HEADER -->
+  <div class="space-y-1">
+    <h1 class="text-2xl font-semibold text-slate-800">
+        @if (isEdit()) {
+       Update Category 
+      } @else { 
+       Create Category
+      } 
+    </h1>
+    
+  </div>
+
+  <!-- BASIC INFORMATION -->
+  <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-800">
+      Basic Information
+    </h2>
+
+    <!-- Category Name -->
+    <app-form-field label="Filter Name">
+      <app-text-input
+        placeholder="Filter name"
+        formControlName="title"
+      />
+    </app-form-field>
+
+     
+
+ <section class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+  <h2 class="text-lg font-semibold text-slate-800">Options</h2>
+
+  <div formArrayName="options" class="space-y-2">
+    <div *ngFor="let option of options.controls; let i = index" [formGroupName]="i" class="flex gap-2 items-center">
+      <app-text-input placeholder="Label" formControlName="label"></app-text-input>
+      <app-text-input placeholder="Value" formControlName="value"></app-text-input>
+      <button type="button" class="px-3 py-1 bg-red-500 text-white rounded" (click)="removeOption(i)">Delete</button>
+    </div>
+  </div>
+
+  <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded mt-2" (click)="addOption()">Add Option</button>
+</section>
+  
+
+    <!-- Flags -->
+    <div class="flex flex-col gap-3 pt-2 text-sm text-slate-700">
+     <app-form-field label="Key (unique)">
+  <app-text-input
+    placeholder="Enter key"
+    formControlName="key"
+  />
+</app-form-field>
+    <!-- Parent Category -->
+   <app-form-field
+  label="Category"
+  hint="Select category for the filter"
+  *ngIf="CategoryOptions.length"
+>
+  <ui-select
+    [options]="CategoryOptions"
+    formControlName="category"
+  />
+</app-form-field>
+      <label class="flex items-center gap-2">
+        <input
+          type="checkbox"
+          formControlName="isActive"
+          class="rounded border-slate-300"
+        />
+        Active (visible on website)
+      </label>
+      <label class="flex items-center gap-2">
+        <input
+          type="checkbox"
+          formControlName="type"
+          class="rounded border-slate-300"
+        />
+       type checkbox
+      </label>
+    </div>
+  </section>
+ 
+
+  <!-- ACTIONS -->
+  <div class="flex justify-end gap-3">
+    <button
+      type="submit"
+      class="h-10 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+    >
+      @if (isEdit()) {
+       Update Category 
+      } @else { 
+       Create Category
+      } 
+    </button>
+  </div>
+
+</form>

@@ -30,6 +30,11 @@ export class DashboardSidebar {
       label: 'Catalog',
       items: [
         { label: 'Products', to: '/dashboard/catalog/products' },
+
+        { label: 'Categories', to: '/dashboard/catalog/categories' },
+        { label: 'Filters', to: '/dashboard/catalog/filters' },
+        { label: 'Warranties', to: '/dashboard/catalog/warranties' },
+        { label: 'Brands', to: '/dashboard/catalog/brands' },
         {
           label: 'UOM Categories',
           to: '/dashboard/catalog/uom-categories',
@@ -40,9 +45,6 @@ export class DashboardSidebar {
           to: '/dashboard/catalog/units-of-measure',
           requiredGroup: 'Manager',
         },
-        { label: 'Warranties', to: '/dashboard/catalog/warranties' },
-        { label: 'Brands', to: '/dashboard/catalog/brands' },
-        { label: 'Categories', to: '/dashboard/catalog/categories' },
       ],
     },
     {

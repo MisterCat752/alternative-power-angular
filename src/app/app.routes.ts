@@ -234,6 +234,37 @@ export const routes: Routes = [
         // // canActivate: [RoleGuard],
         // data: { requiredGroup: 'Manager' },
       },
+
+      // filters
+
+      {
+        path: 'catalog/filters',
+        loadComponent: () =>
+          import('./pages/dashboard/catalog/filters-page/filters-page').then((m) => m.FiltersPage),
+        // // canActivate: [RoleGuard],
+        // data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'catalog/filters/create-filter',
+        loadComponent: () =>
+          import('./pages/dashboard/catalog/filters-page/filters-form-page/filters-form-page').then(
+            (m) => m.FiltersFormPage,
+          ),
+        // // canActivate: [RoleGuard],
+        // data: { requiredGroup: 'Manager' },
+      },
+      {
+        path: 'catalog/filters/edit/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/catalog/filters-page/filters-form-page/filters-form-page').then(
+            (m) => m.FiltersFormPage,
+          ),
+        // // canActivate: [RoleGuard],
+        // data: { requiredGroup: 'Manager' },
+      },
+
+      // product stock
+
       {
         path: 'inventory/product-stock',
         loadComponent: () =>

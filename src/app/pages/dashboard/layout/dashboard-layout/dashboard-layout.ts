@@ -31,15 +31,15 @@ export class DashboardLayout implements OnInit {
   }
   authStore = inject(AuthStore);
   ngOnInit() {
-    this.profileService
-      .loadProfile()
-      .pipe(tap((profile) => console.log('Profile from API (tap):', profile)))
-      .subscribe({
-        error: (err) => {
-          if (err.status === 403) {
-            console.error('Email not verified');
-          }
-        },
-      });
+    // this.profileService
+    //   .loadProfile()
+    //   .pipe(tap((profile) => console.log('Profile from API (tap):', profile)))
+    //   .subscribe({
+    //     error: (err) => {
+    //       if (err.status === 403) {
+    //         console.error('Email not verified');
+    //       }
+    //     },
+    //   });
   }
 }
