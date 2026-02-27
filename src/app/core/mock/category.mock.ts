@@ -140,26 +140,4 @@ export const CATEGORIES_MOCK: Category[] = [
     isActive: true,
     image: null,
   },
-
-  // ---------- SERVICES ----------
-  {
-    id: 14,
-    name: 'Услуги',
-    slug: 'services',
-    parentCategory: null,
-    sortOrder: 6,
-    showInMenu: true,
-    isActive: true,
-    image: null,
-  },
-  {
-    id: 15,
-    name: 'Подписки на обслуживание',
-    slug: 'subscriptions',
-    parentCategory: 14,
-    sortOrder: 1,
-    showInMenu: true,
-    isActive: true,
-    image: null,
-  },
 ];

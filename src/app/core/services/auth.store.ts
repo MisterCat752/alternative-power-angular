@@ -14,15 +14,17 @@ export class AuthStore {
   /* =====================
       AVATAR COMPUTED
   ===================== */
-  avatarUrl = computed<string | null>(() => {
+  avatarUrl = computed<string>(() => {
     const profile = this.user();
-    if (!profile?.avatar) return null;
+
+    const defaultAvatar = 'https://i.pravatar.cc/150?img=8';
+
+    if (!profile?.avatar) return defaultAvatar;
 
     return profile.avatar.startsWith('http')
       ? profile.avatar
       : `${environment.mediaUrl}${profile.avatar}`;
   });
-
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
       const savedAccess = localStorage.getItem('access_token');

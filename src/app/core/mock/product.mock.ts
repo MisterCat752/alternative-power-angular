@@ -294,7 +294,190 @@ Stocare avansată pentru sisteme hibride.`,
     settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
   },
 
-  // ---------- BATTERY DEYE 10.24kWh ----------
+  // ---------- deye-batteries----------
+  {
+    id: 101,
+    title: 'Photovoltaic battery LiFePo4 10.64kWh RW-G10.6, DEYE',
+    description: `The Deye RW-G10.6 photovoltaic battery is a smart storage solution for hybrid and off-grid photovoltaic systems...`,
+    shortDescription: '10.64kWh LiFePO4 battery for hybrid & off-grid systems.',
+    image: 'https://solartech.ro/wp-content/uploads/2025/10/RW-G10.6.png',
+    images: ['https://solartech.ro/wp-content/uploads/2025/10/RW-G10.6.png'],
+    sku: 'RW-G10.6',
+    quantity: 15,
+    colors: 'White',
+    price: 3455,
+    category: 'deye-batteries',
+    brand: 'DEYE',
+    productType: 'single',
+
+    pricing: {
+      currency: 'EUR',
+      listPrice: 3455,
+      salePrice: 3455,
+      tva: 19,
+      logistics: 120,
+      customs: 0,
+      defaultMargin: 18,
+    },
+
+    stock: {
+      baseUom: 'pcs',
+      purchaseUom: 'pcs',
+    },
+
+    settings: {
+      warranty: '10 years',
+      invoice: 'RW-G10.6',
+      slug: 'deye-rw-g10-6-10kwh',
+      modelName: 'RW-G10.6',
+      published: true,
+      internal: false,
+      allowPreorder: true,
+    },
+
+    specifications: [
+      {
+        group: 'Electrical',
+        items: [
+          { label: 'Capacity', value: '10.64kWh' },
+          { label: 'Usable Energy', value: '9.58 kWh' },
+          { label: 'Nominal Voltage', value: '51.2V' },
+          { label: 'Max Charge/Discharge', value: '100A' },
+          { label: 'Peak Current (10s)', value: '200A' },
+        ],
+      },
+      {
+        group: 'General',
+        items: [
+          { label: 'Cell Type', value: 'LiFePO4 (LFP)' },
+          { label: 'Life Cycle', value: '≥ 6000 cycles' },
+          { label: 'Scalability', value: 'Up to 32 units (≈ 340 kWh)' },
+          { label: 'Installation', value: 'Wall or Floor' },
+          { label: 'Weight', value: '96 kg' },
+        ],
+      },
+    ],
+  },
+
+  // 2️⃣ RW-M6.1-B
+  {
+    id: 102,
+    title: 'Acumulator LiFePo4 Deye 6.14kW RW-M6.1-B',
+    description: `Lithium iron phosphate (LFP) battery technology, providing safety, long life and high efficiency...`,
+    shortDescription: '6.14kWh compact wall-mounted battery for DEYE inverters.',
+    image:
+      'https://solartech.ro/wp-content/uploads/2023/04/Deye-RW-M6.1-Acumulator-Baterie-SolarTech-1.jpg',
+    images: [
+      'https://solartech.ro/wp-content/uploads/2023/04/Deye-RW-M6.1-Acumulator-Baterie-SolarTech-1.jpg',
+    ],
+    sku: 'RW-M6.1-B',
+    quantity: 20,
+    colors: 'White',
+    price: 3222,
+    category: 'deye-batteries',
+    brand: 'DEYE',
+    productType: 'single',
+
+    pricing: {
+      currency: 'EUR',
+      listPrice: 3222,
+      salePrice: 2999,
+      websiteDiscount: 7,
+      tva: 19,
+      defaultMargin: 15,
+    },
+
+    stock: {
+      baseUom: 'pcs',
+      purchaseUom: 'pcs',
+    },
+
+    settings: {
+      warranty: '10 years',
+      invoice: 'RW-M6.1-B',
+      slug: 'deye-rw-m6-1-b',
+      modelName: 'RW-M6.1-B',
+      published: true,
+      internal: false,
+      allowPreorder: true,
+    },
+
+    specifications: [
+      {
+        group: 'Technical',
+        items: [
+          { label: 'Technology', value: 'LiFePO4 (LFP)' },
+          { label: 'Capacity', value: '6.14kWh' },
+          { label: 'Cycle Life', value: '6000 cycles' },
+          { label: 'Protection', value: 'Intelligent BMS' },
+          { label: 'Temperature Range', value: '-20°C to 55°C' },
+          { label: 'IP Rating', value: 'IP65' },
+        ],
+      },
+    ],
+  },
+
+  // 3️⃣ BOS-A160 High Voltage Kit
+  {
+    id: 103,
+    title: 'High Voltage Battery Kit 161.28kWh BOS-A160, DEYE',
+    description: `Energy storage system BOS-A160 V-TAC, 161.28 kWh, 806.4 V, LiFePO4...`,
+    shortDescription: 'Industrial 161.28kWh rack-mounted energy storage system.',
+    image: 'https://solartech.ro/wp-content/uploads/2025/10/12657-p1.webp',
+    images: [],
+    sku: 'BOS-A160',
+    quantity: 5,
+    price: 7000,
+    category: 'deye-batteries',
+    brand: 'DEYE',
+    productType: 'single',
+
+    pricing: {
+      currency: 'EUR',
+      listPrice: 7000,
+      salePrice: 7000,
+      tva: 19,
+      defaultMargin: 22,
+    },
+
+    stock: {
+      baseUom: 'system',
+      purchaseUom: 'system',
+    },
+
+    settings: {
+      warranty: '10 years',
+      invoice: 'BOS-A160',
+      slug: 'deye-bos-a160-161kwh',
+      modelName: 'BOS-A160',
+      published: true,
+      internal: false,
+      allowPreorder: false,
+    },
+
+    specifications: [
+      {
+        group: 'Electrical',
+        items: [
+          { label: 'Capacity', value: '161.28kWh' },
+          { label: 'Nominal Voltage', value: '806.4 V' },
+          { label: 'Nominal Current', value: '160 A' },
+          { label: 'DC Power', value: '129.02 kW' },
+          { label: 'Depth of Discharge', value: '90%' },
+        ],
+      },
+      {
+        group: 'Physical',
+        items: [
+          { label: 'Installation', value: 'Rack-mounted' },
+          { label: 'Protection Degree', value: 'IP20' },
+          { label: 'Dimensions', value: '(610×610×1900 mm) ×2' },
+          { label: 'Weight', value: '1586 kg' },
+          { label: 'Technology', value: 'LiFePO4 200Ah' },
+        ],
+      },
+    ],
+  },
   {
     id: 10,
     title: 'Baterie 10.24kWh Deye LiFePO₄, low voltage',
@@ -313,6 +496,7 @@ Stocare avansată pentru sisteme hibride.`,
         items: [
           { label: 'Brand', value: 'Deye' },
           { label: 'Model', value: 'Baterie 10.24kWh Deye LiFePO₄, low voltage' },
+          { label: 'Capacity', value: '10.24kWh' },
           { label: 'Battery Type', value: 'LiFePO4' },
           { label: 'Voltage', value: '48V' },
         ],

@@ -142,6 +142,22 @@ export const CATEGORY_FILTERS_CRUD_MOCK: CategoryFilter[] = [
     ],
   },
   {
+    id: 4,
+    category: 'deye-batteries',
+    key: 'capacity',
+    title: 'Capacity',
+    type: 'checkbox',
+    isActive: true,
+    options: [
+      { label: '6.14kWh', value: '6.14kwh' },
+      { label: '10.24kWh', value: '10.24kWh' },
+
+      { label: '10.64kWh', value: '10.64kWh' },
+      { label: '16.07kWh', value: '16.07kwh' },
+      { label: '161.28kWh', value: '161.28kWh' },
+    ],
+  },
+  {
     id: 5,
     category: 'vtac-batteries',
     key: 'battery type',
