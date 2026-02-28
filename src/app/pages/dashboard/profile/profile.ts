@@ -1,5 +1,6 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthStore } from '../../../core/services/auth.store';
 import { UserProfile } from '../../../core/services/auth.types';
 
 @Component({
@@ -8,36 +9,25 @@ import { UserProfile } from '../../../core/services/auth.types';
   imports: [CommonModule],
   templateUrl: './profile.html',
 })
-export class Profile implements OnInit {
-  profile$ = signal<UserProfile | null>(null);
+export class Profile {
+  constructor(private authStore: AuthStore) {}
 
-  ngOnInit() {
-    // Моковые данные
-    const mockProfile: UserProfile = {
-      id: '1',
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john.doe@example.com',
-      phone: '+373 123 456 789',
-      preferred_language: 'en',
-      date_joined: new Date().toISOString(),
-      email_verified_at: new Date().toISOString(),
-      account_type: 'company',
-      company_name: 'Acme Corp',
-      company_reg_no: '12345678',
-      company_vat_id: 'VAT123456',
-      is_email_verified: true,
-      is_manager: true,
-      is_staff: false,
-      groups: ['Admin', 'Sales'],
-      avatar: 'https://i.pravatar.cc/150?img=8',
-    };
+  // signal с профилем пользователя, реактивно получаем из стора
+  profile$ = computed<UserProfile | null>(() => this.authStore.user());
 
-    this.profile$.set(mockProfile);
-  }
+  // computed аватар
+  avatarUrl = computed<string>(() =>
+    this.profile$()?.avatar ? 'https://i.pravatar.cc/150?img=8' : 'https://i.pravatar.cc/150?img=8',
+  );
 
-  // Если нужен computed avatar
-  get avatarUrl() {
-    return this.profile$()?.avatar ?? null;
-  }
+  // computed имя для отображения
+  fullName = computed(() => {
+    const profile = this.profile$();
+    return profile ? `${profile.first_name} ${profile.last_name}` : '';
+  });
+
+  email = computed(() => this.profile$()?.email ?? '');
+  phone = computed(() => this.profile$()?.phone ?? '');
+  accountType = computed(() => this.profile$()?.account_type ?? '');
+  groups = computed(() => this.profile$()?.groups.join(', ') ?? '');
 }

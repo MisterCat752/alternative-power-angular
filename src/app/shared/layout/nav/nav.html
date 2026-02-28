@@ -1,3 +1,4 @@
+<!-- nav.html -->
 <div class="bg-gray shadow md:block">
   <app-container class="py-4">
     <nav class="flex items-center justify-between py-3">
@@ -39,9 +40,7 @@
       </div>
 
       <!-- Desktop Icons -->
-      <div class="hidden md:flex items-center space-x-4">
-
-        <button mat-button type="button">EN</button>
+      <div class="hidden md:flex items-center space-x-4"> 
 
         <button mat-icon-button type="button" (click)="cartUi.toggle()">
           <mat-icon>shopping_cart</mat-icon>
@@ -53,7 +52,6 @@
 
         <!-- Profile -->
         <div class="relative" (document:click)="closeDropdown()" (click)="$event.stopPropagation()">
-
           <button mat-icon-button (click)="toggleDropdown()">
             @if(isLoggedIn()) {
               <img [src]="avatarUrl()" class="w-8 h-8 rounded-full object-cover border"/>
@@ -64,34 +62,45 @@
 
           @if(dropdownOpen() && isLoggedIn()) {
             <div class="absolute right-0 mt-2 w-[290px] bg-white border rounded shadow-md p-5 z-50">
-
               <div class="text-center">
                 <img [src]="avatarUrl()" class="w-12 h-12 rounded-full mx-auto mb-2"/>
                 <div class="text-sm font-medium">{{ user()?.email }}</div>
-                <div class="text-xs text-gray-500 mb-4">
-                  {{ user()?.account_type }}
-                </div>
+                <div class="text-xs text-gray-500 mb-4">{{ user()?.account_type }}</div>
               </div>
 
-              <a routerLink="/dashboard/profile" class="block px-4 py-2 hover:bg-gray-100">
-                Profile
-              </a>
+              <a routerLink="/dashboard/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+              <a routerLink="/dashboard/profile-settings" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
 
-              <a routerLink="/dashboard/profile-settings" class="block px-4 py-2 hover:bg-gray-100">
-                Settings
-              </a>
-
-              <button
-                (click)="logout()"
-                class="mt-4 w-full px-4 py-2 border rounded hover:bg-gray-100"
-              >
-                Logout
-              </button>
+              <button (click)="logout()" class="mt-4 w-full px-4 py-2 border rounded hover:bg-gray-100">Logout</button>
             </div>
           }
-
         </div>
       </div>
     </nav>
   </app-container>
+</div>
+
+<!-- Mobile Bottom Navbar -->
+<div class="fixed bottom-0 left-0 right-0 bg-white shadow border-t md:hidden z-50">
+  <div class="flex items-center justify-around py-3">
+    <button (click)="cartUi.toggle()" class="flex flex-col items-center text-gray-700">
+      <mat-icon>shopping_cart</mat-icon>
+      <span class="text-xs mt-1">Cart</span>
+    </button>
+
+    <a routerLink="/wish-list" class="flex flex-col items-center text-gray-700">
+      <mat-icon>favorite</mat-icon>
+      <span class="text-xs mt-1">Wishlist</span>
+    </a>
+
+    <button (click)="toggleDropdown()" class="flex flex-col items-center text-gray-700">
+      @if(isLoggedIn()) {
+        <img [src]="avatarUrl()" class="w-6 h-6 rounded-full object-cover border"/>
+        <span class="text-xs mt-1">Profile</span>
+      } @else {
+        <mat-icon>account_circle</mat-icon>
+        <span class="text-xs mt-1">loggin</span>
+      }
+    </button>
+  </div>
 </div>

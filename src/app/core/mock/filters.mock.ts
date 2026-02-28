@@ -83,21 +83,10 @@ export const CATEGORY_FILTERS_MOCK: Record<string, FilterGroup[]> = {
 import { CategoryFilter } from '../models/filter.model';
 
 export const CATEGORY_FILTERS_CRUD_MOCK: CategoryFilter[] = [
+  // =========================
   // longi-panels
-  {
-    id: 1,
-    category: 'longi-panels',
-    key: 'brand',
-    title: 'Brand',
-    type: 'checkbox',
-    isActive: true,
-    options: [
-      { label: 'Canadian Solar', value: 'canadian solar' },
-      { label: 'Jinko', value: 'jinko' },
-      { label: 'Volt Polska', value: 'volt polska' },
-      { label: 'V-TAC', value: 'v-tac' },
-    ],
-  },
+  // =========================
+
   {
     id: 2,
     category: 'longi-panels',
@@ -106,7 +95,8 @@ export const CATEGORY_FILTERS_CRUD_MOCK: CategoryFilter[] = [
     type: 'checkbox',
     isActive: true,
     options: [
-      { label: 'TOPCon', value: 'topcon' },
+      { label: 'TOPCon N-Type', value: 'topcon n-type' },
+      { label: 'Monocrystalline N-Type', value: 'monocrystalline n-type' },
       { label: 'Monocrystalline', value: 'monocrystalline' },
     ],
   },
@@ -125,7 +115,9 @@ export const CATEGORY_FILTERS_CRUD_MOCK: CategoryFilter[] = [
     ],
   },
 
+  // =========================
   // vtac-batteries
+  // =========================
   {
     id: 4,
     category: 'vtac-batteries',
@@ -142,22 +134,6 @@ export const CATEGORY_FILTERS_CRUD_MOCK: CategoryFilter[] = [
     ],
   },
   {
-    id: 4,
-    category: 'deye-batteries',
-    key: 'capacity',
-    title: 'Capacity',
-    type: 'checkbox',
-    isActive: true,
-    options: [
-      { label: '6.14kWh', value: '6.14kwh' },
-      { label: '10.24kWh', value: '10.24kWh' },
-
-      { label: '10.64kWh', value: '10.64kWh' },
-      { label: '16.07kWh', value: '16.07kwh' },
-      { label: '161.28kWh', value: '161.28kWh' },
-    ],
-  },
-  {
     id: 5,
     category: 'vtac-batteries',
     key: 'battery type',
@@ -170,9 +146,39 @@ export const CATEGORY_FILTERS_CRUD_MOCK: CategoryFilter[] = [
     ],
   },
 
-  // deye-inverters
+  // =========================
+  // deye-batteries
+  // =========================
   {
     id: 6,
+    category: 'deye-batteries',
+    key: 'capacity',
+    title: 'Capacity',
+    type: 'checkbox',
+    isActive: true,
+    options: [
+      { label: '6.14kWh', value: '6.14kwh' },
+      { label: '10.24kWh', value: '10.24kwh' },
+      { label: '10.64kWh', value: '10.64kwh' },
+      { label: '16.07kWh', value: '16.07kwh' },
+      { label: '161.28kWh', value: '161.28kwh' },
+    ],
+  },
+  {
+    id: 7,
+    category: 'deye-batteries',
+    key: 'cell type',
+    title: 'Cell Type',
+    type: 'checkbox',
+    isActive: true,
+    options: [{ label: 'LiFePO4 (LFP)', value: 'lifepo4 (lfp)' }],
+  },
+
+  // =========================
+  // deye-inverters
+  // =========================
+  {
+    id: 8,
     category: 'deye-inverters',
     key: 'power',
     title: 'Power',
@@ -183,5 +189,43 @@ export const CATEGORY_FILTERS_CRUD_MOCK: CategoryFilter[] = [
       { label: '12kW', value: '12kw' },
       { label: '15kW', value: '15kw' },
     ],
+  },
+  {
+    id: 9,
+    category: 'deye-inverters',
+    key: 'type',
+    title: 'Inverter Type',
+    type: 'checkbox',
+    isActive: true,
+    options: [
+      { label: 'Hybrid', value: 'hybrid' },
+      { label: 'Ongrid', value: 'ongrid' },
+      { label: 'Three-phase', value: 'three-phase' },
+    ],
+  },
+
+  // =========================
+  // accessories-cables
+  // =========================
+  {
+    id: 10,
+    category: 'accessories-cables',
+    key: 'color',
+    title: 'Color',
+    type: 'checkbox',
+    isActive: true,
+    options: [
+      { label: 'Red', value: 'red' },
+      { label: 'Black', value: 'black' },
+    ],
+  },
+  {
+    id: 11,
+    category: 'accessories-cables',
+    key: 'cross section',
+    title: 'Cross Section',
+    type: 'checkbox',
+    isActive: true,
+    options: [{ label: '6mm²', value: '6mm²' }],
   },
 ];

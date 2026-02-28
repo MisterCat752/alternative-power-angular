@@ -1,16 +1,14 @@
 <!-- Верхняя часть профиля -->
 <div class="flex items-center gap-6" *ngIf="profile$() as profile; else loading">
   
-  <!-- Avatar -->
-  <ng-container *ngIf="avatarUrl; else noAvatar">
-    <img class="w-30 h-30 rounded-full object-cover" [src]="avatarUrl" alt="Avatar" />
-  </ng-container>
-  <ng-template #noAvatar>
-    <span class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+ 
+    @if(avatarUrl()) {
+          <img class="w-30 h-30 rounded-full object-cover" [src]="avatarUrl()" alt="Avatardw" />
+      } @else { 
+         <span class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
       No Image
     </span>
-  </ng-template>
-
+      }
   <div>
     <h1 class="text-2xl font-bold">{{ profile.first_name }} {{ profile.last_name }}</h1>
     <p class="text-gray-500">{{ profile.email }}</p>

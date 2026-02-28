@@ -19,42 +19,35 @@ export class RegisterPage {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  submitted = false;
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     password2: ['', [Validators.required, Validators.minLength(6)]],
-    // userType: ['' as any as UserType, [Validators.required]],
-    // accept: [false, [Validators.requiredTrue]],
   });
 
   submit() {
-    console.log('submit called'); // <--- проверка
+    this.submitted = true;
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     if (this.form.value.password !== this.form.value.password2) {
-      alert('Пароли не совпадают');
+      alert('Passwords do not match');
       return;
     }
 
     const data: RegisterDto = {
       email: this.form.value.email!,
       password: this.form.value.password!,
-      fullName: '', // или this.form.value.fullName если есть
-      preferred_language: 'ro',
+      fullName: '',
+      preferred_language: 'en',
     };
 
     this.auth.register(data).subscribe({
-      next: (user) => {
-        // alert(user.message); // message нет
-        alert(`Регистрация прошла успешно: ${user}`);
-        this.router.navigate(['/auth/login']);
-      },
-      error: (err) => {
-        // здесь точно будет detail от DRF
-        alert(err.error.detail || 'Ошибка регистрации');
-      },
+      next: () => this.router.navigate(['/login']),
+      error: (err) => alert(err.error.detail || 'Registration error'),
     });
   }
 }

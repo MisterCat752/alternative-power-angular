@@ -10,7 +10,7 @@
           <div class="flex items-center justify-between border-b border-gray-200 py-4">
 
             <div class="flex items-center gap-4">
-              <img src="https://picsum.photos/seed/{{item.id}}/80/80"
+              <img [src]="item.image"
                    class="w-20 h-20 rounded object-contain" />
               <div>
                 <div class="font-medium">{{ item.title }}</div>

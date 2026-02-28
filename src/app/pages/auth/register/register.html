@@ -1,93 +1,106 @@
+<!-- src/app/pages/register/register.html -->
 <div class="min-h-screen bg-slate-50 grid place-items-center px-4">
   <div class="w-full max-w-[620px]">
     <div class="text-center mb-6">
-      <img src="assets/logo.png" alt="Alternative Power" class="h-7 mx-auto opacity-90" />
+      <img src="/logo.png" alt="Alternative Power" class="h-7 mx-auto opacity-90" />
     </div>
 
     <div class="text-center">
-      <h1 class="text-3xl font-bold text-slate-900">Зарегистрироваться</h1>
-      <p class="text-sm text-slate-500 mt-1">Creează-ți contul astăzi</p>
+      <h1 class="text-3xl font-bold text-slate-900">Sign Up</h1>
+      <p class="text-sm text-slate-500 mt-1">Create your account today</p>
     </div>
 
     <form class="mt-8 space-y-5" [formGroup]="form" (ngSubmit)="submit()">
-      <!-- email -->
+
+      <!-- Email -->
       <div>
         <label class="block text-[11px] tracking-wide uppercase text-slate-500 mb-2">
-          Адрес электронной почты
+          Email Address
         </label>
         <input
           class="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 outline-none
                  focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
           type="email"
-          placeholder=""
+          placeholder="Email"
           formControlName="email"
         />
+        <!-- Validation -->
+        <p class="text-red-600 text-xs mt-1">
+       <p class="text-red-600 text-xs mt-1">
+  @if ((submitted) && form.controls.email.errors) {
+    @if (form.controls.email.errors?.['required']) {
+      Email is required
+    } @else if (form.controls.email.errors?.['email']) {
+      Enter a valid email
+    }
+  } 
+</p>
+        
       </div>
 
-      <!-- passwords -->
+      <!-- Passwords -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label class="block text-[11px] tracking-wide uppercase text-slate-500 mb-2">Пароль</label>
-          <input
-            class="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 outline-none
-                   focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-            type="password"
-            placeholder=""
-            formControlName="password"
-          />
-        </div>
-
-        <div>
           <label class="block text-[11px] tracking-wide uppercase text-slate-500 mb-2">
-            Confirmă parola
+            Password
           </label>
           <input
             class="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 outline-none
                    focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
             type="password"
-            placeholder=""
+            placeholder="Password"
+            formControlName="password"
+          />
+          <!-- Validation -->
+<p class="text-red-600 text-xs mt-1">
+  @if ((  submitted) && form.controls.password.errors) {
+    @if (form.controls.password.errors?.['required']) {
+      Password is required
+    } @else if (form.controls.password.errors?.['minlength']) {
+      Password must be at least 6 characters
+    }
+  }  
+</p>
+        </div>
+
+        <div>
+          <label class="block text-[11px] tracking-wide uppercase text-slate-500 mb-2">
+            Confirm Password
+          </label>
+          <input
+            class="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 outline-none
+                   focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+            type="password"
+            placeholder="Confirm Password"
             formControlName="password2"
           />
+          <!-- Validation -->
+       <p class="text-red-600 text-xs mt-1">
+  @if ((  submitted) && form.controls.password2.errors) {
+    @if (form.controls.password2.errors?.['required']) {
+      Confirm password is required
+    } @else if (form.controls.password2.errors?.['minlength']) {
+      Confirm password must be at least 6 characters
+    }
+  } @else if ((submitted) && (form.value.password !== form.value.password2)) {
+    Passwords do not match
+  }  
+</p>
         </div>
       </div>
 
-      <!-- user type -->
-      <div>
-        <!-- <label class="block text-[11px] tracking-wide uppercase text-slate-500 mb-2">
-          Тип пользователя
-        </label> -->
-        <!-- <select
-          class="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 outline-none
-                 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-          formControlName="userType"
-        >
-          <option value="" disabled selected>---------</option>
-          <option value="PERSON">Persoană</option>
-          <option value="COMPANY">Companie</option>
-        </select> -->
-      </div>
-
-      <!-- accept -->
-      <!-- <label class="flex items-start gap-3 text-sm text-slate-700">
-        <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300" formControlName="accept" />
-        <span>
-          Accept
-          <a class="text-blue-600 hover:underline" href="#">termenii</a>
-          și
-          <a class="text-blue-600 hover:underline" href="#">politica de confidențialitate</a>
-        </span>
-      </label> -->
-
+      <!-- Submit -->
       <button
-        type="submit" 
+        type="submit"
         class="w-full h-12 rounded-xl cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold"
       >
-        Înregistrare
+        Sign Up
       </button>
 
-      <a routerLink="/auth/login" class="block text-center text-sm text-blue-600 hover:underline">
-        Ai deja un cont? Conectează-te?
+      <a routerLink="/login" class="block text-center text-sm text-blue-600 hover:underline">
+        Already have an account? Sign in
       </a>
+
     </form>
   </div>
 </div>

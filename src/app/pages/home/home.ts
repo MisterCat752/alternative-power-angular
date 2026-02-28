@@ -17,12 +17,6 @@ export class Home {
   private productService = inject(ProductService);
   private cartService = inject(CartService);
   /** hero */
-  slides = [
-    'https://amplussolar.com/blog/wp-content/uploads/2025/01/Types-of-Solar-Panels.jpg',
-    'https://alternativepower.md/media/sliders/Kit_10kw5kw.jpeg',
-    'https://alternativepower.md/media/sliders/kit_5kw_all_in_one.jpeg',
-    'https://alternativepower.md/media/sliders/Kit_6kw5kw.jpeg',
-  ];
 
   heroOpts = {
     slidesPerView: 1,
@@ -82,6 +76,11 @@ export class Home {
       this.products.set(data.filter((p) => p.settings?.published));
     });
   }
+  heroProducts = computed(() => {
+    return this.products()
+      .filter((p) => p.settings?.published)
+      .slice(0, 3); // первые 3 товара
+  });
   trackByCategory = (c: { category: string }) => c.category;
   productTrackBy = (p: Product) => p.id;
   trackByStr = (src: string) => src;

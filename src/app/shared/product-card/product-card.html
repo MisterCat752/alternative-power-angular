@@ -1,12 +1,18 @@
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden max-w-[261px]">
+<div
+  class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-full"
+  [class.max-w-[261px]]="variant === 'default'"
+  [class.w-full]="variant === 'large'"
+>
   <!-- Верх: изображение -->
   <div class="relative p-6 flex items-center justify-center">
-    <img
-      [src]="imageUrl"
-      [alt]="title"
-      class="h-[170px] w-auto object-cover"
-      loading="lazy"
-    />
+  <img
+  [src]="imageUrl"
+  [alt]="title"
+  [class.h-[170px]]="variant === 'default'"
+  [class.h-[350px]]="variant === 'large'"
+  class="w-full object-cover"
+  loading="lazy"
+/>
 
  
   </div>

@@ -20,10 +20,7 @@ export class DashboardSidebar {
     {
       key: 'profile',
       label: 'Profile',
-      items: [
-        { label: 'Profile', to: '/dashboard/profile' },
-        { label: 'Profile settings', to: '/dashboard/profile-settings' },
-      ],
+      items: [{ label: 'Profile', to: '/dashboard/profile' }],
     },
     {
       key: 'catalog',
@@ -60,14 +57,6 @@ export class DashboardSidebar {
         { label: 'Invoices', to: '/dashboard/inventory/invoices' },
         { label: 'Vendors', to: '/dashboard/inventory/vendors' },
         { label: 'Locations', to: '/dashboard/inventory/locations' },
-      ],
-    },
-    {
-      key: 'translations',
-      label: 'Translations',
-      items: [
-        { label: 'Manage Translations', to: '/dashboard/translations' },
-        { label: 'Rosetta Editor', to: '/dashboard/rosseta' },
       ],
     },
 

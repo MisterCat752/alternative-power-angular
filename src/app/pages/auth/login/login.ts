@@ -20,6 +20,7 @@ export class LoginPage {
 
   hide = true;
   loading = false;
+  submitted = false; // ← добавляем флаг отправки
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -27,25 +28,24 @@ export class LoginPage {
   });
 
   submit() {
+    this.submitted = true; // ← форма была отправлена
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    // Приводим типы явно
     const data: LoginDto = {
-      email: this.form.value.email!, // ! гарантирует TS, что не null
+      email: this.form.value.email!,
       password: this.form.value.password!,
     };
     this.loading = true;
     this.auth.login(data).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/dashboard/profile']); // после логина редирект на домашнюю
+        this.router.navigate(['/dashboard/profile']);
       },
       error: (err) => {
         this.loading = false;
-        alert(err.error.detail || 'Ошибка логина');
       },
     });
   }

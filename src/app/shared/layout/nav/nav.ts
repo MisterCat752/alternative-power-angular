@@ -3,18 +3,18 @@ import { Container } from '../../container/container';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { CartUiService } from '../../../services/cart-ui';
 import { AuthStore } from '../../../core/services/auth.store';
 import { ProductService } from '../../../core/services/products/product.service';
 import { Product } from '../../../core/models/products/product.model';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
   imports: [FormsModule, RouterLink, MatIconModule, MatButtonModule, Container],
   templateUrl: './nav.html',
-  styleUrl: './nav.css',
+  styleUrls: ['./nav.css'],
 })
 export class Nav {
   cartUi = inject(CartUiService);
@@ -30,18 +30,13 @@ export class Nav {
   /* ===========================
      AUTH STATE
   =========================== */
-
   user = computed(() => this.authStore.user());
   isLoggedIn = computed(() => !!this.authStore.token() && !!this.authStore.user());
-
-  profileLink = computed(() => (this.isLoggedIn() ? '/dashboard/profile' : '/login'));
-
   avatarUrl = computed(() => this.authStore.avatarUrl());
 
   /* ===========================
      SEARCH
   =========================== */
-
   onSearchChange() {
     if (!this.search.trim()) {
       this.results.set([]);
@@ -65,7 +60,6 @@ export class Nav {
   /* ===========================
      DROPDOWN
   =========================== */
-
   toggleDropdown() {
     if (!this.isLoggedIn()) {
       this.router.navigate(['/login']);

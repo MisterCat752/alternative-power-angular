@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProductCardComponent {
   @Input({ required: true }) title!: string;
+  @Input() variant: 'default' | 'large' = 'default';
   @Input({ required: true }) imageUrl!: string;
   private wishlistService = inject(WishlistService);
   private snackBar = inject(MatSnackBar);

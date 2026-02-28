@@ -2,10 +2,11 @@ import { Product } from '../models/products/product.model';
 
 export const PRODUCTS_MOCK: Product[] = [
   // ---------- SOLAR PANEL LONGI ----------
+  // 1️⃣ LONGI PANEL
   {
     id: 1,
     title: 'Solar Panel Longi 400W',
-    description: 'High efficiency solar panel Longi',
+    description: 'High efficiency Longi monocrystalline solar panel.',
     shortDescription: 'Longi 400W',
     image:
       'https://solartech.ro/wp-content/uploads/2025/05/Panou-fotovoltaic-450W-N-Type-CS6.2-48TD-450-Canadian-Solar.png',
@@ -29,21 +30,21 @@ export const PRODUCTS_MOCK: Product[] = [
     ],
     pricing: { currency: 'EUR', salePrice: 320 },
     stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
+    settings: { warranty: '10 years', published: true, internal: false, allowPreorder: true },
   },
 
-  // ---------- INVERTER DEYE 10K ----------
+  // 2️⃣ DEYE 10K HYBRID
   {
     id: 2,
-    title: 'Инвертор Deye Hybrid 10кВт SUN-10K-SG05LP3-EU-SM2',
-    description: `100% несбалансированный выход
-Возможность подключения по переменному току
-Максимум 10 параллельных модулей
-Поддержка нескольких аккумуляторов
-Максимальный ток зарядки/разрядки 240A
-Поддержка генератора
-48V батарея с трансформаторной изоляцией
-6 временных интервалов зарядки/разрядки`,
+    title: 'Deye Hybrid Inverter 10kW SUN-10K-SG05LP3-EU-SM2',
+    description: `100% unbalanced output.
+AC coupling supported.
+Up to 10 units in parallel.
+Multiple battery support.
+Max charge/discharge current 240A.
+Generator compatible.
+48V battery with transformer isolation.
+6 programmable charge/discharge time slots.`,
     shortDescription: 'Hybrid inverter 10kW',
     image: null,
     sku: 'DEYE-10K-SG05',
@@ -54,11 +55,11 @@ export const PRODUCTS_MOCK: Product[] = [
     productType: 'single',
     specifications: [
       {
-        group: 'Общие характеристики',
+        group: 'General',
         items: [
           { label: 'Brand', value: 'Deye' },
           { label: 'Model', value: 'SUN-10K-SG05LP3-EU-SM2' },
-          { label: 'Inverter Type', value: 'Three-phase' },
+          { label: 'Inverter Type', value: 'Three-phase Hybrid' },
           { label: 'Battery Voltage', value: '48V Low Voltage' },
           { label: 'Output Voltage', value: '230V' },
         ],
@@ -67,50 +68,20 @@ export const PRODUCTS_MOCK: Product[] = [
         group: 'Physical Specifications',
         items: [
           { label: 'Dimensions', value: '-' },
-          { label: 'Weight', value: 'None kg' },
+          { label: 'Weight', value: 'Not specified' },
         ],
       },
     ],
     pricing: { currency: 'EUR', salePrice: 2700 },
     stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
+    settings: { warranty: '10 years', published: true, internal: false, allowPreorder: true },
   },
 
-  // ---------- BATTERY DYNESS ----------
-  {
-    id: 3,
-    title: 'Baterie 10.24kWh DYNESS LiFePO₄, low voltage',
-    description: `DYNESS Powerbox G2 – 10.24kWh LiFePO4, 48V
-Stocare avansată pentru sisteme hibride.`,
-    shortDescription: 'Dyness 10.24kWh battery',
-    image: null,
-    sku: 'DYNESS-G2',
-    quantity: 6,
-    price: 2400,
-    category: 'dyness-batteries',
-    brand: 'Dyness',
-    productType: 'single',
-    specifications: [
-      {
-        group: 'Общие характеристики',
-        items: [
-          { label: 'Brand', value: 'Dyness' },
-          { label: 'Model', value: 'Powerbox G2 10.24kWh' },
-          { label: 'Battery Type', value: 'LiFePO4' },
-          { label: 'Voltage', value: '48V' },
-        ],
-      },
-    ],
-    pricing: { currency: 'EUR', salePrice: 2400 },
-    stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '5 ani', published: true, internal: false, allowPreorder: true },
-  },
-
-  // ---------- BATTERY V-TAC ----------
+  // 4️⃣ V-TAC 5.12
   {
     id: 4,
-    title: 'Acumulator LiFePo4 5.12kWh V-TAC',
-    description: 'High performance 5.12kWh battery',
+    title: 'V-TAC LiFePO4 Battery 5.12kWh',
+    description: 'High performance 5.12kWh LiFePO4 battery.',
     shortDescription: 'V-TAC 5.12kWh',
     image: 'https://solartech.ro/wp-content/uploads/2023/08/1.png',
     images: [
@@ -125,9 +96,8 @@ Stocare avansată pentru sisteme hibride.`,
     productType: 'single',
     specifications: [
       {
-        group: 'Общие характеристики',
+        group: 'General',
         items: [
-          { label: 'Brand', value: 'V-TAC' },
           { label: 'Capacity', value: '5.12kWh' },
           { label: 'Voltage', value: '48V' },
           { label: 'Chemistry', value: 'LiFePO4' },
@@ -136,14 +106,14 @@ Stocare avansată pentru sisteme hibride.`,
     ],
     pricing: { currency: 'EUR', salePrice: 4829 },
     stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '5 ani', published: true, internal: false, allowPreorder: true },
+    settings: { warranty: '5 years', published: true, internal: false, allowPreorder: true },
   },
 
-  // ---------- SOLAR KIT ----------
+  // 5️⃣ SOLAR KIT
   {
     id: 5,
-    title: 'Kit solar hibrid 5kW',
-    description: 'Complete hybrid solar kit',
+    title: 'Hybrid Solar Kit 5kW',
+    description: 'Complete hybrid solar kit including panels, inverter, battery and cables.',
     shortDescription: '5kW kit',
     image: null,
     sku: 'KIT-5KW',
@@ -154,7 +124,7 @@ Stocare avansată pentru sisteme hibride.`,
     productType: 'bundle',
     specifications: [
       {
-        group: 'Общие характеристики',
+        group: 'General',
         items: [
           { label: 'Included', value: 'Panels, Inverter, Battery, Cables' },
           { label: 'Power', value: '5kW' },
@@ -163,9 +133,10 @@ Stocare avansată pentru sisteme hibride.`,
     ],
     pricing: { currency: 'EUR', salePrice: 5200 },
     stock: { baseUom: 'set', purchaseUom: 'set' },
-    settings: { warranty: '5 ani', published: true, internal: false, allowPreorder: true },
+    settings: { warranty: '5 years', published: true, internal: false, allowPreorder: true },
   },
 
+  // 6
   // ---------- ACCESSORY CABLING ----------
   {
     id: 6,
@@ -196,104 +167,166 @@ Stocare avansată pentru sisteme hibride.`,
     stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
     settings: { warranty: '2 ani', published: true, internal: false, allowPreorder: false },
   },
+  // 7
 
-  // ---------- ACCESSORY CONNECTORS ----------
+  // 8
+  // ---------- INVERTER DEYE 12K ----------
   {
-    id: 7,
-    title: 'Connectors for solar kit',
-    description: 'MC4 connectors',
-    shortDescription: 'Connectors',
-    image: null,
-    sku: 'CONN-01',
-    quantity: 40,
-    price: 15,
-    category: 'accessories-connectors',
-    brand: 'Generic',
+    id: 8,
+    title: '[Resealed] DEYE Hybrid Inverter 12kW Three-Phase SUN-12K-SG04LP3-EU',
+    description: `Resealed products have been carefully tested and are fully functional. 
+They benefit from the same 10-year warranty as new products but may have minor cosmetic imperfections.
+
+Suitable for residential use, maximizing solar self-consumption. 
+Supports grid injection (EN50549-1), generator connection and battery backup.`,
+    shortDescription: 'Resealed Hybrid inverter 12kW Three-phase',
+    image: 'https://res.cloudinary.com/dd05pslwk/image/upload/v1772275487/1_jw7k9v.jpg',
+    images: [
+      'https://res.cloudinary.com/dd05pslwk/image/upload/v1772275487/1_jw7k9v.jpg',
+      'https://res.cloudinary.com/dd05pslwk/image/upload/v1772275488/2_tyooc2.jpg',
+      'https://res.cloudinary.com/dd05pslwk/image/upload/v1772275487/3_fum6zu.jpg',
+    ],
+    sku: 'SUN-12K-SG04LP3-EU-RES',
+    quantity: 4,
+    price: 2500,
+    category: 'deye-inverters',
+    brand: 'Deye',
     productType: 'single',
+
     specifications: [
       {
         group: 'General',
         items: [
-          { label: 'Type', value: 'MC4 connector' },
-          { label: 'Compatibility', value: 'Solar Panels' },
-        ],
-      },
-    ],
-    pricing: { currency: 'EUR', salePrice: 15 },
-    stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '2 ani', published: true, internal: false, allowPreorder: false },
-  },
-
-  // ---------- INVERTER DEYE 12K ----------
-  {
-    id: 8,
-    title: 'Инвертор Deye Hybrid 12кВт SUN-12K-SG04LP3-EU',
-    description: 'Three-phase Hybrid inverter 12kW',
-    shortDescription: 'Hybrid inverter 12kW',
-    image: null,
-    sku: 'DEYE-12K-SG04',
-    quantity: 4,
-    price: 2800,
-    category: 'deye-inverters',
-    brand: 'Deye',
-    productType: 'single',
-    specifications: [
-      {
-        group: 'Общие характеристики',
-        items: [
-          { label: 'Brand', value: 'Deye' },
           { label: 'Model', value: 'SUN-12K-SG04LP3-EU' },
-          { label: 'Inverter Type', value: 'Three-phase Inverter' },
+          { label: 'Type', value: 'Hybrid, Three-phase' },
+          { label: 'Power', value: '12kW' },
+          { label: 'Network Injection', value: 'EN50549-1' },
+          { label: 'Weight', value: '40 kg' },
+          { label: 'Dimensions', value: '65 × 55 × 45 cm' },
         ],
       },
       {
-        group: 'Physical Specifications',
+        group: 'PV Input',
         items: [
-          { label: 'Dimensions', value: '-' },
-          { label: 'Weight', value: 'None kg' },
+          { label: 'Max PV Power', value: '15600W' },
+          { label: 'Max PV VOC', value: '800VDC' },
+          { label: 'MPPT Voltage Range', value: '200-650VDC' },
+        ],
+      },
+      {
+        group: 'Battery',
+        items: [
+          { label: 'Battery Voltage', value: '48V' },
+          { label: 'Max DC Charging Current', value: '240A' },
+          { label: 'Supported Batteries', value: 'Gel, Lithium, Lead-Acid' },
+        ],
+      },
+      {
+        group: 'Connectivity',
+        items: [
+          { label: 'Communication Ports', value: 'RS232, RS485, CAN' },
+          { label: 'WiFi', value: 'Included' },
         ],
       },
     ],
-    pricing: { currency: 'EUR', salePrice: 2800 },
-    stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
-  },
 
-  // ---------- INVERTER DEYE 15K ----------
+    pricing: {
+      currency: 'EUR',
+      listPrice: 2800,
+      salePrice: 2500,
+      tva: null,
+      customs: null,
+      logistics: null,
+    },
+
+    stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
+
+    settings: {
+      warranty: '10 ani',
+      published: true,
+      internal: false,
+      allowPreorder: true,
+      modelName: 'SUN-12K-SG04LP3-EU',
+    },
+  },
+  // 9
+  // ---------- INVERTER DEYE 15K 9----------
   {
     id: 9,
-    title: 'Инвертор Deye Hybrid 15кВт SUN-15K-SG05LP3-EU-SM2',
-    description: 'Three-phase Hybrid inverter 15kW',
-    shortDescription: 'Hybrid inverter 15kW',
-    image: null,
-    sku: 'DEYE-15K-SG05',
+    title: 'DEYE Hybrid Inverter 15kW Three-Phase SUN-15K-SG05LP3-EU-SM2',
+    description: `High-performance three-phase hybrid inverter with dual MPPT.
+Compatible with grid and off-grid systems. 
+Supports parallel operation up to 10 units.`,
+    shortDescription: 'Hybrid inverter 15kW Three-phase',
+    image: 'https://res.cloudinary.com/dd05pslwk/image/upload/v1772275861/1-2_glghhr.png',
+    images: [
+      'https://res.cloudinary.com/dd05pslwk/image/upload/v1772275861/1-2_glghhr.png',
+      'https://res.cloudinary.com/dd05pslwk/image/upload/v1772275861/3-1_kwrs6a.png',
+    ],
+    sku: 'SUN-15K-SG05LP3-EU-SM2',
     quantity: 2,
-    price: 3300,
+    price: 10899,
     category: 'deye-inverters',
     brand: 'Deye',
     productType: 'single',
+
     specifications: [
       {
-        group: 'Общие характеристики',
+        group: 'General',
         items: [
-          { label: 'Brand', value: 'Deye' },
-          { label: 'Model', value: 'SUN-15K-SG05LP3-EU-SM2' },
-          { label: 'Inverter Type', value: 'Three-phase Inverter' },
+          { label: 'Power', value: '15kW' },
+          { label: 'Type', value: 'Hybrid, Three-phase' },
+          { label: 'Efficiency (Max)', value: '97.6%' },
+          { label: 'European Efficiency', value: '97.0%' },
+          { label: 'Protection Degree', value: 'IP65' },
+          { label: 'Weight', value: '50.6 kg' },
+          { label: 'Dimensions', value: '456 × 750 × 268.5 mm' },
         ],
       },
       {
-        group: 'Physical Specifications',
+        group: 'PV Input',
         items: [
-          { label: 'Dimensions', value: '-' },
-          { label: 'Weight', value: 'None kg' },
+          { label: 'Max PV Power', value: '22500W' },
+          { label: 'Max Voltage', value: '800V' },
+          { label: 'MPPT Voltage Range', value: '160-650VDC' },
+          { label: 'MPPT Count', value: '2' },
+        ],
+      },
+      {
+        group: 'Battery',
+        items: [
+          { label: 'Battery Voltage Range', value: '40-60V' },
+          { label: 'Max Charge/Discharge Current', value: '280A' },
+          { label: 'Battery Type', value: 'Lithium-ion, Lead-acid' },
+        ],
+      },
+      {
+        group: 'Connectivity',
+        items: [
+          { label: 'Communication', value: 'RS485, RS232, CAN' },
+          { label: 'WiFi', value: 'Included' },
+          { label: 'Optional', value: 'Bluetooth, 4G, LAN, GPRS' },
         ],
       },
     ],
-    pricing: { currency: 'EUR', salePrice: 3300 },
-    stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
-  },
 
+    pricing: {
+      currency: 'RON',
+      listPrice: 15318.16,
+      salePrice: 10899,
+    },
+
+    stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
+
+    settings: {
+      warranty: '10 ani',
+      published: true,
+      internal: false,
+      allowPreorder: true,
+      modelName: 'SUN-15K-SG05LP3-EU-SM2',
+    },
+  },
+  // 10
   // ---------- deye-batteries----------
   {
     id: 101,
@@ -358,7 +391,7 @@ Stocare avansată pentru sisteme hibride.`,
       },
     ],
   },
-
+  // 11
   // 2️⃣ RW-M6.1-B
   {
     id: 102,
@@ -416,14 +449,14 @@ Stocare avansată pentru sisteme hibride.`,
       },
     ],
   },
-
+  // 103
   // 3️⃣ BOS-A160 High Voltage Kit
   {
     id: 103,
     title: 'High Voltage Battery Kit 161.28kWh BOS-A160, DEYE',
     description: `Energy storage system BOS-A160 V-TAC, 161.28 kWh, 806.4 V, LiFePO4...`,
     shortDescription: 'Industrial 161.28kWh rack-mounted energy storage system.',
-    image: 'https://solartech.ro/wp-content/uploads/2025/10/12657-p1.webp',
+    image: 'https://res.cloudinary.com/dd05pslwk/image/upload/v1772217748/12657-p1_lrproh.webp',
     images: [],
     sku: 'BOS-A160',
     quantity: 5,
@@ -478,35 +511,8 @@ Stocare avansată pentru sisteme hibride.`,
       },
     ],
   },
-  {
-    id: 10,
-    title: 'Baterie 10.24kWh Deye LiFePO₄, low voltage',
-    description: `Deye RW-F10.2 – 10.24kWh LiFePO₄, 48V, ideală pentru aplicații hibride`,
-    shortDescription: 'Deye 10.24kWh battery',
-    image: null,
-    sku: 'DEYE-BAT-10.24',
-    quantity: 6,
-    price: 2400,
-    category: 'deye-batteries',
-    brand: 'Deye',
-    productType: 'single',
-    specifications: [
-      {
-        group: 'Общие характеристики',
-        items: [
-          { label: 'Brand', value: 'Deye' },
-          { label: 'Model', value: 'Baterie 10.24kWh Deye LiFePO₄, low voltage' },
-          { label: 'Capacity', value: '10.24kWh' },
-          { label: 'Battery Type', value: 'LiFePO4' },
-          { label: 'Voltage', value: '48V' },
-        ],
-      },
-    ],
-    pricing: { currency: 'EUR', salePrice: 2400 },
-    stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
-  },
 
+  // 11
   // ---------- BATTERY V-TAC 10.24kWh ----------
   {
     id: 11,
@@ -540,6 +546,8 @@ Stocare avansată pentru sisteme hibride.`,
     stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
     settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
   },
+
+  // 12
   {
     id: 12,
     title: 'Baterie 5.12kWh V-TAC  ',
@@ -575,6 +583,7 @@ Stocare avansată pentru sisteme hibride.`,
     settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
   },
 
+  // 13
   // ---------- SOLAR CABLE RED 6mm² ----------
   {
     id: 13,
@@ -606,6 +615,7 @@ Stocare avansată pentru sisteme hibride.`,
     settings: { warranty: '5 ani', published: true, internal: false, allowPreorder: true },
   },
 
+  // 14
   // ---------- SOLAR CABLE BLACK 6mm² ----------
   {
     id: 14,
@@ -637,66 +647,65 @@ Stocare avansată pentru sisteme hibride.`,
     settings: { warranty: '5 ani', published: true, internal: false, allowPreorder: true },
   },
 
+  // 15
   // ---------- INVERTER DEYE 10K Detailed ----------
   {
     id: 15,
-    title: 'Invertor DEYE Hibrid 10kW Trifazat SUN-10K-SG05LP3-EU-SM2',
-    description: `Injectie in reteaua nationala (EN50549-1)
-Display color + Touchscreen
-Port comunicatie CAN/RS485
-Functie paralel
-Conexiune generator sau directionare surplus din PV
-6 perioade programabile pentru incarcare/descarcare acumulator
-Functioneaza cu sau fara acumulatori Low Voltage
-Intrare de 13000W de la panouri
-Putere iesire 10kW Trifazat
-Modul WiFi inclus, cu aplicatie gratuita
-Garantie 10 ani`,
-    shortDescription: 'Hybrid inverter 10kW trifazat',
-    image: null,
-    sku: 'DEYE-10K-TRI',
+    title: 'Invertor DEYE Ongrid 10kW Prosumator SUN-10K-G03',
+    description: `On-grid three-phase inverter suitable for prosumers.
+Supports EN50549-1 grid injection standard.
+WiFi module included.`,
+    shortDescription: 'Ongrid inverter 10kW trifazat',
+    image:
+      'https://res.cloudinary.com/dd05pslwk/image/upload/v1772276042/sun-3-12k-g05-3phase-deye-1_ra30xc.png',
+    images: [
+      'https://res.cloudinary.com/dd05pslwk/image/upload/v1772276042/sun-3-12k-g05-3phase-deye-1_ra30xc.png',
+    ],
+    sku: 'SUN-10K-G03',
     quantity: 1,
-    price: 8699,
+    price: 4019,
     category: 'deye-inverters',
     brand: 'Deye',
     productType: 'single',
+
     specifications: [
       {
         group: 'General',
         items: [
-          { label: 'Weight', value: '26 kg' },
-          { label: 'Dimensions', value: '50 × 27 × 24 cm' },
+          { label: 'Type', value: 'Ongrid, Three-phase' },
+          { label: 'Power', value: '10kW' },
+          { label: 'Weight', value: '11 kg' },
+          { label: 'Dimensions', value: '29 × 47 × 18 cm' },
         ],
-      },
-      {
-        group: 'Battery Input',
-        items: [{ label: 'Battery Voltage', value: '24V' }],
       },
       {
         group: 'PV Input',
-        items: [
-          { label: 'Max Power PV', value: '13000W' },
-          { label: 'MPPT Voltage', value: '200-650VDC' },
-        ],
-      },
-      {
-        group: 'AC Output',
-        items: [
-          { label: 'Injection Network', value: 'Yes' },
-          { label: 'Power', value: '10KW' },
-        ],
+        items: [{ label: 'Max PV Power', value: '7800W' }],
       },
       {
         group: 'Connectivity',
         items: [
-          { label: 'CAN/RS485', value: 'Supported' },
+          { label: 'Communication Port', value: 'RS485' },
           { label: 'WiFi', value: 'Included' },
         ],
       },
     ],
-    pricing: { currency: 'RON', salePrice: 8699 },
+
+    pricing: {
+      currency: 'RON',
+      listPrice: 4956.93,
+      salePrice: 4019,
+    },
+
     stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
-    settings: { warranty: '10 ani', published: true, internal: false, allowPreorder: true },
+
+    settings: {
+      warranty: '10 ani',
+      published: true,
+      internal: false,
+      allowPreorder: false,
+      modelName: 'SUN-10K-G03',
+    },
   },
   {
     id: 16,
@@ -804,7 +813,11 @@ Garantie 10 ani`,
     description:
       'V-TAC LiFePo4 20kWh modular, compatibil cu invertoare multiple, extensibil până la 40kWh.',
     shortDescription: 'V-TAC 20kWh',
-    image: null,
+    image: 'https://solartech.ro/wp-content/uploads/2024/02/pytes-v5-3.png',
+    images: [
+      'https://solartech.ro/wp-content/uploads/2025/10/RW-G10.6.png',
+      'https://solartech.ro/wp-content/uploads/2024/02/pytes-v5-3.png',
+    ],
     sku: 'OHS20K-100',
     quantity: 3,
     price: 25419.15,
@@ -845,7 +858,11 @@ Garantie 10 ani`,
     description:
       'V-TAC LiFePo4 25kWh modular, compatibil cu invertoare multiple, extensibil până la 40kWh.',
     shortDescription: 'V-TAC 25kWh',
-    image: null,
+    image:
+      'https://solartech.ro/wp-content/uploads/2023/04/Deye-RW-M6.1-Acumulator-Baterie-SolarTech-1.jpg',
+    images: [
+      'https://solartech.ro/wp-content/uploads/2023/04/Deye-RW-M6.1-Acumulator-Baterie-SolarTech-1.jpg',
+    ],
     sku: 'OHS25K-100',
     quantity: 3,
     price: 30909.91,
@@ -875,9 +892,9 @@ Garantie 10 ani`,
   },
   {
     id: 20,
-    title: 'Фотоэлектрическая панель 455 Вт N-типа CS6.2-48TD-455',
+    title: 'Photovoltaic Panel 455W N-Type CS6.2-48TD-455',
     description:
-      'Фотоэлектрическая панель Canadian Solar CS6.2-48TD-455 BLACK FRAME, 455Вт, КПД 22,8%, TOPCon N-Type, 144 клетки, IP68.',
+      'Canadian Solar CS6.2-48TD-455 BLACK FRAME photovoltaic panel, 455W, 22.8% efficiency, TOPCon N-Type, 144 cells, IP68.',
     shortDescription: 'Canadian Solar 455W N-Type',
     image:
       'https://solartech.ro/wp-content/uploads/2025/05/Panou-fotovoltaic-450W-N-Type-CS6.2-48TD-450-Canadian-Solar.png',
@@ -926,9 +943,9 @@ Garantie 10 ani`,
   },
   {
     id: 21,
-    title: 'Фотоэлектрическая панель Jinko Tiger Neo N-типа 490 Вт',
+    title: 'Jinko Tiger Neo N-Type 490W Photovoltaic Panel',
     description:
-      'Монокристаллическая панель JinkoSolar 490 Вт N-типа, серия JKM490N-60HL4-V, КПД 22,67%, TOPCon, 120 ячеек, IP68.',
+      'Monocrystalline JinkoSolar 490W N-Type panel, model JKM490N-60HL4-V, 22.67% efficiency, TOPCon technology, 120 cells, IP68.',
     shortDescription: 'Jinko 490W N-Type',
     image: 'https://solartech.ro/wp-content/uploads/2024/08/460-500-605-1.png',
     images: ['https://solartech.ro/wp-content/uploads/2024/08/460-500-605-1.png'],
@@ -970,15 +987,14 @@ Garantie 10 ani`,
       },
     ],
     pricing: { currency: 'LEI', salePrice: 455.14 },
-
     stock: { baseUom: 'pcs', purchaseUom: 'pcs' },
     settings: { published: true, internal: false, allowPreorder: true },
   },
   {
     id: 22,
-    title: 'Монокристаллическая гибкая фотоэлектрическая панель 100 Вт',
+    title: 'Monocrystalline Flexible Photovoltaic Panel 100W',
     description:
-      'Монокристаллическая гибкая солнечная панель MONO FLEX 100 Вт, КПД 21,6%, IP65, для мобильных и автономных систем.',
+      'Monocrystalline flexible solar panel MONO FLEX 100W, 21.6% cell efficiency, IP65, designed for mobile and off-grid systems.',
     shortDescription: 'Volt Polska 100W MONO FLEX',
     image: 'https://solartech.ro/wp-content/uploads/2025/09/04280295.webp',
     images: ['https://solartech.ro/wp-content/uploads/2025/09/04280295.webp'],
@@ -1016,9 +1032,9 @@ Garantie 10 ani`,
   },
   {
     id: 23,
-    title: 'Складная портативная фотоэлектрическая панель 120 Вт',
+    title: 'Foldable Portable Photovoltaic Panel 120W',
     description:
-      'Складная солнечная панель V-TAC VT-10120, 120 Вт, портативная, с USB и Type-C выходами, IP65, для кемпинга и автономных систем.',
+      'Foldable solar panel V-TAC VT-10120, 120W, portable design with USB and Type-C outputs, IP65 rated, ideal for camping and off-grid systems.',
     shortDescription: 'V-TAC VT-10120 120W Foldable',
     image: 'https://solartech.ro/wp-content/uploads/2024/03/11564-P1-Custom.jpg',
     images: [
@@ -1054,7 +1070,7 @@ Garantie 10 ani`,
         group: 'Ports',
         items: [
           { label: 'DC Output', value: '5521, 19.3 V' },
-          { label: 'USB Type-C', value: 'до 45W' },
+          { label: 'USB Type-C', value: 'Up to 45W' },
           { label: 'USB-A', value: 'Quick Charge 3.0' },
         ],
       },

@@ -4,7 +4,7 @@ export const CATEGORIES_MOCK: Category[] = [
   // ---------- INVERTERS ----------
   {
     id: 1,
-    name: 'Инверторы',
+    name: 'Inverters',
     slug: 'inverters',
     parentCategory: null,
     sortOrder: 1,
@@ -14,7 +14,7 @@ export const CATEGORIES_MOCK: Category[] = [
   },
   {
     id: 2,
-    name: 'Инверторы Deye',
+    name: 'Deye Inverters',
     slug: 'deye-inverters',
     parentCategory: 1,
     sortOrder: 1,
@@ -26,7 +26,7 @@ export const CATEGORIES_MOCK: Category[] = [
   // ---------- SOLAR ----------
   {
     id: 3,
-    name: 'Солнечные Панели',
+    name: 'Solar Panels',
     slug: 'solar-panels',
     parentCategory: null,
     sortOrder: 2,
@@ -36,7 +36,7 @@ export const CATEGORIES_MOCK: Category[] = [
   },
   {
     id: 4,
-    name: 'Солнечные Панели Longi',
+    name: 'Longi Solar Panels',
     slug: 'longi-panels',
     parentCategory: 3,
     sortOrder: 1,
@@ -48,7 +48,7 @@ export const CATEGORIES_MOCK: Category[] = [
   // ---------- BATTERIES ----------
   {
     id: 5,
-    name: 'Аккумуляторы',
+    name: 'Batteries',
     slug: 'batteries',
     parentCategory: null,
     sortOrder: 3,
@@ -58,7 +58,7 @@ export const CATEGORIES_MOCK: Category[] = [
   },
   {
     id: 6,
-    name: 'Аккумуляторы Deye',
+    name: 'Deye Batteries',
     slug: 'deye-batteries',
     parentCategory: 5,
     sortOrder: 1,
@@ -67,18 +67,8 @@ export const CATEGORIES_MOCK: Category[] = [
     image: null,
   },
   {
-    id: 7,
-    name: 'Аккумуляторы Dyness',
-    slug: 'dyness-batteries',
-    parentCategory: 5,
-    sortOrder: 2,
-    showInMenu: true,
-    isActive: true,
-    image: null,
-  },
-  {
     id: 8,
-    name: 'Аккумуляторы V-TAC',
+    name: 'V-TAC Batteries',
     slug: 'vtac-batteries',
     parentCategory: 5,
     sortOrder: 3,
@@ -87,32 +77,10 @@ export const CATEGORIES_MOCK: Category[] = [
     image: null,
   },
 
-  // ---------- KITS ----------
-  {
-    id: 9,
-    name: 'Солнечный комплект',
-    slug: 'solar-kit',
-    parentCategory: null,
-    sortOrder: 4,
-    showInMenu: true,
-    isActive: true,
-    image: null,
-  },
-  {
-    id: 10,
-    name: 'Kituri fotovoltaice hibrid',
-    slug: 'hybrid-kits',
-    parentCategory: 9,
-    sortOrder: 1,
-    showInMenu: true,
-    isActive: true,
-    image: null,
-  },
-
   // ---------- ACCESSORIES ----------
   {
     id: 11,
-    name: 'Аксессуары',
+    name: 'Accessories',
     slug: 'accessories',
     parentCategory: null,
     sortOrder: 5,
@@ -122,20 +90,10 @@ export const CATEGORIES_MOCK: Category[] = [
   },
   {
     id: 12,
-    name: 'Кабели',
+    name: 'Cables',
     slug: 'accessories-cables',
     parentCategory: 11,
     sortOrder: 1,
-    showInMenu: true,
-    isActive: true,
-    image: null,
-  },
-  {
-    id: 13,
-    name: 'Соединители',
-    slug: 'accessories-connectors',
-    parentCategory: 11,
-    sortOrder: 2,
     showInMenu: true,
     isActive: true,
     image: null,
