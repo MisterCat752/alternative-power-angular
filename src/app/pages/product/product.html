@@ -1,11 +1,14 @@
 <app-container className="py-6">
   <!-- breadcrumbs -->
   <div class="text-sm text-blue-600 flex flex-wrap gap-2 mb-6">
-    <a routerLink="/" class="hover:underline">Главная</a>
+    <a routerLink="/" class="hover:underline">Главная</a> 
     <span class="text-gray-400">›</span>
-    <a class="hover:underline cursor-pointer">Категории</a>
-    <span class="text-gray-400">›</span>
-    <a class="hover:underline cursor-pointer">Товары</a>
+    <a
+  [routerLink]="['/product', product?.category]"
+  class="hover:underline cursor-pointer"
+>
+  {{ product?.category }}
+</a>
     <span class="text-gray-400">›</span>
     <span class="text-gray-800 font-medium">{{ product?.title }}</span>
   </div>
@@ -43,7 +46,7 @@
       </div>
 
       <div class="mt-4 text-lg font-semibold">
-        Preț :   {{ product?.price }}
+        Price :   {{ product?.price }}
       </div>
 
       <div class="mt-1 text-base"
@@ -60,6 +63,11 @@
         <div class="text-lg font-semibold mb-2">Описание</div>
 
       
+      @if(showFullDesc){
+   <div class="mt-2 text-red-600 font-semibold">
+     Гарантия: {{ product?.shortDescription  ?? '-' }}
+      </div>
+      }
 
         <button type="button" class="mt-2 text-blue-600 hover:underline" (click)="toggleDesc()">
           {{ showFullDesc ? 'Скрыть' : 'Read more' }}
