@@ -32,16 +32,6 @@ export class DashboardSidebar {
         { label: 'Filters', to: '/dashboard/catalog/filters' },
         { label: 'Warranties', to: '/dashboard/catalog/warranties' },
         { label: 'Brands', to: '/dashboard/catalog/brands' },
-        {
-          label: 'UOM Categories',
-          to: '/dashboard/catalog/uom-categories',
-          requiredGroup: 'Manager',
-        },
-        {
-          label: 'Units of Measure',
-          to: '/dashboard/catalog/units-of-measure',
-          requiredGroup: 'Manager',
-        },
       ],
     },
     {
@@ -55,7 +45,6 @@ export class DashboardSidebar {
         },
         { label: 'Stock Moves', to: '/dashboard/inventory/stock-moves' },
         { label: 'Invoices', to: '/dashboard/inventory/invoices' },
-        { label: 'Vendors', to: '/dashboard/inventory/vendors' },
         { label: 'Locations', to: '/dashboard/inventory/locations' },
       ],
     },
@@ -96,7 +85,7 @@ export class DashboardSidebar {
       ],
     },
   ];
-
+  collapsed = signal(false);
   // раскрытые секции
   open = signal<Record<string, boolean>>({
     catalog: true,
@@ -115,6 +104,9 @@ export class DashboardSidebar {
       .filter((g) => g.items.length > 0); // <-- убираем группы без доступных элементов
   });
 
+  toggleSidebar() {
+    this.collapsed.set(!this.collapsed());
+  }
   toggle(key: string) {
     this.open.update((v) => ({ ...v, [key]: !v[key] }));
   }

@@ -1,16 +1,14 @@
 
 <app-nav></app-nav>
 <div class="min-h-[100vh] bg-slate-50">
- 
-  <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] min-h-[100vh]  border border-slate-200">
-    <!-- left -->
-    <app-dashboard-sidebar></app-dashboard-sidebar>
+<div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] min-h-[100vh] border border-slate-200">
+  <!-- left -->
+  <app-dashboard-sidebar></app-dashboard-sidebar>
 
-    <!-- right -->
-    <main class="  ">
-      <div class="px-6 py-6">
-        <router-outlet></router-outlet>
-      </div>
-    </main>
-  </div>
+  <!-- right -->
+  <main class="overflow-x-auto ">
+    <div class="px-6 py-6 max-w-[1540px] mx-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
 </div>
