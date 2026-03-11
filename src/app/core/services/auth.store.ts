@@ -5,15 +5,28 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
+  private platformId = inject(PLATFORM_ID);
+
+  /* =====================
+      STATE
+  ===================== */
+
   token = signal<string | null>(null);
   refreshToken = signal<string | null>(null);
   user = signal<UserProfile | null>(null);
 
-  private platformId = inject(PLATFORM_ID);
+  /* =====================
+      AUTH STATE
+  ===================== */
+
+  isAuthenticated = computed(() => {
+    return !!this.token() && !!this.user();
+  });
 
   /* =====================
-      AVATAR COMPUTED
+      AVATAR
   ===================== */
+
   avatarUrl = computed<string>(() => {
     const profile = this.user();
 
@@ -25,21 +38,43 @@ export class AuthStore {
       ? profile.avatar
       : `${environment.mediaUrl}${profile.avatar}`;
   });
-  constructor() {
-    if (isPlatformBrowser(this.platformId)) {
-      const savedAccess = localStorage.getItem('access_token');
-      const savedRefresh = localStorage.getItem('refresh_token');
-      const savedUser = localStorage.getItem('auth_user');
 
-      if (savedAccess) this.token.set(savedAccess);
-      if (savedRefresh) this.refreshToken.set(savedRefresh);
-      if (savedUser) this.user.set(JSON.parse(savedUser));
+  /* =====================
+      INIT FROM STORAGE
+  ===================== */
+
+  constructor() {
+    this.initFromStorage();
+  }
+
+  initFromStorage() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const savedAccess = localStorage.getItem('access_token');
+    const savedRefresh = localStorage.getItem('refresh_token');
+    const savedUser = localStorage.getItem('auth_user');
+
+    if (savedAccess) {
+      this.token.set(savedAccess);
+    }
+
+    if (savedRefresh) {
+      this.refreshToken.set(savedRefresh);
+    }
+
+    if (savedUser) {
+      try {
+        this.user.set(JSON.parse(savedUser));
+      } catch {
+        localStorage.removeItem('auth_user');
+      }
     }
   }
 
   /* =====================
-        SET USER
+      SET USER
   ===================== */
+
   setUser(user: UserProfile) {
     this.user.set(user);
 
@@ -49,8 +84,9 @@ export class AuthStore {
   }
 
   /* =====================
-        LOGIN SUCCESS
+      LOGIN SUCCESS
   ===================== */
+
   loginSuccess(access: string, refresh: string, user: UserProfile | null = null) {
     this.token.set(access);
     this.refreshToken.set(refresh);
@@ -70,8 +106,21 @@ export class AuthStore {
   }
 
   /* =====================
-        LOGOUT
+      UPDATE ACCESS TOKEN
   ===================== */
+
+  updateAccessToken(token: string) {
+    this.token.set(token);
+
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('access_token', token);
+    }
+  }
+
+  /* =====================
+      LOGOUT
+  ===================== */
+
   logout() {
     this.token.set(null);
     this.refreshToken.set(null);

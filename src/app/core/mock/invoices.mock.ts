@@ -85,4 +85,90 @@ export const INVOICES_MOCK: PurchaseInvoiceDetailsDto[] = [
       },
     ],
   },
+
+  // ---------- новые доп. инвойсы ----------
+  {
+    id: 3,
+    doc_number: 'INV-2025-003',
+    doc_date: '2025-03-01',
+    currency: 'EUR',
+    channel: 'IMPORT',
+    doc_sum: 5200,
+    status: 'RECEIVED',
+
+    source: 'Supplier delivery',
+
+    vendor: {
+      id: 1,
+      name: 'SolarTech SRL',
+      email: 'sales@solartech.ro',
+      phone: '+40 712 555 111',
+      vat_id: 'RO123456',
+    },
+
+    lines: [
+      {
+        id: 4,
+        line_no: 1,
+        qty: 2,
+        unit_cost: 5200,
+        line_sum: 10400,
+        product: {
+          id: 5,
+          code: 'KIT-5KW',
+          product_name: 'Hybrid Solar Kit 5kW',
+          uom: 'set',
+        },
+      },
+    ],
+  },
+
+  {
+    id: 4,
+    doc_number: 'INV-2025-004',
+    doc_date: '2025-03-05',
+    currency: 'EUR',
+    channel: 'IMPORT',
+    doc_sum: 50,
+    status: 'RECEIVED',
+
+    source: 'Accessory Supplier',
+
+    vendor: {
+      id: 3,
+      name: 'PV Accessories SRL',
+      email: 'contact@pvaccessories.ro',
+      phone: '+40 712 222 333',
+      vat_id: 'RO654321',
+    },
+
+    lines: [
+      {
+        id: 5,
+        line_no: 1,
+        qty: 50,
+        unit_cost: 25,
+        line_sum: 1250,
+        product: {
+          id: 6,
+          code: 'CABLE-01',
+          product_name: 'Cables for solar kit',
+          uom: 'pcs',
+        },
+      },
+      {
+        id: 6,
+        line_no: 2,
+        qty: 20,
+        unit_cost: 11999,
+        line_sum: 239980,
+        product: {
+          id: 13,
+          code: 'CABLE-RED-6MM',
+          product_name: 'Cablu solar fotovoltaic 6mm², Rola 500m, Roșu',
+          uom: 'roll',
+        },
+      },
+    ],
+  },
 ];

@@ -15,7 +15,10 @@ export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
-  constructor(private authStore: AuthStore, private authService: AuthService) {}
+  constructor(
+    private authStore: AuthStore,
+    private authService: AuthService,
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authStore.token();
@@ -27,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
           return this.handle401(authReq, next);
         }
         return throwError(() => error);
-      })
+      }),
     );
   }
 
@@ -40,13 +43,11 @@ export class AuthInterceptor implements HttpInterceptor {
         switchMap((res) => {
           this.isRefreshing = false;
 
-          // обновляем токен в store и localStorage
           this.authStore.token.set(res.access);
           if (typeof window !== 'undefined') localStorage.setItem('access_token', res.access);
 
           this.refreshSubject.next(res.access);
 
-          // повторяем оригинальный запрос
           const cloned = req.clone({
             setHeaders: { Authorization: `Bearer ${res.access}` },
           });
@@ -56,10 +57,9 @@ export class AuthInterceptor implements HttpInterceptor {
           this.isRefreshing = false;
           this.authStore.logout();
           return throwError(() => err);
-        })
+        }),
       );
     } else {
-      // ждем завершения текущего обновления
       return this.refreshSubject.pipe(
         filter((token) => token != null),
         take(1),
@@ -68,7 +68,7 @@ export class AuthInterceptor implements HttpInterceptor {
             setHeaders: { Authorization: `Bearer ${token}` },
           });
           return next.handle(cloned);
-        })
+        }),
       );
     }
   }

@@ -5,11 +5,12 @@ import { Container } from '../../shared/container/container';
 import { ProductService } from '../../core/services/products/product.service';
 import { Product } from '../../core/models/products/product.model';
 import { CartService } from '../../core/services/cart.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProductCardComponent, Slider, Container],
+  imports: [ProductCardComponent, Slider, Container, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

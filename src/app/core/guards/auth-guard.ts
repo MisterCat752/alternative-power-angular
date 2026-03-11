@@ -5,18 +5,15 @@ import { AuthStore } from '../services/auth.store';
 
 export const AuthGuard: CanActivateFn = () => {
   const platformId = inject(PLATFORM_ID);
-  const auth = inject(AuthStore);
 
   if (!isPlatformBrowser(platformId)) {
     return true;
   }
 
+  const auth = inject(AuthStore);
   const router = inject(Router);
 
-  const token = auth.token();
-  const user = auth.user();
-
-  if (!token || !user) {
+  if (!auth.isAuthenticated()) {
     return router.parseUrl('/login');
   }
 

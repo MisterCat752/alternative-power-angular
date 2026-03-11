@@ -18,6 +18,8 @@ export class StockService {
         const mapStock = new Map();
 
         for (const m of moves) {
+          if (m.state !== 'posted' || m.active === false) continue;
+
           const key = `${m.productId}_${m.to}`;
 
           if (!mapStock.has(key)) {

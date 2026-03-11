@@ -9,7 +9,7 @@
     <h1 class="text-4xl font-bold text-slate-900">Invoices</h1>
     <div class="text-slate-500 mt-1">Purchase invoices from suppliers</div>
     <div class="text-xs text-slate-400 mt-2">
-      ● Last synced 3 недели, 4 дня by you
+      ● Last synced 3 week, 4 day by you
     </div>
   </div>
 
@@ -22,12 +22,7 @@
   (valueChange)="selectedLocation.set($event)"
 ></ui-select>
 
-    <button
-      type="button"
-      class="h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold inline-flex items-center gap-2"
-    >
-      ⟳ Sync invoices
-    </button>
+ 
 
   
 
@@ -176,12 +171,12 @@
         @for (r of rows(); track r.id) {
           <tr class="border-b border-slate-100 hover:bg-slate-50">
             <td class="px-4 py-4">
-              <input
-                type="checkbox"
-                class="h-4 w-4"
-                [checked]="selectedInvoiceId() === r.id"
-                (change)="onSelectInvoice(r.id, $event)"
-              />
+             <input
+  type="checkbox"
+  class="h-4 w-4"
+  [checked]="selectedInvoiceIds().includes(r.id)"
+  (change)="onToggleInvoiceSelection(r.id, $event)"
+/>
             </td>
 
             <td class="px-4 py-4">
@@ -244,13 +239,7 @@
                     title="View"
                   >
                     👁
-                  </button>
-                  <button
-                    class="h-9 w-9 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700"
-                    title="Receive"
-                  >
-                    📥
-                  </button>
+                  </button> 
            </div>
             </td>
           </tr>

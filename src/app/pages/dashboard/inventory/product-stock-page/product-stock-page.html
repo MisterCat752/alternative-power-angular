@@ -16,36 +16,49 @@
 <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
   <div class="bg-white border border-slate-200 rounded-2xl p-5">
     <div class="text-sm font-semibold text-slate-700">Inventory Summary</div>
-    <div class="mt-4 space-y-2 text-sm">
-      <div class="flex justify-between"><span class="text-slate-500">Total items:</span><span class="font-semibold">1 227</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">Items in stock:</span><span class="font-semibold text-green-600">1 227</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">Items out of stock:</span><span class="font-semibold text-red-600">0</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">Unique SKUs with stock:</span><span class="font-semibold text-blue-600">1 226</span></div>
-      <div class="pt-2 border-t border-slate-100"></div>
-      <div class="flex justify-between"><span class="text-slate-500">Total qty in stock:</span><span class="font-semibold text-blue-600">45 393</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">Total qty out:</span><span class="font-semibold text-red-600">0</span></div>
-    </div>
+   <div class="mt-4 space-y-2 text-sm">
+  <div class="flex justify-between">
+    <span class="text-slate-500">Total items:</span>
+    <span class="font-semibold">{{ totalItems() }}</span>
+  </div>
+
+  <div class="flex justify-between">
+    <span class="text-slate-500">Items in stock:</span>
+    <span class="font-semibold text-green-600">{{ itemsInStock() }}</span>
+  </div>
+
+  <div class="flex justify-between">
+    <span class="text-slate-500">Items out of stock:</span>
+    <span class="font-semibold text-red-600">{{ itemsOutOfStock() }}</span>
+  </div>
+
+  <div class="flex justify-between">
+    <span class="text-slate-500">Unique SKUs with stock:</span>
+    <span class="font-semibold text-blue-600">{{ uniqueSkus() }}</span>
+  </div>
+
+  <div class="pt-2 border-t border-slate-100"></div>
+
+  <div class="flex justify-between">
+    <span class="text-slate-500">Total qty in stock:</span>
+    <span class="font-semibold text-blue-600">{{ totalQty() }}</span>
+  </div>
+</div>
   </div>
 
   <div class="bg-white border border-slate-200 rounded-2xl p-5">
     <div class="text-sm font-semibold text-slate-700">Invoice Cost</div>
     <div class="text-xs text-slate-400 mt-1">Original supplier prices</div>
     <div class="mt-4 space-y-2 text-sm">
-      <div class="flex justify-between"><span class="text-slate-500">EUR (37 items):</span><span class="font-semibold text-blue-600">300 089,01</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">USD (10 items):</span><span class="font-semibold text-green-600">8 404,78</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">MDL (1 180 items):</span><span class="font-semibold text-orange-600">2 919 982,39</span></div>
+   <div class="flex justify-between">
+  <span class="text-slate-500">Stock value:</span>
+  <span class="font-semibold text-green-600">
+    {{ totalStockValue() | number:'1.0-0' }}
+  </span>
+</div>
     </div>
   </div>
-
-  <div class="bg-white border border-slate-200 rounded-2xl p-5">
-    <div class="text-sm font-semibold text-slate-700">With Exchange Rates</div>
-    <div class="text-xs text-slate-400 mt-1">All values in MDL</div>
-    <div class="mt-4 space-y-2 text-sm">
-      <div class="flex justify-between"><span class="text-slate-500">Invoice cost:</span><span class="font-semibold text-blue-600">8 985 749,12</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">Landed cost:</span><span class="font-semibold text-blue-600">11 043 298,28</span></div>
-      <div class="flex justify-between"><span class="text-slate-500">Website price:</span><span class="font-semibold text-green-600">13 855 442,90</span></div>
-    </div>
-  </div>
+ 
 </div>
 
 <!-- tabs row -->

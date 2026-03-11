@@ -1,3 +1,107 @@
 import { StockMove } from '../models/stock-move';
 
-export const STOCK_MOVES_MOCK: StockMove[] = [];
+export const STOCK_MOVES_MOCK: StockMove[] = [
+  // ---------- HEADER MOVES для инвойсов с RECEIVED ----------
+  {
+    id: 1001,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 1,
+    invoiceNumber: 'INV-2025-001',
+    createdAt: '2025-02-10',
+  },
+  {
+    id: 1003,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 3,
+    invoiceNumber: 'INV-2025-003',
+    createdAt: '2025-03-01',
+  },
+  {
+    id: 1004,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 4,
+    invoiceNumber: 'INV-2025-004',
+    createdAt: '2025-03-05',
+  },
+
+  // ---------- PRODUCT LINES ----------
+  // Из INV-2025-001
+  {
+    id: 1,
+    productId: 1,
+    productName: 'Solar Panel Longi 400W',
+    qty: 5,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 1,
+    invoiceNumber: 'INV-2025-001',
+    createdAt: '2025-02-10',
+  },
+  {
+    id: 2,
+    productId: 2,
+    productName: 'Deye Hybrid 10kW',
+    qty: 1,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 1,
+    invoiceNumber: 'INV-2025-001',
+    createdAt: '2025-02-10',
+  },
+
+  // Из INV-2025-003
+  {
+    id: 4,
+    productId: 5,
+    productName: 'Hybrid Solar Kit 5kW',
+    qty: 2,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 3,
+    invoiceNumber: 'INV-2025-003',
+    createdAt: '2025-03-01',
+  },
+
+  // Из INV-2025-004
+  {
+    id: 5,
+    productId: 6,
+    productName: 'Cables for solar kit',
+    qty: 50,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 4,
+    invoiceNumber: 'INV-2025-004',
+    createdAt: '2025-03-05',
+  },
+  {
+    id: 6,
+    productId: 13,
+    productName: 'Cablu solar fotovoltaic 6mm², Rola 500m, Roșu',
+    qty: 20,
+    from: 'supplier',
+    to: 'warehouse',
+    state: 'posted',
+    source: 'invoice',
+    sourceId: 4,
+    invoiceNumber: 'INV-2025-004',
+    createdAt: '2025-03-05',
+  },
+];

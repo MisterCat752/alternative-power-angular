@@ -1,5 +1,38 @@
 <app-container>
- 
+    <!-- HERO -->
+  <section
+    class="relative w-full h-[320px] md:h-[420px] rounded-xl overflow-hidden mt-6"
+  >
+    <img
+      src="/hero.jpg"
+      alt="Solar energy products"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+
+    <!-- overlay -->
+    <div class="absolute inset-0 bg-black/40"></div>
+
+    <!-- content -->
+    <div
+      class="relative z-10 flex flex-col justify-center h-full text-white px-8 md:px-16 max-w-xl"
+    >
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">
+        Solar Energy Solutions
+      </h1>
+
+      <p class="text-sm md:text-base mb-6 text-white/90">
+        High quality panels, batteries and accessories for your solar system.
+      </p>
+
+      <a
+      
+        routerLink="/catalog/longi-panels"
+        class="cursor-pointer inline-block bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition w-fit"
+      >
+        Shop now
+      </a>
+    </div>
+  </section>
  
   <h2 class="text-2xl font-semibold mt-10 mb-4">Popular products</h2>
  <!-- КАТЕГОРИИ -->

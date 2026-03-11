@@ -61,7 +61,7 @@ export class InvoicesPage {
 
   /** selection */
   selectedInvoiceId = signal<number | null>(null);
-
+  selectedInvoiceIds = signal<number[]>([]);
   /** data */
   rows = signal<InvoiceRow[]>([]);
   totalCount = signal(0);
@@ -175,17 +175,26 @@ export class InvoicesPage {
   }
 
   onReceiveSelected() {
-    const id = this.selectedInvoiceId();
+    const ids = this.selectedInvoiceIds();
     const location = this.selectedLocation();
+    if (!ids.length || !location) return;
 
-    if (!id || !location) return;
-
-    this.invoicesService.receiveInvoice(id, location)!.subscribe(() => {
+    this.invoicesService.receiveInvoices(ids, location).subscribe(() => {
       this.loadInvoices();
-      this.selectedInvoiceId.set(null);
+      this.selectedInvoiceIds.set([]);
     });
   }
-
+  onToggleInvoiceSelection(id: number, e: Event) {
+    const checked = (e.target as HTMLInputElement).checked;
+    const ids = [...this.selectedInvoiceIds()];
+    if (checked) {
+      if (!ids.includes(id)) ids.push(id);
+    } else {
+      const idx = ids.indexOf(id);
+      if (idx > -1) ids.splice(idx, 1);
+    }
+    this.selectedInvoiceIds.set(ids);
+  }
   onLockSelected(id: number) {
     if (!id) return;
 

@@ -13,7 +13,7 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { AppInitService } from './services/appInit.service';
+import { AppInitService } from './core/services/appInit.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -43,9 +43,8 @@ export const appConfig: ApplicationConfig = {
       useValue: () => {
         const platformId = inject(PLATFORM_ID);
         if (!isPlatformBrowser(platformId)) return;
-
         const appInit = inject(AppInitService);
-        return appInit.init();
+        return appInit.init(); // возвращаем Promise
       },
     },
   ],

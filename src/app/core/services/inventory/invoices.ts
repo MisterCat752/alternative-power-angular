@@ -55,47 +55,69 @@ export class InvoicesService {
 
   lockInvoice(id: number) {
     const inv = this.invoices.find((i) => i.id === id);
-    if (inv) inv.status = 'LOCKED';
+    if (inv) {
+      inv.status = 'LOCKED';
+      this.stockMoves.getMovesByInvoice(id).subscribe((moves) => {
+        moves.forEach((m) => (m.active = false));
+      });
+    }
     return of({ detail: 'Locked' });
   }
 
   unLockInvoice(id: number) {
     const inv = this.invoices.find((i) => i.id === id);
-    if (inv) inv.status = 'DRAFT';
+    if (inv) {
+      inv.status = 'DRAFT';
+      this.stockMoves.getMovesByInvoice(id).subscribe((moves) => {
+        moves.forEach((m) => (m.active = false));
+      });
+    }
     return of({ detail: 'Unlocked' });
   }
 
-  receiveInvoice(id: number, locationCode: string): Observable<{ detail: string }> {
-    const inv = this.invoices.find((i) => i.id === id);
-    if (!inv) return of({ detail: 'Invoice not found' }); // никогда не возвращаем null
+  receiveInvoices(ids: number[], locationCode: string) {
+    for (const id of ids) {
+      const inv = this.invoices.find((i) => i.id === id);
+      if (!inv) continue;
 
-    inv.status = 'RECEIVED';
-    console.log(inv, 'inv');
-    // HEADER MOVE
-    this.stockMoves.createMove({
-      from: 'SUPPLIER',
-      to: locationCode,
-      state: 'posted',
-      source: 'invoice',
-      sourceId: inv.id,
-      invoiceNumber: inv.doc_number,
-    });
+      // Если инвойс уже был received в другом месте — деактивируем старые движения
+      if (inv.status === 'RECEIVED' && inv.source && inv.source !== locationCode) {
+        this.stockMoves
+          .getMovesByInvoice(inv.id)
+          .subscribe((moves) => moves.forEach((m) => (m.active = false)));
+      }
 
-    // PRODUCT MOVES
-    for (const line of inv.lines) {
+      inv.status = 'RECEIVED';
+      inv.source = locationCode;
+
+      // HEADER MOVE
       this.stockMoves.createMove({
-        productId: line.product.id,
-        productName: line.product.product_name,
-        qty: line.qty,
         from: 'SUPPLIER',
         to: locationCode,
         state: 'posted',
         source: 'invoice',
         sourceId: inv.id,
         invoiceNumber: inv.doc_number,
+        active: true,
       });
+
+      // PRODUCT MOVES
+      for (const line of inv.lines) {
+        this.stockMoves.createMove({
+          productId: line.product.id,
+          productName: line.product.product_name,
+          qty: line.qty,
+          from: 'SUPPLIER',
+          to: locationCode,
+          state: 'posted',
+          source: 'invoice',
+          sourceId: inv.id,
+          invoiceNumber: inv.doc_number,
+          active: true,
+        });
+      }
     }
 
-    return of({ detail: `Received in ${locationCode}` });
+    return of({ detail: `Received ${ids.length} invoice(s) in ${locationCode}` });
   }
 }

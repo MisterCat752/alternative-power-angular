@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CartUiService } from '../../../services/cart-ui';
+import { CartUiService } from '../../../core/services/cart-ui';
 import { AuthStore } from '../../../core/services/auth.store';
 import { ProductService } from '../../../core/services/products/product.service';
 import { Product } from '../../../core/models/products/product.model';

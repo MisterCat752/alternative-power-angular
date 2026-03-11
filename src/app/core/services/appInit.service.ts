@@ -1,7 +1,8 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { AuthStore } from '../core/services/auth.store';
-import { ProfileService } from '../core/services/profile.service';
-import { catchError, firstValueFrom, of, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { AuthStore } from './auth.store';
+import { ProfileService } from './profile.service';
+import { firstValueFrom, catchError, of, tap } from 'rxjs';
+
 @Injectable({ providedIn: 'root' })
 export class AppInitService {
   private authStore = inject(AuthStore);
@@ -9,17 +10,20 @@ export class AppInitService {
 
   init(): Promise<void> {
     const token = this.authStore.token();
-    if (!token) return Promise.resolve(); // нет токена — не ждём
+    const user = this.authStore.user();
 
-    // загружаем профиль и ждём результата
+    if (!token) return Promise.resolve();
+    if (user) return Promise.resolve();
+
+    // эмуляция запроса профиля
     return firstValueFrom(
       this.profileService.loadProfile().pipe(
         tap((profile) => this.authStore.setUser(profile)),
         catchError(() => {
           this.authStore.logout();
           return of(null);
-        })
-      )
+        }),
+      ),
     ).then(() => void 0);
   }
 }

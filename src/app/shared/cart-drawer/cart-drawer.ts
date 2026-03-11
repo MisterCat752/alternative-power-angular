@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { CartUiService } from '../../services/cart-ui';
+import { CartUiService } from '../../core/services/cart-ui';
 import { CartService } from '../../core/services/cart.service';
 import { signal } from '@angular/core';
 import { RouterLink } from '@angular/router';

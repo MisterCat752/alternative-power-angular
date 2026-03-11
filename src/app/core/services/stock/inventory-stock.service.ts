@@ -16,7 +16,9 @@ export class StockMovesService {
   getMovesByInvoice(invoiceId: number) {
     return of(this.moves.filter((m) => m.sourceId === invoiceId));
   }
-
+  removeMovesByInvoice(invoiceId: number) {
+    this.moves = this.moves.filter((m) => m.sourceId !== invoiceId);
+  }
   createMove(move: Omit<StockMove, 'id' | 'createdAt'>): StockMove {
     const newMove: StockMove = {
       ...move,
