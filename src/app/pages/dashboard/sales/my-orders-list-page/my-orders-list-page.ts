@@ -1,6 +1,9 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, inject, OnInit } from '@angular/core';
 import { UiSelect, UiSelectOption } from '../../../../shared/ui/ui-select/ui-select';
 import { RouterLink } from '@angular/router';
+import { OrderDetails } from '../../../../core/models/orders/orders.model';
+import { OrdersService } from '../../../../core/services/orders/order.service';
+import { AuthStore } from '../../../../core/services/auth.store';
 
 type OrderStatus =
   | 'ALL'
@@ -15,11 +18,11 @@ type OrderStatus =
 type OrderRow = {
   order: string;
   items: number;
-  total: string; // "28 068,96"
-  currency: string; // "MDL"
+  total: string;
+  currency: string;
   status: Exclude<OrderStatus, 'ALL'>;
-  date: string; // "Янв 7, 2026"
-  time: string; // "01:57"
+  date: string;
+  time: string;
 };
 
 type Tab = { key: OrderStatus; label: string; count?: number };
@@ -30,30 +33,34 @@ type Tab = { key: OrderStatus; label: string; count?: number };
   imports: [UiSelect, RouterLink],
   templateUrl: './my-orders-list-page.html',
 })
-export class MyOrdersListPage {
-  // summary
+export class MyOrdersListPage implements OnInit {
+  private ordersService = inject(OrdersService);
+  private authStore = inject(AuthStore);
+
   summary = signal({
-    totalOrders: 2,
-    processing: 1,
+    totalOrders: 0,
+    processing: 0,
     inTransit: 0,
     delivered: 0,
   });
 
-  // tabs like on screenshot
   tabs: Tab[] = [
-    { key: 'ALL', label: 'All', count: 2 },
-    { key: 'DRAFT', label: 'Draft', count: 1 },
-    { key: 'SUBMITTED', label: 'Submitted', count: 0 },
-    { key: 'CONFIRMED', label: 'Confirmed', count: 0 },
-    { key: 'PROCESSING', label: 'Processing', count: 1 },
-    { key: 'SHIPPED', label: 'Shipped', count: 0 },
-    { key: 'FULFILLED', label: 'Fulfilled', count: 0 },
-    { key: 'CANCELED', label: 'Canceled', count: 0 },
+    { key: 'ALL', label: 'All' },
+    { key: 'DRAFT', label: 'Draft' },
+    { key: 'SUBMITTED', label: 'Submitted' },
+    { key: 'CONFIRMED', label: 'Confirmed' },
+    { key: 'PROCESSING', label: 'Processing' },
+    { key: 'SHIPPED', label: 'Shipped' },
+    { key: 'FULFILLED', label: 'Fulfilled' },
+    { key: 'CANCELED', label: 'Canceled' },
   ];
 
   tab = signal<OrderStatus>('ALL');
   search = signal('');
   status = signal<OrderStatus>('ALL');
+  appliedStatus = signal<OrderStatus>('ALL');
+
+  rows = signal<OrderRow[]>([]);
 
   statusOpts: UiSelectOption<OrderStatus>[] = [
     { label: 'All statuses', value: 'ALL' },
@@ -66,32 +73,55 @@ export class MyOrdersListPage {
     { label: 'Canceled', value: 'CANCELED' },
   ];
 
-  rows = signal<OrderRow[]>([
-    {
-      order: '#SO-202601-0002',
-      items: 2,
-      total: '28 068,96',
-      currency: 'MDL',
-      status: 'PROCESSING',
-      date: 'Янв 7, 2026',
-      time: '01:57',
-    },
-    {
-      order: '#SO-202601-0001',
-      items: 0,
-      total: '1,00',
-      currency: 'MDL',
-      status: 'DRAFT',
-      date: 'Янв 7, 2026',
-      time: '01:55',
-    },
-  ]);
+  ngOnInit() {
+    const user = this.authStore.user();
+    if (!user) return;
 
-  // apply/reset как на скрине (мок: просто держим "applied" отдельно)
-  appliedStatus = signal<OrderStatus>('ALL');
+    this.ordersService.getOrders().subscribe((orders: OrderDetails[]) => {
+      const myOrders = orders.filter((o) => o.customer.email === user.email);
+
+      const mapped: OrderRow[] = myOrders.map((o) => ({
+        order: o.code,
+        items: o.items.length,
+        total: o.total.toLocaleString(),
+        currency: o.currency,
+        status: this.mapStatus(o.status),
+        date: new Date(o.date).toLocaleDateString(),
+        time: new Date(o.date).toLocaleTimeString(),
+      }));
+
+      this.rows.set(mapped);
+
+      this.summary.set({
+        totalOrders: mapped.length,
+        processing: mapped.filter((o) => o.status === 'PROCESSING').length,
+        inTransit: mapped.filter((o) => o.status === 'SHIPPED').length,
+        delivered: mapped.filter((o) => o.status === 'FULFILLED').length,
+      });
+    });
+  }
+
+  private mapStatus(status: string): Exclude<OrderStatus, 'ALL'> {
+    switch (status) {
+      case 'processing':
+        return 'PROCESSING';
+      case 'draft':
+        return 'DRAFT';
+      case 'cancelled':
+        return 'CANCELED';
+      case 'pending':
+        return 'SUBMITTED';
+      case 'completed':
+        return 'FULFILLED';
+      default:
+        return 'PROCESSING';
+    }
+  }
+
   apply() {
     this.appliedStatus.set(this.status());
   }
+
   reset() {
     this.search.set('');
     this.status.set('ALL');
@@ -108,6 +138,7 @@ export class MyOrdersListPage {
       const okTab = byTab === 'ALL' ? true : r.status === byTab;
       const okStatus = byStatus === 'ALL' ? true : r.status === byStatus;
       const okSearch = !q ? true : r.order.toLowerCase().includes(q);
+
       return okTab && okStatus && okSearch;
     });
   });
@@ -116,12 +147,16 @@ export class MyOrdersListPage {
     switch (s) {
       case 'DRAFT':
         return 'bg-blue-100 text-blue-700 border-blue-200';
+
       case 'PROCESSING':
         return 'bg-orange-100 text-orange-700 border-orange-200';
+
       case 'FULFILLED':
         return 'bg-green-100 text-green-700 border-green-200';
+
       case 'CANCELED':
         return 'bg-red-100 text-red-700 border-red-200';
+
       default:
         return 'bg-slate-100 text-slate-700 border-slate-200';
     }

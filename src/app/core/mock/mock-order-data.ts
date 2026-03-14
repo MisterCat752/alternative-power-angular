@@ -27,7 +27,7 @@ export const MOCK_ORDERS: OrderDetails[] = [
     ],
     customer: {
       name: 'Alex Popescu',
-      email: 'alex.popescu@gmail.com',
+      email: 'admin@gmail.com',
       phone: '+37369000111',
     },
     shipping: {
@@ -61,16 +61,16 @@ export const MOCK_ORDERS: OrderDetails[] = [
         total: 5600,
       },
       {
-        id: 3,
-        sku: 'DYNESS-G2',
-        unit_price: 2400,
+        id: 4,
+        sku: 'VTAC-5.12',
+        unit_price: 4829,
         quantity: 1,
-        total: 2400,
+        total: 4829,
       },
     ],
     customer: {
       name: 'Ion Rusu',
-      email: 'ion.rusu@gmail.com',
+      email: 'admin@gmail.com',
       phone: '+37368000222',
     },
     shipping: {
@@ -97,15 +97,15 @@ export const MOCK_ORDERS: OrderDetails[] = [
         total: 5200,
       },
       {
-        id: 2,
-        sku: 'CONN-01',
-        unit_price: 15,
+        id: 23,
+        sku: 'Foldable Portable Photovoltaic Panel',
+        unit_price: 420,
         quantity: 2,
-        total: 30,
+        total: 840,
       },
       {
-        id: 3,
-        sku: 'CABLE-01',
+        id: 14,
+        sku: 'CABLE-BLK-6MM',
         unit_price: 25,
         quantity: 2,
         total: 50,
