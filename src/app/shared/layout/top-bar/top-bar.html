@@ -32,19 +32,19 @@
 
                 <!-- Дети -->
                 @if(cat.children?.length) {
-                  <ul class="pl-4 space-y-1">
-                    @for(sub of cat.children; track sub.id) {
-                      <a
-                      (click)="closeMenu()"
-                      [routerLink]="['/catalog', sub.slug]">
-                        <li
-                          class="hover:bg-gray cursor-pointer rounded px-2 py-1 text-sm"
-                        >
-                          {{ sub.name }}
-                        </li>
-                      </a>
-                    }
-                  </ul>
+                <ul class="pl-4 space-y-1">
+  @for(sub of cat.children; track sub.id) {
+    <li>
+      <a
+        (click)="closeMenu()"
+        [routerLink]="['/catalog', sub.slug]"
+        class="block hover:bg-gray-100 cursor-pointer rounded px-2 py-1 text-sm transition"
+      >
+        {{ sub.name }}
+      </a>
+    </li>
+  }
+</ul>
                 }
 
               </div>
