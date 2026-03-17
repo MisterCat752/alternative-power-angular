@@ -5,7 +5,12 @@ It is a **large-scale Angular e-commerce platform** for solar equipment (and oth
 
 [**Live Demo**](https://mistercat752.github.io/alternative-power-angular/)
 
----
+You can log in using the following admin credentials:
+
+Email: admin@gmail.com
+Password: 123456
+
+## Alternatively, you can register a new account and log in — you will automatically be granted admin privileges.
 
 ## Project Overview
 
